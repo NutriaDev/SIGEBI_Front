@@ -1,0 +1,30 @@
+<div class="flex h-screen bg-background">
+  <!-- Sidebar -->
+  <aside class="w-64 bg-primary text-white flex flex-col shadow-lg">
+    <div class="p-6 border-b border-primary-700">
+      <h1 class="text-xl font-bold tracking-wide">SIGEBI</h1>
+      <p class="text-xs text-primary-200 mt-1">Gestión Biomédica</p>
+    </div>
+    <nav class="flex-1 p-4 space-y-1">
+      <!-- Navigation items will go here -->
+    </nav>
+  </aside>
+
+  <!-- Main content area -->
+  <div class="flex-1 flex flex-col overflow-hidden">
+    <!-- Top bar -->
+    <header
+      class="h-16 bg-surface border-b border-gray-200 flex items-center justify-between px-6 shadow-sm"
+    >
+      <div class="text-lg font-semibold text-text-main">Dashboard</div>
+      <div class="flex items-center gap-4">
+        <!-- User menu, notifications, etc. -->
+      </div>
+    </header>
+
+    <!-- Page content -->
+    <main class="flex-1 overflow-y-auto p-6">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+</div>
