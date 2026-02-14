@@ -4,63 +4,49 @@
 
 /* ═══════════════════════════════════════════
    SIGEBI — Global Theme Tokens
-   Adjust these values to match your Figma design
+   Colors: #CCDBDC · #263D42 · #FFFFFF
    ═══════════════════════════════════════════ */
 
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap");
+
 :root {
-  /* Primary palette */
-  --color-primary: #1e40af;
-  --color-primary-light: #3b82f6;
-  --color-primary-dark: #1e3a8a;
+  --color-primary: #263d42;
+  --color-primary-light: #4d6e75;
+  --color-primary-dark: #121f23;
 
-  /* Secondary palette */
-  --color-secondary: #0f766e;
-  --color-secondary-light: #14b8a6;
-  --color-secondary-dark: #134e4a;
+  --color-secondary: #ccdbdc;
+  --color-secondary-light: #e8eeef;
+  --color-secondary-dark: #a8c2c4;
 
-  /* Accent */
-  --color-accent: #f59e0b;
+  --color-bg: #ccdbdc;
+  --color-surface: #ffffff;
+  --color-border: #a8c2c4;
 
-  /* Semantic */
+  --color-text: #263d42;
+  --color-text-muted: #4d6e75;
+
   --color-danger: #dc2626;
   --color-success: #16a34a;
   --color-warning: #d97706;
 
-  /* Surfaces */
-  --color-bg: #f8fafc;
-  --color-surface: #ffffff;
-  --color-border: #e2e8f0;
-
-  /* Typography */
-  --color-text: #1e293b;
-  --color-text-muted: #64748b;
-
-  /* Spacing base */
-  --space-unit: 0.25rem;
-
-  /* Border radius */
   --radius-sm: 0.375rem;
   --radius-md: 0.5rem;
   --radius-lg: 0.75rem;
   --radius-xl: 1rem;
 
-  /* Shadows */
   --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
   --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
   --shadow-lg:
     0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
 
-  /* Font */
   --font-family: "Inter", system-ui, -apple-system, sans-serif;
 }
-
-/* ═══════════════════════════════════════════
-   Base resets
-   ═══════════════════════════════════════════ */
 
 @layer base {
   body {
     @apply bg-background text-text-main font-sans antialiased;
+    margin: 0;
+    padding: 0;
   }
 
   h1,
@@ -73,21 +59,11 @@
   }
 }
 
-/* ═══════════════════════════════════════════
-   Reusable component classes
-   ═══════════════════════════════════════════ */
-
 @layer components {
   .btn-primary {
-    @apply bg-primary text-white px-4 py-2 rounded-md font-medium
-           hover:bg-primary-700 transition-colors duration-200
-           focus:outline-none focus:ring-2 focus:ring-primary-300;
-  }
-
-  .btn-secondary {
-    @apply bg-secondary text-white px-4 py-2 rounded-md font-medium
-           hover:bg-secondary-600 transition-colors duration-200
-           focus:outline-none focus:ring-2 focus:ring-secondary-300;
+    @apply bg-primary text-white px-6 py-3 rounded-md font-medium w-full
+          hover:bg-primary-600 transition-colors duration-200
+          focus:outline-none focus:ring-2 focus:ring-primary-300;
   }
 
   .btn-outline {
@@ -101,8 +77,14 @@
   }
 
   .input-field {
-    @apply w-full px-3 py-2 border border-gray-300 rounded-md
+    @apply w-full px-4 py-3 border border-secondary-dark rounded-md bg-white
            focus:outline-none focus:ring-2 focus:ring-primary-300 focus:border-primary
-           placeholder:text-text-muted transition-colors duration-200;
+           placeholder:text-text-muted transition-colors duration-200 text-text-main;
+  }
+
+  .select-field {
+    @apply w-full px-4 py-3 border border-secondary-dark rounded-md bg-white
+           focus:outline-none focus:ring-2 focus:ring-primary-300 focus:border-primary
+           text-text-muted transition-colors duration-200 appearance-none cursor-pointer;
   }
 }
