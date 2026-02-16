@@ -53,6 +53,19 @@ export class AuthService {
        return this.currentUserSubject.value?.roles || [];
     }
 
+    getPermissions(): string[] {
+        return this.currentUserSubject.value?.permissions || [];
+    }
+
+    hasPermission(permission: string): boolean {
+        return this.getPermissions().includes(permission);
+    }
+
+    hasAnyPermission(permissions: string[]): boolean {
+        return permissions.some(p => this.getPermissions().includes(p));
+    }
+
+
     private initialize() {
     const token = this.tokenService.getAccessToken();
 
