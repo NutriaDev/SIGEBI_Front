@@ -1,31 +1,45 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { MainLayoutComponent } from './layout/main-layout/main-layout.component';
 import { AuthLayoutComponent } from './layout/auth-layout/auth-layout.component';
+import { MainLayoutComponent } from './layout/main-layout/main-layout.component';
 import { AuthGuard } from './core/guards/auth.guard';
 
 const routes: Routes = [
+  // 🔐 AUTH (sin sidebar)
   {
     path: 'auth',
-    loadChildren: () =>
-      import('./modules/auth/auth.module').then(m => m.AuthModule)
+    component: AuthLayoutComponent,
+    children: [
+      {
+        path: '',
+        loadChildren: () =>
+          import('./modules/auth/auth.module').then((m) => m.AuthModule),
+      },
+    ],
   },
-  {
-    path: 'dashboard',
-    loadChildren: () =>
-      import('./modules/dashboard/dashboard.module').then(m => m.DashboardModule)
-  },
+
+  // 🏠 APP (con sidebar)
   {
     path: '',
-    redirectTo: 'dashboard',
-    pathMatch: 'full'
+    component: MainLayoutComponent,
+    canActivate: [AuthGuard],
+    children: [
+      {
+        path: 'dashboard',
+        loadChildren: () =>
+          import('./modules/dashboard/dashboard.module').then(
+            (m) => m.DashboardModule,
+          ),
+      },
+    ],
   },
-  {
-    path: '**',
-    redirectTo: 'auth/login'
-  }
-];
 
+  // Default
+  { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+
+  // Fallback
+  { path: '**', redirectTo: 'auth/login' },
+];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
