@@ -18,26 +18,21 @@ const routes: Routes = [
     ],
   },
 
-  // 🏠 APP (con sidebar)
+  // ✅ Dashboard - privado (path explícito, sin conflicto)
   {
-    path: '',
+    path: 'dashboard',
     component: MainLayoutComponent,
     canActivate: [AuthGuard],
-    children: [
-      {
-        path: 'dashboard',
-        loadChildren: () =>
-          import('./modules/dashboard/dashboard.module').then(
-            (m) => m.DashboardModule,
-          ),
-      },
-    ],
+    loadChildren: () =>
+      import('./modules/dashboard/dashboard.module').then(
+        (m) => m.DashboardModule,
+      ),
   },
 
-  // Default
+  // ✅ Redirect raíz - UN solo path: ''
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
 
-  // Fallback
+  // ✅ Fallback
   { path: '**', redirectTo: 'auth/login' },
 ];
 

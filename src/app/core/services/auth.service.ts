@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { environment } from '../../../environments/environment.prod';
+import { environment } from '../../../environments/environment';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { LoginRequest, LoginResponse } from '../../modules/auth/models';
 import { HttpClient } from '@angular/common/http';
@@ -27,6 +27,12 @@ export class AuthService {
   login(credentials: LoginRequest): Observable<any> {
     return this.http.post<any>(`${this.API}/login`, credentials).pipe(
       tap((response) => {
+        // ✅ DIAGNÓSTICO - ver estructura real
+        console.log('response:', JSON.stringify(response));
+        console.log('response.body:', response.body);
+        console.log('response.accessToken:', response.accessToken);
+        console.log('response.body?.accessToken:', response.body?.accessToken);
+
         const accessToken = response.body.accessToken;
         const refreshToken = response.body.refreshToken;
 
@@ -73,14 +79,22 @@ export class AuthService {
     return permissions.some((p) => this.getPermissions().includes(p));
   }
 
-  private initialize() {
+  private initialize(): void {
     const token = this.tokenService.getAccessToken();
 
-    if (token && !this.jwtDecoderService.isTokenExpired(token)) {
-      const payload = this.jwtDecoderService.decodeToken(token);
-      this.currentUserSubject.next(payload);
-    } else {
+    // ✅ Sin token - no hacer nada
+    if (!token) return;
+
+    // ✅ Token expirado - limpiar
+    if (this.jwtDecoderService.isTokenExpired(token)) {
+      console.warn('⚠️ Token expirado, limpiando sesión');
       this.tokenService.clear();
+      return;
     }
+
+    // ✅ Token válido - restaurar sesión
+    const payload = this.jwtDecoderService.decodeToken(token);
+    this.currentUserSubject.next(payload);
+    console.log('✅ Sesión restaurada:', payload?.roles);
   }
 }
