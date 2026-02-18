@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { MainLayoutComponent } from './layout/main-layout/main-layout.component';
 import { AuthLayoutComponent } from './layout/auth-layout/auth-layout.component';
+import { MainLayoutComponent } from './layout/main-layout/main-layout.component';
 import { AuthGuard } from './core/guards/auth.guard';
 
 const routes: Routes = [
-  // ── Auth routes (no guard) ──
+  // 🔐 AUTH (sin sidebar)
   {
     path: 'auth',
     component: AuthLayoutComponent,
@@ -18,51 +18,61 @@ const routes: Routes = [
     ],
   },
 
-  // ── Protected routes (with guard + main layout) ──
+  // ✅ Dashboard - privado (path explícito, sin conflicto)
   {
     path: '',
     component: MainLayoutComponent,
     canActivate: [AuthGuard],
     children: [
       {
-        path: 'users',
+        path: 'dashboard',
         loadChildren: () =>
-          import('./modules/users/users.module').then((m) => m.UsersModule),
+          import('./modules/dashboard/dashboard.module').then(
+            (m) => m.DashboardModule,
+          ),
       },
       {
         path: 'equipment',
         loadChildren: () =>
           import('./modules/equipment/equipment.module').then(
-            (m) => m.EquipmentModule
+            (m) => m.EquipmentModule,
           ),
       },
       {
         path: 'inventory',
         loadChildren: () =>
           import('./modules/inventory/inventory.module').then(
-            (m) => m.InventoryModule
+            (m) => m.InventoryModule,
           ),
       },
       {
         path: 'maintenance',
         loadChildren: () =>
           import('./modules/maintenance/maintenance.module').then(
-            (m) => m.MaintenanceModule
+            (m) => m.MaintenanceModule,
           ),
       },
       {
         path: 'reports',
         loadChildren: () =>
           import('./modules/reports/reports.module').then(
-            (m) => m.ReportsModule
+            (m) => m.ReportsModule,
           ),
       },
-      { path: '', redirectTo: 'equipment', pathMatch: 'full' },
+      {
+        path: 'users',
+        loadChildren: () =>
+          import('./modules/users/users.module').then((m) => m.UsersModule),
+      },
+      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
     ],
   },
 
-  // ── Fallback ──
-  { path: '**', redirectTo: 'auth' },
+  // ✅ Redirect raíz - UN solo path: ''
+  { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+
+  // ✅ Fallback
+  { path: '**', redirectTo: 'auth/login' },
 ];
 
 @NgModule({
