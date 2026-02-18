@@ -1,52 +1,102 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable, tap } from 'rxjs';
-import { TokenService } from './token.service';
 import { environment } from '../../../environments/environment';
-
-export interface LoginRequest {
-  email: string;
-  password: string;
-}
-
-export interface LoginResponse {
-  accessToken: string;
-  refreshToken?: string;
-  user: {
-    id: string;
-    email: string;
-    name: string;
-    role: string;
-  };
-}
+import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { LoginRequest, LoginResponse } from '../../modules/auth/models';
+import { HttpClient } from '@angular/common/http';
+import { JwtDecoderService, JwtPayload } from './jwt-decoder.service';
+import { TokenService } from './token.service';
+import { LoggerService } from './logger.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private readonly apiUrl = `${environment.apiUrl}/auth`;
+  private readonly API = `${environment.apiUrl}/auth`;
+  private currentUserSubject = new BehaviorSubject<JwtPayload | null>(null);
+  public currentUser$ = this.currentUserSubject.asObservable();
 
   constructor(
     private http: HttpClient,
-    private tokenService: TokenService
-  ) {}
+    private jwtDecoderService: JwtDecoderService,
+    private tokenService: TokenService,
+    private logger: LoggerService,
+  ) {
+    this.initialize();
+  }
 
-  login(credentials: LoginRequest): Observable<LoginResponse> {
-    return this.http.post<LoginResponse>(`${this.apiUrl}/login`, credentials).pipe(
+  login(credentials: LoginRequest): Observable<any> {
+    return this.http.post<any>(`${this.API}/login`, credentials).pipe(
       tap((response) => {
-        this.tokenService.saveToken(response.accessToken);
-        if (response.refreshToken) {
-          this.tokenService.saveRefreshToken(response.refreshToken);
-        }
-      })
+        // ✅ DIAGNÓSTICO - ver estructura real
+        console.log('response:', JSON.stringify(response));
+        console.log('response.body:', response.body);
+        console.log('response.accessToken:', response.accessToken);
+        console.log('response.body?.accessToken:', response.body?.accessToken);
+
+        const accessToken = response.body.accessToken;
+        const refreshToken = response.body.refreshToken;
+
+        this.tokenService.saveAccessToken(accessToken);
+        this.tokenService.saveRefreshToken(refreshToken);
+
+        const payload = this.jwtDecoderService.decodeToken(accessToken);
+        this.currentUserSubject.next(payload);
+      }),
     );
   }
 
-  logout(): void {
-    this.tokenService.clearTokens();
+  logout() {
+    this.currentUserSubject.next(null);
+    this.tokenService.clear();
+    this.logger.log('User logged out');
   }
 
-  isLoggedIn(): boolean {
-    return this.tokenService.isAuthenticated();
+  isAuthenticated(): boolean {
+    return !!this.tokenService.getAccessToken();
+  }
+
+  getRoles(): string[] {
+    const token = this.tokenService.getAccessToken();
+    if (!token) return [];
+
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      return payload.roles || [];
+    } catch (e) {
+      return [];
+    }
+  }
+
+  getPermissions(): string[] {
+    return this.currentUserSubject.value?.permissions || [];
+  }
+
+  hasPermission(permission: string): boolean {
+    console.log('Checking permission:', permission);
+    console.log('User permissions:', this.getPermissions());
+    return this.getPermissions().includes(permission);
+  }
+
+  hasAnyPermission(permissions: string[]): boolean {
+    return permissions.some((p) => this.getPermissions().includes(p));
+  }
+
+  private initialize(): void {
+    const token = this.tokenService.getAccessToken();
+
+    // ✅ Sin token - no hacer nada
+    if (!token) return;
+
+    // ✅ Token expirado - limpiar
+    if (this.jwtDecoderService.isTokenExpired(token)) {
+      console.warn('⚠️ Token expirado, limpiando sesión');
+      this.tokenService.clear();
+      return;
+    }
+
+    // ✅ Token válido - restaurar sesión
+    const payload = this.jwtDecoderService.decodeToken(token);
+    this.currentUserSubject.next(payload);
+    console.log('✅ Sesión restaurada:', payload?.roles);
   }
 }

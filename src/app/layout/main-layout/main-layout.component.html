@@ -1,30 +1,89 @@
-<div class="flex h-screen bg-background">
-  <!-- Sidebar -->
-  <aside class="w-64 bg-primary text-white flex flex-col shadow-lg">
-    <div class="p-6 border-b border-primary-700">
-      <h1 class="text-xl font-bold tracking-wide">SIGEBI</h1>
-      <p class="text-xs text-primary-200 mt-1">Gestión Biomédica</p>
+<div class="flex min-h-screen bg-secondary">
+
+ 
+  <!-- SIDEBAR -->
+  <aside class="w-64 bg-primary text-white flex flex-col p-6">
+
+     <h1 class="text-4xl text-white font-semibold mb-8">SIGEBI</h1>
+
+
+   
+    <!-- Equipos Médicos (visible para todos logueados) -->
+    <a routerLink="/equipment"
+       class="mb-4 hover:text-secondary-light transition">
+      Equipos Médicos
+    </a>
+
+    <!-- Inventarios -->
+    <a routerLink="/inventory"
+       class="mb-4 hover:text-secondary-light transition">
+      Inventarios
+    </a>
+    
+
+    <!-- Mantenimiento -->
+    <a routerLink="/maintenance"
+       class="mb-4 hover:text-secondary-light transition">
+      Mantenimiento y Soporte
+    </a>
+
+     <!-- Reportes -->
+    <ng-container *ngIf="has('reports.read')">
+      <a routerLink="/reports"
+         class="mb-10 hover:text-secondary-light transition">
+        Reportes y Auditorías
+      </a>
+    </ng-container>
+
+
+
+    <!-- Usuarios -->
+    <ng-container *ngIf="has('users.read')">
+      <a routerLink="/users"
+         class="mb-4 btn-white">
+        Usuarios
+      </a>
+    </ng-container>
+  
+
+    <!-- Crear Usuario -->
+    <ng-container *ngIf="has('users.create')">
+      <a routerLink="/users/create"
+         class="mb-4 btn-white">
+        Nuevo Usuario
+      </a>
+    </ng-container>
+   
+
+    <!-- Gestión de Roles -->
+    <ng-container *ngIf="has('users.update')">
+      <a routerLink="/users/edit"
+         class="mb-4 btn-white">
+        Editar Usuario
+      </a>
+    </ng-container>
+
+    <!-- Sesiones -->
+    <!-- <ng-container *ngIf="has('sessions.manage')">
+      <a routerLink="/sessions"
+         class="mb-4 btn-white">
+        Sesiones Activas
+      </a>
+    </ng-container> -->
+
+    <div class="mt-auto pt-6 border-t border-primary-light">
+      <button
+        (click)="authService.logout()"
+        class="text-sm text-center italic opacity-70 hover:opacity-100 transition">
+        Cerrar Sesión
+      </button>
     </div>
-    <nav class="flex-1 p-4 space-y-1">
-      <!-- Navigation items will go here -->
-    </nav>
+
   </aside>
 
-  <!-- Main content area -->
-  <div class="flex-1 flex flex-col overflow-hidden">
-    <!-- Top bar -->
-    <header
-      class="h-16 bg-surface border-b border-gray-200 flex items-center justify-between px-6 shadow-sm"
-    >
-      <div class="text-lg font-semibold text-text-main">Dashboard</div>
-      <div class="flex items-center gap-4">
-        <!-- User menu, notifications, etc. -->
-      </div>
-    </header>
+  <!-- CONTENIDO -->
+  <main class="flex-1 p-8">
+    <router-outlet></router-outlet>
+  </main>
 
-    <!-- Page content -->
-    <main class="flex-1 overflow-y-auto p-6">
-      <router-outlet></router-outlet>
-    </main>
-  </div>
 </div>

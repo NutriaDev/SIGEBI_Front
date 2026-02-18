@@ -1,0 +1,20 @@
+<!-- SUPERADMIN -->
+<ng-container *ngIf="is('SUPERADMIN')">
+  <app-dashboard-superadmin></app-dashboard-superadmin>
+</ng-container>
+
+<!-- ADMIN -->
+<ng-container *ngIf="is('ADMIN')">
+  <app-dashboard-admin></app-dashboard-admin>
+</ng-container>
+
+<!-- SUPERVISOR -->
+<ng-container *ngIf="is('SUPERVISOR')">
+  <app-dashboard-supervisor></app-dashboard-supervisor>
+</ng-container>
+
+<!-- TECNICO -->
+<ng-container *ngIf="is('TECNICO')">
+  <app-dashboard-tecnico></app-dashboard-tecnico>
+</ng-container>
+
