@@ -7,7 +7,7 @@ import { DashboardSuperadminComponent } from './role-dashboards/dashboard-supera
 import { DashboardAdminComponent } from './role-dashboards/dashboard-admin/dashboard-admin.component';
 import { DashboardSupervisorComponent } from './role-dashboards/dashboard-supervisor/dashboard-supervisor.component';
 import { DashboardTecnicoComponent } from './role-dashboards/dashboard-tecnico/dashboard-tecnico.component';
-
+import { TabContainerComponent } from './components/tab-container/tab-container.component';
 
 @NgModule({
   declarations: [
@@ -15,11 +15,9 @@ import { DashboardTecnicoComponent } from './role-dashboards/dashboard-tecnico/d
     DashboardSuperadminComponent,
     DashboardAdminComponent,
     DashboardSupervisorComponent,
-    DashboardTecnicoComponent
+    DashboardTecnicoComponent,
+    TabContainerComponent,
   ],
-  imports: [
-    CommonModule,
-    DashboardRoutingModule
-  ]
+  imports: [CommonModule, DashboardRoutingModule],
 })
-export class DashboardModule { }
+export class DashboardModule {}
