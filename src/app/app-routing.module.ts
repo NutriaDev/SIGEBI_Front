@@ -20,13 +20,52 @@ const routes: Routes = [
 
   // ✅ Dashboard - privado (path explícito, sin conflicto)
   {
-    path: 'dashboard',
+    path: '',
     component: MainLayoutComponent,
     canActivate: [AuthGuard],
-    loadChildren: () =>
-      import('./modules/dashboard/dashboard.module').then(
-        (m) => m.DashboardModule,
-      ),
+    children: [
+      {
+        path: 'dashboard',
+        loadChildren: () =>
+          import('./modules/dashboard/dashboard.module').then(
+            (m) => m.DashboardModule,
+          ),
+      },
+      {
+        path: 'equipment',
+        loadChildren: () =>
+          import('./modules/equipment/equipment.module').then(
+            (m) => m.EquipmentModule,
+          ),
+      },
+      {
+        path: 'inventory',
+        loadChildren: () =>
+          import('./modules/inventory/inventory.module').then(
+            (m) => m.InventoryModule,
+          ),
+      },
+      {
+        path: 'maintenance',
+        loadChildren: () =>
+          import('./modules/maintenance/maintenance.module').then(
+            (m) => m.MaintenanceModule,
+          ),
+      },
+      {
+        path: 'reports',
+        loadChildren: () =>
+          import('./modules/reports/reports.module').then(
+            (m) => m.ReportsModule,
+          ),
+      },
+      {
+        path: 'users',
+        loadChildren: () =>
+          import('./modules/users/users.module').then((m) => m.UsersModule),
+      },
+      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+    ],
   },
 
   // ✅ Redirect raíz - UN solo path: ''

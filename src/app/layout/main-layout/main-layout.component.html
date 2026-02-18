@@ -1,10 +1,13 @@
 <div class="flex min-h-screen bg-secondary">
 
+ 
   <!-- SIDEBAR -->
   <aside class="w-64 bg-primary text-white flex flex-col p-6">
 
-    <h2 class="text-2xl font-semibold mb-8">SIGEBI</h2>
+     <h1 class="text-4xl text-white font-semibold mb-8">SIGEBI</h1>
 
+
+   
     <!-- Equipos Médicos (visible para todos logueados) -->
     <a routerLink="/equipment"
        class="mb-4 hover:text-secondary-light transition">
@@ -16,6 +19,7 @@
        class="mb-4 hover:text-secondary-light transition">
       Inventarios
     </a>
+    
 
     <!-- Mantenimiento -->
     <a routerLink="/maintenance"
@@ -23,50 +27,54 @@
       Mantenimiento y Soporte
     </a>
 
-    <!-- Usuarios -->
-    <ng-container *ngIf="has('users.read')">
-      <a routerLink="/users"
-         class="mb-4 hover:text-secondary-light transition">
-        Usuarios
-      </a>
-    </ng-container>
-
-    <!-- Crear Usuario -->
-    <ng-container *ngIf="has('users.create')">
-      <a routerLink="/users/create"
-         class="mb-4 hover:text-secondary-light transition">
-        Nuevo Usuario
-      </a>
-    </ng-container>
-
-    <!-- Reportes -->
+     <!-- Reportes -->
     <ng-container *ngIf="has('reports.read')">
       <a routerLink="/reports"
-         class="mb-4 hover:text-secondary-light transition">
+         class="mb-10 hover:text-secondary-light transition">
         Reportes y Auditorías
       </a>
     </ng-container>
 
+
+
+    <!-- Usuarios -->
+    <ng-container *ngIf="has('users.read')">
+      <a routerLink="/users"
+         class="mb-4 btn-white">
+        Usuarios
+      </a>
+    </ng-container>
+  
+
+    <!-- Crear Usuario -->
+    <ng-container *ngIf="has('users.create')">
+      <a routerLink="/users/create"
+         class="mb-4 btn-white">
+        Nuevo Usuario
+      </a>
+    </ng-container>
+   
+
     <!-- Gestión de Roles -->
-    <ng-container *ngIf="has('roles.manage')">
-      <a routerLink="/roles"
-         class="mb-4 hover:text-secondary-light transition">
-        Gestión de Roles
+    <ng-container *ngIf="has('users.edit')">
+      <a routerLink="/users/edit"
+         class="mb-4 btn-white">
+        Editar Usuario
       </a>
     </ng-container>
 
     <!-- Sesiones -->
-    <ng-container *ngIf="has('sessions.manage')">
+    <!-- <ng-container *ngIf="has('sessions.manage')">
       <a routerLink="/sessions"
-         class="mb-4 hover:text-secondary-light transition">
+         class="mb-4 btn-white">
         Sesiones Activas
       </a>
-    </ng-container>
+    </ng-container> -->
 
     <div class="mt-auto pt-6 border-t border-primary-light">
       <button
         (click)="authService.logout()"
-        class="text-sm italic opacity-70 hover:opacity-100 transition">
+        class="text-sm text-center italic opacity-70 hover:opacity-100 transition">
         Cerrar Sesión
       </button>
     </div>
