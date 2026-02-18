@@ -6,6 +6,7 @@ import { HttpClient } from '@angular/common/http';
 import { JwtDecoderService, JwtPayload } from './jwt-decoder.service';
 import { TokenService } from './token.service';
 import { LoggerService } from './logger.service';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
@@ -20,6 +21,7 @@ export class AuthService {
     private jwtDecoderService: JwtDecoderService,
     private tokenService: TokenService,
     private logger: LoggerService,
+    private router: Router,
   ) {
     this.initialize();
   }
@@ -49,6 +51,7 @@ export class AuthService {
     this.currentUserSubject.next(null);
     this.tokenService.clear();
     this.logger.log('User logged out');
+    this.router.navigate(['/auth/login']);
   }
 
   isAuthenticated(): boolean {
@@ -84,19 +87,16 @@ export class AuthService {
   private initialize(): void {
     const token = this.tokenService.getAccessToken();
 
-    // ✅ Sin token - no hacer nada
     if (!token) return;
 
-    // ✅ Token expirado - limpiar
     if (this.jwtDecoderService.isTokenExpired(token)) {
-      console.warn('⚠️ Token expirado, limpiando sesión');
       this.tokenService.clear();
       return;
     }
 
-    // ✅ Token válido - restaurar sesión
     const payload = this.jwtDecoderService.decodeToken(token);
     this.currentUserSubject.next(payload);
-    console.log('✅ Sesión restaurada:', payload?.roles);
+
+    console.log('Payload completo:', payload);
   }
 }
