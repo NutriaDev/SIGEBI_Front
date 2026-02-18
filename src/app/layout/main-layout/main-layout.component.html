@@ -85,16 +85,37 @@
 
   <!-- HEADER -->
   <div class="bg-primary text-white rounded-lg shadow-lg 
-              px-8 py-5 flex justify-between items-center mb-8">
+            px-8 py-5 flex justify-between items-center mb-8">
 
-    <div class="h-6 w-40 bg-white/30 rounded"></div>
+  <!-- Bienvenida -->
+  <div>
+    <h2 class="text-lg text-white font-semibold">
+      Bienvenido {{ authService.currentUser?.name }}
+    </h2>
+  </div>
 
-    <div class="flex items-center gap-6">
-      <div class="h-4 w-32 bg-white/30 rounded"></div>
-      <div class="h-8 w-8 bg-white/30 rounded-full"></div>
+  <!-- Info usuario -->
+  <div class="flex items-center gap-6">
+
+    <div class="text-right">
+      <p class="text-sm font-medium">
+        {{ authService.currentUser?.email }}
+      </p>
+      <p class="text-xs opacity-80">
+        {{ authService.currentUser?.roles?.[0] }}
+      </p>
+    </div>
+
+    <!-- Avatar -->
+    <div class="h-10 w-10 rounded-full bg-white/30 
+                flex items-center justify-center font-bold text-white">
+      {{ authService.currentUser?.name?.charAt(0) }}
     </div>
 
   </div>
+
+</div>
+
 
   <!-- TABLERO -->
   <div class="bg-gray-200 rounded-lg shadow-inner p-8 min-h-[70vh]">

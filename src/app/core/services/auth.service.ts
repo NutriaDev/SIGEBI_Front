@@ -78,6 +78,10 @@ export class AuthService {
     return permissions.some((p) => this.getPermissions().includes(p));
   }
 
+  get currentUser() {
+    return this.currentUserSubject.value;
+  }
+
   private initialize(): void {
     const token = this.tokenService.getAccessToken();
 
