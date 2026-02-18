@@ -1,135 +1,136 @@
-<div class="min-h-screen bg-secondary flex items-center">
-
-  <aside class="w-64 bg-primary text-white flex flex-col p-6 
-                ml-8 rounded-lg shadow-2xl h-[92vh]">
-
-
-     <h1 class="text-4xl text-white font-semibold text-center mb-16">SIGEBI</h1>
-     
-   
-    <!-- Equipos Médicos (visible para todos logueados) -->
-    <a routerLink="/equipment"
-       class="mb-4 hover:text-secondary-light transition">
-      Equipos Médicos
-    </a>
-
-    <!-- Inventarios -->
-    <a routerLink="/inventory"
-       class="mb-4 hover:text-secondary-light transition">
-      Inventarios
-    </a>
-    
-
-    <!-- Mantenimiento -->
-    <a routerLink="/maintenance"
-       class="mb-4 hover:text-secondary-light transition">
-      Mantenimiento y Soporte
-    </a>
-
-     <!-- Reportes -->
-    <ng-container *ngIf="has('reports.read')">
-      <a routerLink="/reports"
-         class="mb-10 hover:text-secondary-light transition">
-        Reportes y Auditorías
-      </a>
-    </ng-container>
+<div class="min-h-screen bg-secondary relative lg:flex">
 
 
 
-    <!-- Usuarios -->
-    <ng-container *ngIf="has('users.read')">
-      <a routerLink="/users"
-         class="mb-4 btn-white">
-        Usuarios
-      </a>
-    </ng-container>
-  
+  <!-- ========================= -->
+  <!-- OVERLAY (solo mobile) -->
+  <!-- ========================= -->
+  <div *ngIf="isSidebarOpen"
+       (click)="toggleSidebar()"
+       class="fixed inset-0 bg-black/40 z-50 lg:hidden">
+  </div>
 
-    <!-- Crear Usuario -->
-    <ng-container *ngIf="has('users.create')">
-      <a routerLink="/users/create"
-         class="mb-4 btn-white">
-        Nuevo Usuario
-      </a>
-    </ng-container>
-   
+  <!-- ========================= -->
+  <!-- SIDEBAR -->
+  <!-- ========================= -->
+ <aside
+  class="fixed lg:relative z-40
+         w-64 bg-primary text-white flex flex-col p-6
+         rounded-xl shadow-2xl
+         top-4 left-4 bottom-4 mt-4
+         lg:top-auto lg:left-auto lg:bottom-auto
+         lg:ml-8 lg:h-[92vh]
+         transform transition-transform duration-300
+         lg:translate-x-0"
+  [ngClass]="{
+    '-translate-x-full': !isSidebarOpen,
+    'translate-x-0': isSidebarOpen
+  }"
+>
 
-    <!-- Gestión de Roles -->
-    <ng-container *ngIf="has('users.update')">
-      <a routerLink="/users/edit"
-         class="mb-4 btn-white">
-        Editar Usuario
-      </a>
-    </ng-container>
 
-    <!-- Sesiones -->
-    <!-- <ng-container *ngIf="has('sessions.manage')">
-      <a routerLink="/sessions"
-         class="mb-4 btn-white">
-        Sesiones Activas
-      </a>
-    </ng-container> -->
+
+    <h1 class="text-3xl text-white font-semibold text-center mb-12">
+      SIGEBI
+    </h1>
+
+    <nav class="flex flex-col gap-4 text-sm">
+
+      <a routerLink="/equipment">Equipos Médicos</a>
+      <a routerLink="/inventory">Inventarios</a>
+      <a routerLink="/maintenance">Mantenimiento</a>
+
+      <ng-container *ngIf="has('reports.read')">
+        <a routerLink="/reports">Reportes</a>
+      </ng-container>
+
+      <ng-container *ngIf="has('users.read')">
+        <a routerLink="/users" class="btn-white">Usuarios</a>
+      </ng-container>
+
+      <ng-container *ngIf="has('users.create')">
+        <a routerLink="/users/create" class="btn-white">Nuevo Usuario</a>
+      </ng-container>
+
+      <ng-container *ngIf="has('users.update')">
+        <a routerLink="/users/edit" class="btn-white">Editar Usuario</a>
+      </ng-container>
+
+    </nav>
 
     <div class="mt-auto pt-6 border-t border-primary-light">
       <button
         (click)="authService.logout()"
-        class="text-sm text-center italic opacity-70 hover:opacity-100 transition">
+        class="text-xs italic opacity-70 hover:opacity-100">
         Cerrar Sesión
       </button>
     </div>
 
   </aside>
 
+  <!-- ========================= -->
   <!-- CONTENIDO -->
-<main class="flex-1 p-10">
+  <!-- ========================= -->
+  <main class="flex-1 p-4 sm:p-6 md:p-8 lg:p-10">
 
-  <!-- HEADER -->
-  <div class="bg-primary text-white rounded-lg shadow-lg 
-            px-8 py-5 flex justify-between items-center mb-8">
+    <!-- HEADER -->
+    <div
+      class="bg-primary text-white rounded-lg shadow-lg
+            px-4 sm:px-6 md:px-8 py-4 sm:py-5
+            flex justify-between items-center mb-6 sm:mb-8">
 
-  <!-- Bienvenida -->
-  <div>
-    <h2 class="text-lg text-white font-semibold">
-      Bienvenido {{ authService.currentUser?.name }}
-    </h2>
-  </div>
+      <!-- LEFT -->
+      <div class="flex items-center gap-4">
 
-  <!-- Info usuario -->
-  <div class="flex items-center gap-6">
+        <!-- BOTÓN HAMBURGUESA -->
+        <button
+          class="lg:hidden"
+          (click)="toggleSidebar()"
+        >
+          ☰
+        </button>
 
-    <div class="text-right">
-      <p class="text-sm font-medium">
-        {{ authService.currentUser?.email }}
-      </p>
-      <p class="text-xs opacity-80">
-        {{ authService.currentUser?.roles?.[0] }}
-      </p>
+        <h2 class="text-sm sm:text-base md:text-lg font-semibold">
+          Bienvenido {{ authService.currentUser?.name }}
+        </h2>
+
+      </div>
+
+      <!-- RIGHT -->
+      <div class="flex items-center gap-4 sm:gap-6">
+
+        <div class="hidden sm:block text-right">
+          <p class="text-sm font-medium">
+            {{ authService.currentUser?.email }}
+          </p>
+          <p class="text-xs opacity-80">
+            {{ authService.currentUser?.roles?.[0] }}
+          </p>
+        </div>
+
+        <!-- Avatar -->
+        <div
+          class="h-9 w-9 sm:h-10 sm:w-10 rounded-full bg-white/30
+                 flex items-center justify-center font-bold">
+          {{ authService.currentUser?.name?.charAt(0) }}
+        </div>
+
+      </div>
     </div>
 
-    <!-- Avatar -->
-    <div class="h-10 w-10 rounded-full bg-white/30 
-                flex items-center justify-center font-bold text-white">
-      {{ authService.currentUser?.name?.charAt(0) }}
-    </div>
+    <!-- TABLERO -->
+    <div
+      class="bg-secondary-light rounded-lg shadow-inner
+             p-4 sm:p-6 md:p-8 min-h-[65vh]">
 
-  </div>
+      <div class="bg-white rounded-lg shadow-md h-full p-4 sm:p-6 md:p-10">
 
-</div>
+        <router-outlet></router-outlet>
 
-
-  <!-- TABLERO -->
-  <div class="bg-gray-200 rounded-lg shadow-inner p-8 min-h-[70vh]">
-
-    <!-- Caja interior tipo dashboard -->
-    <div class="bg-white rounded-lg shadow-md h-full p-10">
-
-      <router-outlet></router-outlet>
+      </div>
 
     </div>
 
-  </div>
-
-</main>
-
+  </main>
 
 </div>
