@@ -10,18 +10,20 @@ export interface Tab {
   providedIn: 'root',
 })
 export class TabService {
+  private tabs: Tab[] = [];
   private tabsSubject = new BehaviorSubject<Tab[]>([]);
+
   tabs$ = this.tabsSubject.asObservable();
 
-  private tabs: Tab[] = [];
-
   openTab(title: string, component: Type<any>) {
-    const exists = this.tabs.find((t) => t.title === title);
+    const existingIndex = this.tabs.findIndex((t) => t.title === title);
 
-    if (!exists) {
-      this.tabs.push({ title, component });
-      this.tabsSubject.next(this.tabs);
+    if (existingIndex !== -1) {
+      return; // evita duplicados
     }
+
+    this.tabs.push({ title, component });
+    this.tabsSubject.next(this.tabs);
   }
 
   closeTab(index: number) {

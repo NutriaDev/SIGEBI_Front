@@ -37,27 +37,28 @@
 
     <nav class="flex flex-col gap-4 text-sm">
 
-      <a routerLink="/equipment"  (click)="isSidebarOpen = false">Equipos Médicos</a>
-      <a routerLink="/inventory"  (click)="isSidebarOpen = false">Inventarios</a>
-      <a routerLink="/maintenance"  (click)="isSidebarOpen = false">Mantenimiento</a>
+  <a (click)="openEquipment()">Equipos Médicos</a>
+  <a (click)="openInventory()">Inventarios</a>
+  <a (click)="openMaintenance()">Mantenimiento</a>
 
-      <ng-container *ngIf="has('reports.read')">
-        <a routerLink="/reports"  (click)="isSidebarOpen = false">Reportes</a>
-      </ng-container>
+  <ng-container *ngIf="has('reports.read')">
+    <a (click)="openReports()">Reportes</a>
+  </ng-container>
 
-      <ng-container *ngIf="has('users.read')">
-        <a routerLink="/users" class="btn-white" (click)="isSidebarOpen = false">Usuarios</a>
-      </ng-container>
+  <ng-container *ngIf="has('users.read')">
+    <a class="btn-white" (click)="openUsers()">Usuarios</a>
+  </ng-container>
 
-      <ng-container *ngIf="has('users.create')">
-        <a routerLink="/users/create" class="btn-white" (click)="isSidebarOpen = false">Nuevo Usuario</a>
-      </ng-container>
+  <ng-container *ngIf="has('users.create')">
+    <a class="btn-white" (click)="openCreateUser()">Nuevo Usuario</a>
+  </ng-container>
 
-      <ng-container *ngIf="has('users.update')">
-        <a routerLink="/users/edit" class="btn-white" (click)="isSidebarOpen = false">Editar Usuario</a>
-      </ng-container>
+  <ng-container *ngIf="has('users.update')">
+    <a class="btn-white" (click)="openEditUser()">Editar Usuario</a>
+  </ng-container>
 
-    </nav>
+</nav>
+
 
     <div class="mt-auto pt-6 border-t border-primary-light">
       <button
