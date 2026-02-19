@@ -64,10 +64,22 @@
 
       <!-- ENTIDAD / PASSWORD -->
       <div class="grid md:grid-cols-2 gap-6">
-        <div>
-          <label class="block text-sm mb-1">Entidad</label>
-          <input formControlName="entity" class="input w-full" />
-        </div>
+       <!-- Entidad -->
+<div>
+  <label class="block text-sm mb-1">Entidad</label>
+
+  <select
+    formControlName="entity"
+    class="input w-full"
+  >
+    <option value="">Seleccionar entidad</option>
+    <option value="1">SIGEBI</option>
+    <option value="2">DRAGONESDEV</option>
+    <option value="3">SANITAS</option>
+    <option value="4">CLINICAX</option>
+  </select>
+</div>
+
 
         <div>
           <label class="block text-sm mb-1">Contraseña *</label>

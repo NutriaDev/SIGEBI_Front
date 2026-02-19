@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UsersService } from '../../services/users.service';
 
 @Component({
   selector: 'app-user-create',
@@ -7,8 +8,12 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 })
 export class UserCreateComponent {
   userForm: FormGroup;
+  loading = false;
 
-  constructor(private fb: FormBuilder) {
+  constructor(
+    private fb: FormBuilder,
+    private usersService: UsersService,
+  ) {
     this.userForm = this.fb.group({
       role: ['', Validators.required],
       firstName: ['', Validators.required],
@@ -28,6 +33,30 @@ export class UserCreateComponent {
       return;
     }
 
-    console.log(this.userForm.value); // luego lo conectamos al backend
+    const payload = {
+      idRole: Number(this.userForm.value.role),
+      name: this.userForm.value.firstName,
+      lastName: this.userForm.value.lastName,
+      birthDate: this.userForm.value.birthDate,
+      phone: this.userForm.value.phone,
+      id: Number(this.userForm.value.document), // 👈 backend usa "id"
+      email: this.userForm.value.email,
+      companyId: Number(this.userForm.value.entity),
+      password: this.userForm.value.password,
+    };
+
+    console.log('Payload enviado:', payload);
+
+    this.usersService.createUser(payload).subscribe({
+      next: (res) => {
+        console.log(res);
+        alert('Usuario creado correctamente');
+        this.userForm.reset();
+      },
+      error: (err) => {
+        console.error(err);
+        alert('Error al crear usuario');
+      },
+    });
   }
 }
