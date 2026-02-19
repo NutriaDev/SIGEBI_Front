@@ -6,6 +6,7 @@ import { HttpClient } from '@angular/common/http';
 import { JwtDecoderService, JwtPayload } from './jwt-decoder.service';
 import { TokenService } from './token.service';
 import { LoggerService } from './logger.service';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
@@ -20,6 +21,7 @@ export class AuthService {
     private jwtDecoderService: JwtDecoderService,
     private tokenService: TokenService,
     private logger: LoggerService,
+    private router: Router,
   ) {
     this.initialize();
   }
@@ -27,12 +29,6 @@ export class AuthService {
   login(credentials: LoginRequest): Observable<any> {
     return this.http.post<any>(`${this.API}/login`, credentials).pipe(
       tap((response) => {
-        // ✅ DIAGNÓSTICO - ver estructura real
-        console.log('response:', JSON.stringify(response));
-        console.log('response.body:', response.body);
-        console.log('response.accessToken:', response.accessToken);
-        console.log('response.body?.accessToken:', response.body?.accessToken);
-
         const accessToken = response.body.accessToken;
         const refreshToken = response.body.refreshToken;
 
@@ -49,6 +45,7 @@ export class AuthService {
     this.currentUserSubject.next(null);
     this.tokenService.clear();
     this.logger.log('User logged out');
+    this.router.navigate(['/auth/login']);
   }
 
   isAuthenticated(): boolean {
@@ -81,22 +78,41 @@ export class AuthService {
     return permissions.some((p) => this.getPermissions().includes(p));
   }
 
+  get currentUser() {
+    return this.currentUserSubject.value;
+  }
+
   private initialize(): void {
     const token = this.tokenService.getAccessToken();
 
-    // ✅ Sin token - no hacer nada
-    if (!token) return;
+    console.log('🔎 Token en storage:', token);
 
-    // ✅ Token expirado - limpiar
+    if (!token) {
+      console.log('❌ No hay token almacenado');
+      return;
+    }
+
     if (this.jwtDecoderService.isTokenExpired(token)) {
-      console.warn('⚠️ Token expirado, limpiando sesión');
+      console.log('⏳ Token expirado, limpiando sesión');
       this.tokenService.clear();
       return;
     }
 
-    // ✅ Token válido - restaurar sesión
     const payload = this.jwtDecoderService.decodeToken(token);
+
+    if (!payload) {
+      console.log('❌ No se pudo decodificar el token');
+      return;
+    }
+
+    console.log('📦 Payload completo:', payload);
+    console.log('👤 Email:', payload.email);
+    console.log('📝 Name:', payload.name);
+    console.log('🎭 Roles:', payload.roles);
+    console.log('🔐 Permissions:', payload.permissions);
+
     this.currentUserSubject.next(payload);
-    console.log('✅ Sesión restaurada:', payload?.roles);
+
+    console.log('✅ Sesión restaurada correctamente');
   }
 }
