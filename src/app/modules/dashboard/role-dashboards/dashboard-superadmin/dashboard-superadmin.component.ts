@@ -3,6 +3,7 @@ import { TabService } from '../../services/tab.service';
 import { UserListComponent } from '../../../users/pages/user-list/user-list.component';
 import { UserCreateComponent } from '../../../users/pages/user-create/user-create.component';
 import { UserEditComponent } from '../../../users/pages/user-edit/user-edit.component';
+import { ReportsModule } from '../../../reports/reports.module';
 
 @Component({
   selector: 'app-dashboard-superadmin',
@@ -20,5 +21,9 @@ export class DashboardSuperadminComponent {
 
   openEditUser() {
     this.tabService.openTab('Editar Usuario', UserEditComponent);
+  }
+
+  openReports() {
+    this.tabService.openTab('Reportes', ReportsModule);
   }
 }

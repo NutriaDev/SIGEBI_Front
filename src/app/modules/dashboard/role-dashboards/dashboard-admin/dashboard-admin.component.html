@@ -35,13 +35,18 @@ Utiliza el menú lateral para acceder a los módulos disponibles.
       <div class="card">
         <h3 class="font-semibold mb-2">Accesos Rápidos</h3>
 
-        <button class="btn-outline w-full mb-2">
-          Crear Usuario
-        </button>
+        <button 
+  class="btn-outline w-full mb-2"
+  (click)="openCreateUser()">
+  Crear Usuario
+</button>
 
-        <button class="btn-outline w-full">
-          Ver Reportes
-        </button>
+<button 
+  class="btn-outline w-full"
+  (click)="openReports()">
+  Ver Reportes
+</button>
+
 
       </div>
 
@@ -50,15 +55,25 @@ Utiliza el menú lateral para acceder a los módulos disponibles.
      <!-- 🔥 BOTONES INFERIORES -->
   <div class="flex flex-col md:flex-row gap-6 pt-6">
 
-    <button
-      class="bg-primary text-white px-6 py-3 rounded-lg shadow hover:opacity-90 transition w-full">
-      Descargar Manual de Usuario
-    </button>
+   <a
+  href="https://github.com/NutriaDev/SIGEBI/tree/develop"
+  target="_blank"
+  rel="noopener noreferrer"
+  class="bg-primary text-white px-6 py-3 rounded-lg shadow hover:opacity-90 transition w-full text-center block"
+>
+  Descargar Manual de Usuario
+</a>
 
-    <button
-      class="bg-primary text-white px-6 py-3 rounded-lg shadow hover:opacity-90 transition w-full">
-      Demo
-    </button>
+<a
+  href="https://github.com/NutriaDev/SIGEBI/tree/develop"
+  target="_blank"
+  rel="noopener noreferrer"
+  class="bg-primary text-white px-6 py-3 rounded-lg shadow hover:opacity-90 transition w-full text-center block"
+>
+  Demo
+</a>
+
+
 
   </div>
 
