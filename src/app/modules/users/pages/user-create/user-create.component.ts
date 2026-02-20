@@ -22,8 +22,9 @@ export class UserCreateComponent {
       phone: [''],
       document: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      entity: [''],
+      entity: ['', Validators.required],
       password: ['', Validators.required],
+      confirmPassword: ['', Validators.required],
     });
   }
 
@@ -33,13 +34,19 @@ export class UserCreateComponent {
       return;
     }
 
+    // 🔥 VALIDACIÓN DE CONTRASEÑAS
+    if (this.userForm.value.password !== this.userForm.value.confirmPassword) {
+      alert('Las contraseñas no coinciden');
+      return;
+    }
+
     const payload = {
       idRole: Number(this.userForm.value.role),
       name: this.userForm.value.firstName,
       lastName: this.userForm.value.lastName,
       birthDate: this.userForm.value.birthDate,
       phone: this.userForm.value.phone,
-      id: Number(this.userForm.value.document), // 👈 backend usa "id"
+      id: Number(this.userForm.value.document),
       email: this.userForm.value.email,
       companyId: Number(this.userForm.value.entity),
       password: this.userForm.value.password,

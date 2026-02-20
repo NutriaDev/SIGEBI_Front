@@ -1,25 +1,20 @@
 <div class="max-w-5xl mx-auto">
-
   <!-- HEADER -->
-  <div class="bg-primary  px-6 py-4 rounded-lg shadow mb-8">
+  <div class="bg-primary px-6 py-4 rounded-lg shadow mb-8">
     <h2 class="text-lg text-white font-semibold">Crear Nuevo Usuario</h2>
   </div>
 
   <!-- FORM CARD -->
   <div class="bg-transparent rounded-xl shadow-lg p-8">
-
     <form [formGroup]="userForm" (ngSubmit)="submit()" class="space-y-6">
-
       <!-- ROL -->
       <div>
         <label class="block text-sm mb-1">Rol *</label>
-        <select formControlName="role"
-          class="input w-full">
-          <option value="">Seleccionar rol</option>
-          <option value="SUPERADMIN">SUPERADMIN</option>
-          <option value="ADMIN">ADMIN</option>
-          <option value="SUPERVISOR">SUPERVISOR</option>
-          <option value="TECNICO">TECNICO</option>
+        <select formControlName="role" class="input w-full">
+          <option value="1">SUPERADMIN</option>
+          <option value="2">ADMIN</option>
+          <option value="3">SUPERVISOR</option>
+          <option value="4">TECNICO</option>
         </select>
       </div>
 
@@ -64,47 +59,43 @@
 
       <!-- ENTIDAD / PASSWORD -->
       <div class="grid md:grid-cols-2 gap-6">
-       <!-- Entidad -->
-<div>
-  <label class="block text-sm mb-1">Entidad</label>
-
-  <select
-    formControlName="entity"
-    class="input w-full"
-  >
-    <option value="">Seleccionar entidad</option>
-    <option value="1">SIGEBI</option>
-    <option value="2">DRAGONESDEV</option>
-    <option value="3">SANITAS</option>
-    <option value="4">CLINICAX</option>
-  </select>
-</div>
-
-
+        <!-- Entidad -->
         <div>
-          <label class="block text-sm mb-1">Contraseña *</label>
-          <input type="password" formControlName="password" class="input w-full" />
+          <label class="block text-sm mb-1">Entidad</label>
+
+          <select formControlName="entity" class="input w-full">
+            <option value="">Seleccionar entidad</option>
+            <option value="1">SIGEBI</option>
+            <option value="2">DRAGONESDEV</option>
+            <option value="3">SANITAS</option>
+            <option value="4">CLINICAX</option>
+          </select>
         </div>
 
-        <div>
-          <label class="block text-sm mb-1">Confirmar Contraseña *</label>
-          <input type="password" formControlName="password" class="input w-full" />
-        </div>
+        <input
+          type="password"
+          placeholder="Contraseña"
+          formControlName="password"
+          class="input w-full"
+        />
+
+        <input
+          type="password"
+          placeholder="Confirmar contraseña"
+          formControlName="confirmPassword"
+          class="input w-full"
+        />
       </div>
-      
 
       <!-- BOTÓN -->
       <div class="pt-6 text-center">
         <button
           type="submit"
-          class="bg-primary text-white px-8 py-3 rounded-lg shadow hover:opacity-90 transition">
+          class="bg-primary text-white px-8 py-3 rounded-lg shadow hover:opacity-90 transition"
+        >
           Registrar Usuario
         </button>
       </div>
-
     </form>
-
   </div>
-
 </div>
-
