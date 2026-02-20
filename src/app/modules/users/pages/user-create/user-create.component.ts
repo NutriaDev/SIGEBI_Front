@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UsersService } from '../../services/users.service';
 import Swal from 'sweetalert2';
+import { strongPasswordValidator } from '../../validators/password.validator';
+import { letterValidator } from '../../validators/letter.validator';
 
 @Component({
   selector: 'app-user-create',
@@ -11,20 +13,23 @@ export class UserCreateComponent {
   userForm: FormGroup;
   loading = false;
 
+  showPassword = false;
+  showConfirmPassword = false;
+
   constructor(
     private fb: FormBuilder,
     private usersService: UsersService,
   ) {
     this.userForm = this.fb.group({
       role: ['', Validators.required],
-      firstName: ['', Validators.required],
-      lastName: ['', Validators.required],
+      firstName: ['', [Validators.required, letterValidator]],
+      lastName: ['', [Validators.required, letterValidator]],
       birthDate: [''],
       phone: [''],
       document: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       entity: ['', Validators.required],
-      password: ['', Validators.required],
+      password: ['', [Validators.required, strongPasswordValidator]],
       confirmPassword: ['', Validators.required],
     });
   }
