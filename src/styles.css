@@ -101,9 +101,8 @@
    ═══════════════════════════════════════ */
 
   .sigebi-popup {
-    border-radius: var(--radius-lg);
-    font-family: var(--font-family);
-    background: var(--color-surface);
+    border-radius: 1rem !important;
+    font-family: "Inter", sans-serif;
   }
 
   .swal2-title {
@@ -112,22 +111,20 @@
   }
 
   .swal2-html-container {
-    color: var(--color-text-muted);
+    color: var(--color-primary-light);
   }
 
   /* Botón estilo SIGEBI */
   .sigebi-confirm-btn {
-    background-color: var(--color-primary) !important;
+    background-color: #263d42 !important;
     color: white !important;
-    padding: 0.7rem 1.8rem !important;
-    border-radius: var(--radius-md) !important;
+    padding: 0.6rem 1.5rem !important;
+    border-radius: 0.5rem !important;
     font-weight: 500 !important;
-    border: none !important;
-    transition: all 0.2s ease;
   }
 
   .sigebi-confirm-btn:hover {
-    background-color: var(--color-primary-light) !important;
+    opacity: 0.9;
   }
 
   /* Iconos alineados con la paleta */

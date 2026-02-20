@@ -18,13 +18,23 @@ export class HttpErrorMapperService {
   }
 
   mapCreateUserError(error: any): string {
+    if (!error || !error.status) {
+      return 'Error inesperado.';
+    }
+
     switch (error.status) {
       case 400:
-        return 'El correo ya existe.';
+        return error.error?.message || 'Datos inválidos.';
+
+      case 409:
+        return 'El correo ya está registrado.';
+
       case 403:
-        return 'Tu cuenta está deshabilitada.';
+        return 'No tienes permisos para crear usuarios.';
+
       case 0:
         return 'No se pudo conectar con el servidor.';
+
       default:
         return 'Error inesperado.';
     }

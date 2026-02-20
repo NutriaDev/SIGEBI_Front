@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UsersService } from '../../services/users.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-user-create',
@@ -31,12 +32,34 @@ export class UserCreateComponent {
   submit() {
     if (this.userForm.invalid) {
       this.userForm.markAllAsTouched();
+
+      Swal.fire({
+        icon: 'warning',
+        title: 'Formulario incompleto',
+        text: 'Por favor completa todos los campos obligatorios.',
+        confirmButtonText: 'Aceptar',
+        buttonsStyling: false,
+        customClass: {
+          popup: 'sigebi-popup',
+          confirmButton: 'sigebi-confirm-btn',
+        },
+      });
+
       return;
     }
 
-    // 🔥 VALIDACIÓN DE CONTRASEÑAS
     if (this.userForm.value.password !== this.userForm.value.confirmPassword) {
-      alert('Las contraseñas no coinciden');
+      Swal.fire({
+        icon: 'warning',
+        title: 'Contraseñas no coinciden',
+        text: 'Verifica que ambas contraseñas sean iguales.',
+        confirmButtonText: 'Aceptar',
+        buttonsStyling: false,
+        customClass: {
+          popup: 'sigebi-popup',
+          confirmButton: 'sigebi-confirm-btn',
+        },
+      });
       return;
     }
 
@@ -52,17 +75,49 @@ export class UserCreateComponent {
       password: this.userForm.value.password,
     };
 
-    console.log('Payload enviado:', payload);
+    this.loading = true;
 
     this.usersService.createUser(payload).subscribe({
-      next: (res) => {
-        console.log(res);
-        alert('Usuario creado correctamente');
+      next: () => {
+        Swal.fire({
+          icon: 'success',
+          title: 'Usuario creado',
+          text: 'El usuario fue registrado correctamente.',
+          confirmButtonText: 'Aceptar',
+          buttonsStyling: false,
+          customClass: {
+            popup: 'sigebi-popup',
+            confirmButton: 'sigebi-confirm-btn',
+          },
+        });
+
         this.userForm.reset();
+        this.loading = false;
       },
       error: (err) => {
-        console.error(err);
-        alert('Error al crear usuario');
+        let message = 'Error al crear usuario';
+
+        if (err.status === 409) {
+          message = 'El correo ya existe.';
+        } else if (err.status === 400) {
+          message = err.error?.message || 'Datos inválidos.';
+        } else if (err.status === 403) {
+          message = 'No tienes permisos para crear usuarios.';
+        }
+
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: message,
+          confirmButtonText: 'Aceptar',
+          buttonsStyling: false,
+          customClass: {
+            popup: 'sigebi-popup',
+            confirmButton: 'sigebi-confirm-btn',
+          },
+        });
+
+        this.loading = false;
       },
     });
   }
