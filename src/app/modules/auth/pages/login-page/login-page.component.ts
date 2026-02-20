@@ -57,8 +57,15 @@ export class LoginPageComponent {
           icon: 'error',
           title: 'Error de autenticación',
           text: message,
-          confirmButtonColor: '#263D42',
+          confirmButtonText: 'Aceptar',
+          buttonsStyling: false,
+          customClass: {
+            popup: 'sigebi-popup',
+            confirmButton: 'sigebi-confirm-btn',
+          },
         });
+
+        this.loading = false;
 
         this.loading = false;
       },
