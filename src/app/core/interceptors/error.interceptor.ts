@@ -16,23 +16,27 @@ export class ErrorInterceptor implements HttpInterceptor {
 
   intercept(
     req: HttpRequest<unknown>,
-    next: HttpHandler
+    next: HttpHandler,
   ): Observable<HttpEvent<unknown>> {
     return next.handle(req).pipe(
       catchError((error: HttpErrorResponse) => {
-        switch (error.status) {
-          case 401:
-            this.router.navigate(['/auth/login']);
-            break;
-          case 403:
-            this.router.navigate(['/forbidden']);
-            break;
-          case 500:
-            console.error('Server error:', error.message);
-            break;
+        const skipRedirect = req.headers.has('Skip-Auth-Redirect');
+
+        if (!skipRedirect) {
+          switch (error.status) {
+            case 401:
+              this.router.navigate(['/auth/login']);
+              break;
+            case 403:
+              this.router.navigate(['/forbidden']);
+              break;
+            case 500:
+              console.error('Server error:', error.message);
+              break;
+          }
         }
         return throwError(() => error);
-      })
+      }),
     );
   }
 }

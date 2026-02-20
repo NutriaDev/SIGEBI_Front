@@ -96,4 +96,56 @@
   .input {
     @apply bg-gray-100 border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary;
   }
+  /* ═══════════════════════════════════════
+   SIGEBI SweetAlert Custom Theme
+   ═══════════════════════════════════════ */
+
+  .sigebi-popup {
+    border-radius: var(--radius-lg);
+    font-family: var(--font-family);
+    background: var(--color-surface);
+  }
+
+  .swal2-title {
+    color: var(--color-primary);
+    font-weight: 600;
+  }
+
+  .swal2-html-container {
+    color: var(--color-text-muted);
+  }
+
+  /* Botón estilo SIGEBI */
+  .sigebi-confirm-btn {
+    background-color: var(--color-primary) !important;
+    color: white !important;
+    padding: 0.7rem 1.8rem !important;
+    border-radius: var(--radius-md) !important;
+    font-weight: 500 !important;
+    border: none !important;
+    transition: all 0.2s ease;
+  }
+
+  .sigebi-confirm-btn:hover {
+    background-color: var(--color-primary-light) !important;
+  }
+
+  /* Iconos alineados con la paleta */
+  /* Warning icon */
+  .swal2-icon.swal2-warning {
+    border-color: var(--color-primary) !important;
+    color: var(--color-primary) !important;
+  }
+
+  /* Error icon */
+  .swal2-icon.swal2-error {
+    border-color: var(--color-danger) !important;
+    color: var(--color-danger) !important;
+  }
+
+  /* Success icon */
+  .swal2-icon.swal2-success {
+    border-color: var(--color-success) !important;
+    color: var(--color-success) !important;
+  }
 }
