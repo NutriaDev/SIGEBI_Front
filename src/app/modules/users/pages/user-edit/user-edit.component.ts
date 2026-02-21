@@ -4,6 +4,7 @@ import { UsersService } from '../../services/users.service';
 import { strongPasswordValidator } from '../../validators/password.validator';
 import { letterValidator } from '../../validators/letter.validator';
 import Swal from 'sweetalert2';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-user-edit',
@@ -22,6 +23,7 @@ export class UserEditComponent {
   constructor(
     private fb: FormBuilder,
     private usersService: UsersService,
+    private route: ActivatedRoute,
   ) {
     this.userForm = this.fb.group({
       role: ['', Validators.required],
@@ -37,7 +39,16 @@ export class UserEditComponent {
     });
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.route.params.subscribe((params) => {
+      const emailParam = params['email'];
+
+      if (emailParam) {
+        const decodedEmail = decodeURIComponent(emailParam);
+        this.loadUserByEmail(decodedEmail);
+      }
+    });
+  }
 
   mapRoleNameToId(roleName: string): number | null {
     const roles: any = {
@@ -102,6 +113,31 @@ export class UserEditComponent {
           icon: 'error',
           title: 'Usuario no encontrado',
           text: 'No se encontró usuario con ese dato.',
+          confirmButtonText: 'Aceptar',
+          buttonsStyling: false,
+          customClass: {
+            popup: 'sigebi-popup',
+            confirmButton: 'sigebi-confirm-btn',
+          },
+        });
+      },
+    });
+  }
+
+  loadUserByEmail(email: string) {
+    this.loading = true;
+
+    this.usersService.getUserByEmail(email).subscribe({
+      next: (response) => {
+        this.fillForm(response.body);
+        this.loading = false;
+      },
+      error: () => {
+        this.loading = false;
+        Swal.fire({
+          icon: 'error',
+          title: 'Usuario no encontrado',
+          text: 'No se encontró usuario con ese correo.',
           confirmButtonText: 'Aceptar',
           buttonsStyling: false,
           customClass: {
