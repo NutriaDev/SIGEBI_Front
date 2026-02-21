@@ -1,6 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { User } from '../models/user.model';
+import { ApiResponse } from '@shared/models/response.model';
 
 @Injectable({
   providedIn: 'root',
@@ -12,5 +14,17 @@ export class UsersService {
 
   createUser(payload: any) {
     return this.http.post(`${this.baseUrl}/users-create`, payload);
+  }
+
+  getAllUsers(): Observable<ApiResponse<User[]>> {
+    return this.http.get<ApiResponse<User[]>>(`${this.baseUrl}/get-all-users`);
+  }
+
+  updateUser(payload: any) {
+    return this.http.put(`${this.baseUrl}/update-user`, payload);
+  }
+
+  deleteUser(payload: any) {
+    return this.http.delete(`${this.baseUrl}/users-delete`, payload);
   }
 }
