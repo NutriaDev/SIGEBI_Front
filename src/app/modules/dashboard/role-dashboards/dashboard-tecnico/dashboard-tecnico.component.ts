@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { TabService } from '../../services/tab.service';
-import { UserListComponent } from '../../../users/pages/user-list/user-list.component';
+import { ReportsModule } from '../../../reports/reports.module';
 
 @Component({
   selector: 'app-dashboard-tecnico',
@@ -8,4 +8,8 @@ import { UserListComponent } from '../../../users/pages/user-list/user-list.comp
 })
 export class DashboardTecnicoComponent {
   constructor(private tabService: TabService) {}
+
+  openReports() {
+    this.tabService.openTab('Reportes', ReportsModule);
+  }
 }

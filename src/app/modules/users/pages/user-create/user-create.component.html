@@ -1,1 +1,260 @@
-<p>user-create works!</p>
+<div class="max-w-5xl mx-auto">
+  <!-- HEADER -->
+  <div class="bg-primary px-6 py-4 rounded-lg shadow mb-8">
+    <h2 class="text-lg text-white font-semibold">Crear Nuevo Usuario</h2>
+  </div>
+
+  <!-- FORM CARD -->
+  <div class="bg-transparent rounded-xl shadow-lg p-8">
+    <form [formGroup]="userForm" (ngSubmit)="submit()" class="space-y-6">
+      <!-- ROL -->
+      <div>
+        <label class="block text-sm mb-1">Rol *</label>
+        <select formControlName="role" class="input w-full">
+          <option value="1">SUPERADMIN</option>
+          <option value="2">ADMIN</option>
+          <option value="3">SUPERVISOR</option>
+          <option value="4">TECNICO</option>
+        </select>
+      </div>
+
+      <!-- NOMBRE / APELLIDO -->
+      <div class="grid md:grid-cols-2 gap-6">
+        <div>
+          <label class="block text-sm mb-1">Nombres *</label>
+          <input formControlName="firstName" class="input w-full" />
+
+          <div
+            *ngIf="
+              userForm.get('firstName')?.errors?.['letter'] &&
+              userForm.get('firstName')?.touched
+            "
+            class="text-sm text-red-500 mt-1"
+          >
+            Solo se permiten letras
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-sm mb-1">Apellidos *</label>
+          <input formControlName="lastName" class="input w-full" />
+
+          <div
+            *ngIf="
+              userForm.get('lastName')?.errors?.['letter'] &&
+              userForm.get('lastName')?.touched
+            "
+            class="text-sm text-red-500 mt-1"
+          >
+            Solo se permiten letras
+          </div>
+        </div>
+      </div>
+
+      <!-- FECHA / CELULAR -->
+      <div class="grid md:grid-cols-2 gap-6">
+        <div>
+          <label class="block text-sm mb-1">Fecha de Nacimiento</label>
+          <input type="date" formControlName="birthDate" class="input w-full" />
+        </div>
+
+        <div>
+          <label class="block text-sm mb-1">Celular</label>
+          <input formControlName="phone" class="input w-full" />
+        </div>
+      </div>
+
+      <!-- DOCUMENTO / EMAIL -->
+      <div class="grid md:grid-cols-2 gap-6">
+        <div>
+          <label class="block text-sm mb-1">Cédula / NIT *</label>
+          <input formControlName="document" class="input w-full" />
+        </div>
+
+        <div>
+          <label class="block text-sm mb-1">Email *</label>
+          <input type="email" formControlName="email" class="input w-full" />
+        </div>
+      </div>
+
+      <!-- ENTIDAD / PASSWORD -->
+      <div class="grid md:grid-cols-2 gap-6">
+        <!-- Entidad -->
+        <div>
+          <label class="block text-sm mb-1">Entidad</label>
+
+          <select formControlName="entity" class="input w-full">
+            <option value="">Seleccionar entidad</option>
+            <option value="1">SIGEBI</option>
+            <option value="2">DRAGONESDEV</option>
+            <option value="3">SANITAS</option>
+            <option value="4">CLINICAX</option>
+          </select>
+        </div>
+
+        <!-- PASSWORD -->
+        <div class="relative space-y-1">
+          <input
+            [type]="showPassword ? 'text' : 'password'"
+            placeholder="Contraseña"
+            formControlName="password"
+            class="input w-full"
+          />
+
+          <!-- Botón ojito -->
+          <button
+            type="button"
+            (click)="showPassword = !showPassword"
+            class="absolute right-3 top-3 text-text-muted"
+          >
+            <span *ngIf="!showPassword">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#263d42"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-eye-icon lucide-eye"
+              >
+                <path
+                  d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"
+                />
+                <circle cx="12" cy="12" r="3" /></svg
+            ></span>
+            <span *ngIf="showPassword">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#263d42"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-eye-off-icon lucide-eye-off"
+              >
+                <path
+                  d="M10.733 5.076a10.744 10.744 0 0 1 11.205 6.575 1 1 0 0 1 0 .696 10.747 10.747 0 0 1-1.444 2.49"
+                />
+                <path d="M14.084 14.158a3 3 0 0 1-4.242-4.242" />
+                <path
+                  d="M17.479 17.499a10.75 10.75 0 0 1-15.417-5.151 1 1 0 0 1 0-.696 10.75 10.75 0 0 1 4.446-5.143"
+                />
+                <path d="m2 2 20 20" /></svg
+            ></span>
+          </button>
+
+          <div
+            *ngIf="
+              userForm.get('password')?.invalid &&
+              userForm.get('password')?.touched
+            "
+            class="text-sm text-red-500"
+          >
+            <div *ngIf="userForm.get('password')?.errors?.['required']">
+              La contraseña es obligatoria
+            </div>
+
+            <div *ngIf="userForm.get('password')?.errors?.['minLength']">
+              Debe tener mínimo 8 caracteres
+            </div>
+
+            <div *ngIf="userForm.get('password')?.errors?.['uppercase']">
+              Debe contener al menos una mayúscula
+            </div>
+
+            <div *ngIf="userForm.get('password')?.errors?.['number']">
+              Debe contener al menos un número
+            </div>
+
+            <div *ngIf="userForm.get('password')?.errors?.['specialChar']">
+              Debe contener al menos un carácter especial
+            </div>
+          </div>
+        </div>
+
+        <!-- CONFIRM PASSWORD -->
+        <div class="relative space-y-1">
+          <input
+            [type]="showConfirmPassword ? 'text' : 'password'"
+            placeholder="Confirmar contraseña"
+            formControlName="confirmPassword"
+            class="input w-full pr-10"
+          />
+
+          <button
+            type="button"
+            (click)="showConfirmPassword = !showConfirmPassword"
+            class="absolute right-3 top-3 text-text-muted"
+          >
+            <span *ngIf="!showConfirmPassword">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#263d42"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-eye-icon lucide-eye"
+              >
+                <path
+                  d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"
+                />
+                <circle cx="12" cy="12" r="3" /></svg
+            ></span>
+            <span *ngIf="showConfirmPassword">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#263d42"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-eye-off-icon lucide-eye-off"
+              >
+                <path
+                  d="M10.733 5.076a10.744 10.744 0 0 1 11.205 6.575 1 1 0 0 1 0 .696 10.747 10.747 0 0 1-1.444 2.49"
+                />
+                <path d="M14.084 14.158a3 3 0 0 1-4.242-4.242" />
+                <path
+                  d="M17.479 17.499a10.75 10.75 0 0 1-15.417-5.151 1 1 0 0 1 0-.696 10.75 10.75 0 0 1 4.446-5.143"
+                />
+                <path d="m2 2 20 20" /></svg
+            ></span>
+          </button>
+
+          <div
+            *ngIf="
+              userForm.errors?.['passwordMismatch'] &&
+              userForm.get('confirmPassword')?.touched
+            "
+            class="text-sm text-red-500"
+          >
+            Las contraseñas no coinciden
+          </div>
+        </div>
+      </div>
+
+      <!-- BOTÓN -->
+      <div class="pt-6 text-center">
+        <button
+          type="submit"
+          class="bg-primary text-white px-8 py-3 rounded-lg shadow hover:opacity-90 transition"
+        >
+          Registrar Usuario
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

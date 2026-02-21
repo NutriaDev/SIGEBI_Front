@@ -18,12 +18,15 @@ import { AuthInterceptor } from './core/interceptors/auth.interceptor';
     SharedModule,
     LayoutModule,
     AppRoutingModule,
+    HttpClientModule,
   ],
-  providers: [{
-    provide: HTTP_INTERCEPTORS,
-    useClass: AuthInterceptor,
-    multi: true
-  }],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true,
+    },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

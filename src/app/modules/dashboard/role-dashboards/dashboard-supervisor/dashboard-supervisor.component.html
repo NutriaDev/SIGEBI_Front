@@ -1,40 +1,39 @@
 <app-tab-container></app-tab-container>
 
 <div class="space-y-6">
-
   <div class="bg-primary text-white px-6 py-3 rounded-lg shadow">
     Bienvenido a tu espacio operativo
   </div>
 
   <div class="bg-white rounded-lg shadow p-6">
-
     <p class="text-text-muted">
-      Aquí puedes supervisar actividad operativa,
-      usuarios y reportes.
+      Desde aquí puedes supervisar la actividad operativa del sistema. Puedes
+      consultar usuarios y actualizar información cuando sea necesario. También
+      tienes acceso a la gestión y creación de reportes.
+    </p>
+    <p class="text-text-muted">
+      Este espacio te permite monitorear y coordinar sin afectar la
+      configuración del sistema.
     </p>
 
     <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
-
       <div class="card">
         <h3 class="font-semibold mb-2">Tu Rol</h3>
         <p>SUPERVISOR</p>
+        <p>Sesión activa segura</p>
       </div>
 
       <div class="card">
         <h3 class="font-semibold mb-2">Accesos Rápidos</h3>
 
-        <button class="btn-outline w-full mb-2">
+        <button class="btn-outline w-full mb-2" (click)="openReports()">
           Ver Reportes
         </button>
 
-        <button class="btn-outline w-full">
+        <button class="btn-outline w-full mb-2" (click)="openUsers()">
           Ver Usuarios
         </button>
-
       </div>
-
     </div>
-
   </div>
-
 </div>

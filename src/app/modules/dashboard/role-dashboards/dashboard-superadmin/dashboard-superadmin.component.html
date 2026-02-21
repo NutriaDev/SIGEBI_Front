@@ -1,20 +1,24 @@
 <app-tab-container></app-tab-container>
 
 <div class="space-y-6">
-
   <div class="bg-primary text-white px-6 py-3 rounded-lg shadow">
     Bienvenido a tu centro de Gestión
   </div>
 
   <div class="bg-white rounded-lg shadow p-6 space-y-4">
+    <p class="text-text-muted">
+      Este es tu centro de control administrativo. Desde aquí puedes gestionar
+      usuarios, roles, sesiones activas y supervisar la operación completa del
+      sistema.
+    </p>
 
     <p class="text-text-muted">
-      Este es tu centro de control administrativo.
-      Puedes gestionar usuarios, roles y sesiones activas.
+      Como SUPERADMIN tienes acceso total a la configuración y seguridad de la
+      plataforma. Revisa accesos rápidos o navega desde el menú lateral para
+      comenzar.
     </p>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-
       <div class="card">
         <h3 class="font-semibold mb-2">Tu Rol</h3>
         <p>SUPERADMIN</p>
@@ -24,19 +28,14 @@
       <div class="card">
         <h3 class="font-semibold mb-2">Accesos Rápidos</h3>
 
-        <button class="btn-outline w-full mb-2">
+        <button class="btn-outline w-full mb-2" (click)="openCreateUser()">
           Crear Usuario
         </button>
 
-        <button class="btn-outline w-full">
+        <button class="btn-outline w-full" (click)="openReports()">
           Ver Reportes
         </button>
-
       </div>
-
     </div>
-
   </div>
-
 </div>
-

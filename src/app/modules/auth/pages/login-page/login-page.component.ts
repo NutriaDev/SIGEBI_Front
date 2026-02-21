@@ -1,14 +1,14 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../../core/services/auth.service';
+import { HttpErrorMapperService } from '../../../../core/services/http-error-mapper.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-login-page',
   templateUrl: './login-page.component.html',
-  styleUrls: ['./login-page.component.css'],
 })
 export class LoginPageComponent {
-
   roles: string[] = ['Administrador', 'Técnico', 'Supervisor', 'Auditor'];
   selectedRole = '';
   username = '';
@@ -18,34 +18,60 @@ export class LoginPageComponent {
 
   constructor(
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private errorMapper: HttpErrorMapperService,
   ) {}
 
   onLogin(): void {
-
     if (!this.username || !this.password) {
-      this.errorMessage = 'Usuario y contraseña requeridos';
+      Swal.fire({
+        icon: 'warning',
+        title: 'Campos requeridos',
+        text: 'Usuario y contraseña requeridos',
+        confirmButtonText: 'Aceptar',
+        buttonsStyling: false,
+        customClass: {
+          popup: 'sigebi-popup',
+          confirmButton: 'sigebi-confirm-btn',
+        },
+      });
+
       return;
     }
 
     this.loading = true;
-    this.errorMessage = '';
 
     const credentials = {
-      email: this.username,     // backend espera email
-      password: this.password
+      email: this.username,
+      password: this.password,
     };
 
     this.authService.login(credentials).subscribe({
       next: () => {
-        this.loading = false;
         this.router.navigate(['/dashboard']);
       },
       error: (err) => {
+        const message = this.errorMapper.mapLoginError(err);
+
+        Swal.fire({
+          icon: 'error',
+          title: 'Error de autenticación',
+          text: message,
+          confirmButtonText: 'Aceptar',
+          buttonsStyling: false,
+          customClass: {
+            popup: 'sigebi-popup',
+            confirmButton: 'sigebi-confirm-btn',
+          },
+        });
+
         this.loading = false;
-        this.errorMessage = 'Credenciales inválidas';
-        console.error(err);
-      }
+
+        this.loading = false;
+      },
+      complete: () => {
+        this.loading = false;
+      },
     });
   }
 }

@@ -1,11 +1,11 @@
-<div class="min-h-screen bg-secondary flex flex-col items-center justify-center px-4">
-
+<div
+  class="min-h-screen bg-secondary flex flex-col items-center justify-center px-4"
+>
   <!-- Title -->
   <h1 class="text-4xl font-bold text-primary tracking-wide mb-10">SIGEBI</h1>
 
   <!-- Login form card -->
   <div class="w-full max-w-md space-y-5">
-
     <!-- Rol select -->
     <div class="relative">
       <!-- <select
@@ -15,9 +15,16 @@
         <option value="" disabled selected>Rol</option>
         <option *ngFor="let role of roles" [value]="role">{{ role }}</option>
       </select> -->
-      <div class="pointer-events-none absolute inset-y-0 left-4 flex items-center">
-        <svg *ngIf="!selectedRole" class="w-3 h-3 text-primary" fill="currentColor" viewBox="0 0 24 24">
-          <path d="M8 5v14l11-7z"/>
+      <div
+        class="pointer-events-none absolute inset-y-0 left-4 flex items-center"
+      >
+        <svg
+          *ngIf="!selectedRole"
+          class="w-3 h-3 text-primary"
+          fill="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path d="M8 5v14l11-7z" />
         </svg>
       </div>
     </div>
@@ -47,11 +54,18 @@
     <!-- Iniciar Sesión button -->
     <div class="pt-2">
       <button
-        class="btn-primary text-base tracking-wide"
+        class="btn-primary text-base tracking-wide w-full"
+        [disabled]="loading"
         (click)="onLogin()"
       >
-        Iniciar Sesión
+        <span *ngIf="!loading">Iniciar Sesión</span>
+        <span *ngIf="loading">Cargando...</span>
       </button>
+
+      <!-- 🔴 Mensaje de error -->
+      <div *ngIf="errorMessage" class="mt-3 text-sm text-red-500 text-center">
+        {{ errorMessage }}
+      </div>
     </div>
 
     <!-- Olvide contraseña -->
