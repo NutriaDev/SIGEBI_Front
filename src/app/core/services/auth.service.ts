@@ -27,18 +27,24 @@ export class AuthService {
   }
 
   login(credentials: LoginRequest): Observable<any> {
-    return this.http.post<any>(`${this.API}/login`, credentials).pipe(
-      tap((response) => {
-        const accessToken = response.body.accessToken;
-        const refreshToken = response.body.refreshToken;
+    return this.http
+      .post<any>(`${this.API}/login`, credentials, {
+        headers: {
+          'Skip-Auth-Redirect': 'true',
+        },
+      })
+      .pipe(
+        tap((response) => {
+          const accessToken = response.body.accessToken;
+          const refreshToken = response.body.refreshToken;
 
-        this.tokenService.saveAccessToken(accessToken);
-        this.tokenService.saveRefreshToken(refreshToken);
+          this.tokenService.saveAccessToken(accessToken);
+          this.tokenService.saveRefreshToken(refreshToken);
 
-        const payload = this.jwtDecoderService.decodeToken(accessToken);
-        this.currentUserSubject.next(payload);
-      }),
-    );
+          const payload = this.jwtDecoderService.decodeToken(accessToken);
+          this.currentUserSubject.next(payload);
+        }),
+      );
   }
 
   logout() {

@@ -1,40 +1,34 @@
 <app-tab-container></app-tab-container>
 
 <div class="space-y-6">
-
   <div class="bg-primary text-white px-6 py-3 rounded-lg shadow">
     Bienvenido a tu espacio de trabajo
   </div>
 
   <div class="bg-white rounded-lg shadow p-6">
-
     <p class="text-text-muted">
-      Aquí puedes gestionar tickets asignados
-      y crear reportes técnicos.
+      Este es tu espacio de trabajo operativo. Aquí podrás gestionar tickets
+      asignados, consultar información de usuarios y crear reportes técnicos
+    </p>
+    <p class="text-text-muted">
+      Utiliza el menú lateral para acceder a los módulos operativos disponibles
+      según tu perfil.
     </p>
 
     <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
-
       <div class="card">
         <h3 class="font-semibold mb-2">Tu Rol</h3>
         <p>TÉCNICO</p>
+        <p>Sesión activa segura</p>
       </div>
 
       <div class="card">
         <h3 class="font-semibold mb-2">Accesos Rápidos</h3>
 
-        <button class="btn-outline w-full mb-2">
-          Ver Mis Tickets
+        <button class="btn-outline w-full mb-2" (click)="openReports()">
+          Ver Reportes
         </button>
-
-        <button class="btn-outline w-full">
-          Crear Reporte Técnico
-        </button>
-
       </div>
-
     </div>
-
   </div>
-
 </div>
