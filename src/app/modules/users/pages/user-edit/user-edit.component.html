@@ -5,9 +5,46 @@
   </div>
 
   <!-- Tabs -->
-  <div class="flex gap-2">
-    <button class="btn-white">Buscar Usuario por Id</button>
-    <button class="btn-white">Buscar Usuario por Email</button>
+  <div class="grid md:grid-cols-2 gap-4 mt-6">
+    <!-- Buscar por ID -->
+    <div class="flex gap-2">
+      <input
+        type="number"
+        name="searchId"
+        placeholder="Ingrese ID"
+        [(ngModel)]="searchId"
+        class="input w-full"
+      />
+      <button
+        type="button"
+        class="btn-primary md:w-auto"
+        (click)="searchById()"
+      >
+        Buscar
+      </button>
+    </div>
+
+    <!-- Buscar por Email -->
+    <div class="flex gap-2">
+      <input
+        type="email"
+        name="searchEmail"
+        placeholder="Ingrese Email"
+        [(ngModel)]="searchEmail"
+        class="input w-full"
+      />
+      <button
+        type="button"
+        class="btn-primary md:w-auto"
+        (click)="searchByEmail()"
+      >
+        Buscar
+      </button>
+    </div>
+  </div>
+
+  <div *ngIf="loading" class="text-center py-4 text-primary font-medium">
+    Cargando usuario...
   </div>
 
   <!-- FORM CARD -->
@@ -30,6 +67,16 @@
         <div>
           <label class="block text-sm mb-1">Nombres *</label>
           <input formControlName="firstName" class="input w-full" />
+
+          <div
+            *ngIf="
+              userForm.get('firstName')?.invalid &&
+              userForm.get('firstName')?.touched
+            "
+            class="text-sm text-red-500 mt-1"
+          >
+            Nombre inválido
+          </div>
         </div>
 
         <div>
@@ -95,11 +142,23 @@
       <div class="flex flex-col md:flex-row justify-between gap-4 pt-8">
         <button type="submit" class="btn-primary md:w-auto">Guardar</button>
 
-        <button type="button" class="btn-primary md:w-auto">Bloquear</button>
+        <button
+          type="button"
+          class="btn-primary md:w-auto"
+          [disabled]="userForm.invalid || loading"
+        >
+          Bloquear
+        </button>
       </div>
 
       <div class="pt-4 text-center">
-        <button type="button" class="btn-primary md:w-auto">Eliminar</button>
+        <button
+          type="button"
+          class="btn-primary md:w-auto"
+          [disabled]="userForm.invalid || loading"
+        >
+          Eliminar
+        </button>
       </div>
     </form>
   </div>
