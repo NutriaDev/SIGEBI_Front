@@ -1,16 +1,15 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, Input, OnChanges } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UsersService } from '../../services/users.service';
 import { strongPasswordValidator } from '../../validators/password.validator';
 import { letterValidator } from '../../validators/letter.validator';
 import Swal from 'sweetalert2';
-import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-user-edit',
   templateUrl: './user-edit.component.html',
 })
-export class UserEditComponent {
+export class UserEditComponent implements OnInit, OnChanges {
   userForm: FormGroup;
   loading = false;
 
@@ -20,10 +19,11 @@ export class UserEditComponent {
   searchId!: number;
   searchEmail!: string;
 
+  @Input() email?: string;
+
   constructor(
     private fb: FormBuilder,
     private usersService: UsersService,
-    private route: ActivatedRoute,
   ) {
     this.userForm = this.fb.group({
       role: ['', Validators.required],
@@ -39,17 +39,15 @@ export class UserEditComponent {
     });
   }
 
-  ngOnInit(): void {
-    this.route.params.subscribe((params) => {
-      const emailParam = params['email'];
+  ngOnInit(): void {}
 
-      if (emailParam) {
-        const decodedEmail = decodeURIComponent(emailParam);
-        this.loadUserByEmail(decodedEmail);
-      }
-    });
+  ngOnChanges(): void {
+    if (this.email) {
+      this.loadUserByEmail(this.email);
+    }
   }
 
+  // 🔵 Mapeo rol string → id
   mapRoleNameToId(roleName: string): number | null {
     const roles: any = {
       SUPERADMIN: 1,
@@ -59,6 +57,8 @@ export class UserEditComponent {
     };
     return roles[roleName] ?? null;
   }
+
+  // 🔵 Rellenar formulario
   fillForm(user: any) {
     this.userForm.patchValue({
       role: this.mapRoleNameToId(user.roleName),
@@ -72,6 +72,7 @@ export class UserEditComponent {
     });
   }
 
+  // 🔵 Cargar por ID manual
   searchById() {
     if (!this.searchId) return;
 
@@ -82,48 +83,17 @@ export class UserEditComponent {
         this.fillForm(response.body);
         this.loading = false;
       },
-      error: () => {
-        this.loading = false;
-        Swal.fire({
-          icon: 'error',
-          title: 'Usuario no encontrado',
-          text: 'No se encontró usuario con ese dato.',
-          confirmButtonText: 'Aceptar',
-          buttonsStyling: false,
-          customClass: {
-            popup: 'sigebi-popup',
-            confirmButton: 'sigebi-confirm-btn',
-          },
-        });
-      },
+      error: () => this.showNotFound(),
     });
   }
 
+  // 🔵 Cargar por Email manual
   searchByEmail() {
     if (!this.searchEmail) return;
-    this.loading = true;
-    this.usersService.getUserByEmail(this.searchEmail).subscribe({
-      next: (response) => {
-        this.fillForm(response.body);
-        this.loading = false;
-      },
-      error: () => {
-        this.loading = false;
-        Swal.fire({
-          icon: 'error',
-          title: 'Usuario no encontrado',
-          text: 'No se encontró usuario con ese dato.',
-          confirmButtonText: 'Aceptar',
-          buttonsStyling: false,
-          customClass: {
-            popup: 'sigebi-popup',
-            confirmButton: 'sigebi-confirm-btn',
-          },
-        });
-      },
-    });
+    this.loadUserByEmail(this.searchEmail);
   }
 
+  // 🔵 Método reutilizable
   loadUserByEmail(email: string) {
     this.loading = true;
 
@@ -132,39 +102,24 @@ export class UserEditComponent {
         this.fillForm(response.body);
         this.loading = false;
       },
-      error: () => {
-        this.loading = false;
-        Swal.fire({
-          icon: 'error',
-          title: 'Usuario no encontrado',
-          text: 'No se encontró usuario con ese correo.',
-          confirmButtonText: 'Aceptar',
-          buttonsStyling: false,
-          customClass: {
-            popup: 'sigebi-popup',
-            confirmButton: 'sigebi-confirm-btn',
-          },
-        });
-      },
+      error: () => this.showNotFound(),
     });
   }
 
-  // submit() {
-  //   if (this.userForm.invalid) {
-  //     this.userForm.markAllAsTouched();
-  //     return;
-  //   }
+  // 🔵 SweetAlert centralizado
+  showNotFound() {
+    this.loading = false;
 
-  //   this.loading = true;
-  //   this.usersService.update(this.userForm.value).subscribe({
-  //     next: () => {
-  //       this.loading = false;
-  //       this.userForm.reset();
-  //       this.router.navigate(['/users']);
-  //     },
-  //     error: () => {
-  //       this.loading = false;
-  //     },
-  //   });
-  // }
+    Swal.fire({
+      icon: 'error',
+      title: 'Usuario no encontrado',
+      text: 'No se encontró usuario con ese dato.',
+      confirmButtonText: 'Aceptar',
+      buttonsStyling: false,
+      customClass: {
+        popup: 'sigebi-popup',
+        confirmButton: 'sigebi-confirm-btn',
+      },
+    });
+  }
 }

@@ -4,6 +4,7 @@ import { BehaviorSubject } from 'rxjs';
 export interface Tab {
   title: string;
   component: Type<any>;
+  data?: any;
 }
 
 @Injectable({
@@ -15,14 +16,14 @@ export class TabService {
 
   tabs$ = this.tabsSubject.asObservable();
 
-  openTab(title: string, component: Type<any>) {
+  openTab(title: string, component: Type<any>, data?: any) {
     const existingIndex = this.tabs.findIndex((t) => t.title === title);
 
     if (existingIndex !== -1) {
       return; // evita duplicados
     }
 
-    this.tabs.push({ title, component });
+    this.tabs.push({ title, component, data });
     this.tabsSubject.next(this.tabs);
   }
 

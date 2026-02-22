@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { UsersService } from '../../services/users.service';
 import { User } from '../../models/user.model';
 import { Router } from '@angular/router';
+import { TabService } from 'app/modules/dashboard/services/tab.service';
+import { UserEditComponent } from '../user-edit/user-edit.component';
 
 @Component({
   selector: 'app-user-list',
@@ -13,7 +15,7 @@ export class UserListComponent implements OnInit {
 
   constructor(
     private usersService: UsersService,
-    private router: Router,
+    private tabService: TabService,
   ) {}
 
   ngOnInit(): void {
@@ -22,7 +24,6 @@ export class UserListComponent implements OnInit {
 
   loadUsers(): void {
     this.loading = true;
-
     this.usersService.getAllUsers().subscribe({
       next: (response) => {
         this.users = response.body; // ✅ totalmente tipado
@@ -36,9 +37,11 @@ export class UserListComponent implements OnInit {
   }
 
   onEdit(user: User) {
-    const encodedEmail = encodeURIComponent(user.email);
-    this.router.navigate(['/users/edit', encodedEmail]);
+    this.tabService.openTab('Editar ' + user.name, UserEditComponent, {
+      email: user.email,
+    });
   }
+
   // onDelete(id: number): void {
   //   this.usersService.deleteUser(id).subscribe({
   //     next: () => {

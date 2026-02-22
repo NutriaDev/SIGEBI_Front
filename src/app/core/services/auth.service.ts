@@ -75,8 +75,6 @@ export class AuthService {
   }
 
   hasPermission(permission: string): boolean {
-    console.log('Checking permission:', permission);
-    console.log('User permissions:', this.getPermissions());
     return this.getPermissions().includes(permission);
   }
 
@@ -91,15 +89,11 @@ export class AuthService {
   private initialize(): void {
     const token = this.tokenService.getAccessToken();
 
-    console.log('🔎 Token en storage:', token);
-
     if (!token) {
-      console.log('❌ No hay token almacenado');
       return;
     }
 
     if (this.jwtDecoderService.isTokenExpired(token)) {
-      console.log('⏳ Token expirado, limpiando sesión');
       this.tokenService.clear();
       return;
     }
@@ -107,18 +101,9 @@ export class AuthService {
     const payload = this.jwtDecoderService.decodeToken(token);
 
     if (!payload) {
-      console.log('❌ No se pudo decodificar el token');
       return;
     }
 
-    console.log('📦 Payload completo:', payload);
-    console.log('👤 Email:', payload.email);
-    console.log('📝 Name:', payload.name);
-    console.log('🎭 Roles:', payload.roles);
-    console.log('🔐 Permissions:', payload.permissions);
-
     this.currentUserSubject.next(payload);
-
-    console.log('✅ Sesión restaurada correctamente');
   }
 }
