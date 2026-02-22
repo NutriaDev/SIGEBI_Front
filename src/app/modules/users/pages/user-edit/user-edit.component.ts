@@ -22,6 +22,7 @@ export class UserEditComponent implements OnInit, OnChanges {
   searchEmail!: string;
 
   @Input() email?: string;
+  @Input() toogleUserStatus?: boolean;
 
   constructor(
     private fb: FormBuilder,
@@ -98,20 +99,7 @@ export class UserEditComponent implements OnInit, OnChanges {
     this.loadUserByEmail(this.searchEmail);
   }
 
-  // 🔵 Método reutilizable
-  loadUserByEmail(email: string) {
-    this.loading = true;
-
-    this.usersService.getUserByEmail(email).subscribe({
-      next: (response) => {
-        this.fillForm(response.body);
-        this.loading = false;
-      },
-      error: () => this.showNotFound(),
-    });
-  }
-
-  toggleUserStatus() {
+  toggleUserStatusMethod() {
     if (!this.currentUserId) return;
 
     const action = this.isUserActive ? 'desactiva' : 'activa';
@@ -157,6 +145,27 @@ export class UserEditComponent implements OnInit, OnChanges {
         },
         error: () => this.showNotFound(),
       });
+    });
+  }
+
+  // 🔵 Método reutilizable
+  loadUserByEmail(email: string) {
+    this.loading = true;
+
+    this.usersService.getUserByEmail(email).subscribe({
+      next: (response) => {
+        this.fillForm(response.body);
+        this.loading = false;
+
+        // 🔥 Si viene el flag, dispara automáticamente el toggle
+        if (this.toogleUserStatus) {
+          // Pequeño timeout para que Angular termine render
+          setTimeout(() => {
+            this.toggleUserStatusMethod();
+          }, 100);
+        }
+      },
+      error: () => this.showNotFound(),
     });
   }
 

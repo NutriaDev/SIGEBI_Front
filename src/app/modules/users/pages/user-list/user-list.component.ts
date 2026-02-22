@@ -42,6 +42,13 @@ export class UserListComponent implements OnInit {
     });
   }
 
+  onBlock(user: User) {
+    this.tabService.openTab('Editar ' + user.name, UserEditComponent, {
+      email: user.email,
+      toogleUserStatus: true,
+    });
+  }
+
   // onDelete(id: number): void {
   //   this.usersService.deleteUser(id).subscribe({
   //     next: () => {
