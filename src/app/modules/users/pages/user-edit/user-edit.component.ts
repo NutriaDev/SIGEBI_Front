@@ -23,6 +23,7 @@ export class UserEditComponent implements OnInit, OnChanges {
 
   @Input() email?: string;
   @Input() toogleUserStatus?: boolean;
+  @Input() toogleUserDelete?: boolean;
 
   constructor(
     private fb: FormBuilder,
@@ -184,6 +185,44 @@ export class UserEditComponent implements OnInit, OnChanges {
     });
   }
 
+  toggleUserDeleteMethod() {
+    if (!this.currentUserId) return;
+
+    Swal.fire({
+      icon: 'warning',
+      title: '¿Eliminar usuario?',
+      text: 'Esta acción no se puede deshacer.',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar',
+      buttonsStyling: false,
+      customClass: {
+        popup: 'sigebi-popup',
+        confirmButton: 'sigebi-confirm-btn',
+      },
+    }).then((result) => {
+      if (!result.isConfirmed) return;
+
+      this.loading = true;
+
+      this.usersService.deleteUserHard(this.currentUserId).subscribe({
+        next: () => {
+          Swal.fire({
+            icon: 'success',
+            title: 'Usuario eliminado correctamente',
+            confirmButtonText: 'Aceptar',
+          });
+
+          this.loading = false;
+
+          // 🔥 Aquí deberías cerrar el tab
+          // this.tabService.closeCurrentTab();
+        },
+        error: () => this.showNotFound(),
+      });
+    });
+  }
+
   // 🔵 Método reutilizable
   loadUserByEmail(email: string) {
     this.loading = true;
@@ -193,18 +232,21 @@ export class UserEditComponent implements OnInit, OnChanges {
         this.fillForm(response.body);
         this.loading = false;
 
-        // 🔥 Si viene el flag, dispara automáticamente el toggle
         if (this.toogleUserStatus) {
-          // Pequeño timeout para que Angular termine render
           setTimeout(() => {
             this.toggleUserStatusMethod();
+          }, 100);
+        }
+
+        if (this.toogleUserDelete) {
+          setTimeout(() => {
+            this.toggleUserDeleteMethod();
           }, 100);
         }
       },
       error: () => this.showNotFound(),
     });
   }
-
   // 🔵 SweetAlert centralizado
   showNotFound() {
     this.loading = false;

@@ -43,20 +43,16 @@ export class UserListComponent implements OnInit {
   }
 
   onBlock(user: User) {
-    this.tabService.openTab('Editar ' + user.name, UserEditComponent, {
+    this.tabService.openTab('Bloquear ' + user.name, UserEditComponent, {
       email: user.email,
       toogleUserStatus: true,
     });
   }
 
-  // onDelete(id: number): void {
-  //   this.usersService.deleteUser(id).subscribe({
-  //     next: () => {
-  //       this.loadUsers();
-  //     },
-  //     error: (error) => {
-  //       console.error('Error deleting user', error);
-  //     },
-  //   });
-  // }
+  onDelete(user: User) {
+    this.tabService.openTab('Eliminar ' + user.name, UserEditComponent, {
+      email: user.email,
+      toogleUserDelete: true,
+    });
+  }
 }

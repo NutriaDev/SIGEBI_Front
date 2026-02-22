@@ -24,10 +24,6 @@ export class UsersService {
     return this.http.patch(`${this.baseUrl}/update-user`, payload);
   }
 
-  deleteUser(payload: any) {
-    return this.http.delete(`${this.baseUrl}/users-delete`, payload);
-  }
-
   getUserById(id: number): Observable<ApiResponse<User>> {
     return this.http.get<ApiResponse<User>>(
       `${this.baseUrl}/get-user-by-id/${id}`,
