@@ -53,7 +53,7 @@ export class HttpErrorMapperService {
         return 'El correo ya está registrado.';
 
       case 403:
-        return 'No tienes permisos para crear usuarios.';
+        return 'No tienes permisos para editar usuarios.';
 
       case 0:
         return 'No se pudo conectar con el servidor.';

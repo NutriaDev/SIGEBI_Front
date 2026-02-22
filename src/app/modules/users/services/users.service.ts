@@ -21,7 +21,7 @@ export class UsersService {
   }
 
   updateUser(payload: any) {
-    return this.http.put(`${this.baseUrl}/update-user`, payload);
+    return this.http.patch(`${this.baseUrl}/update-user`, payload);
   }
 
   deleteUser(payload: any) {
@@ -37,6 +37,20 @@ export class UsersService {
   getUserByEmail(email: string): Observable<ApiResponse<User>> {
     return this.http.get<ApiResponse<User>>(
       `${this.baseUrl}/get-user-by-email/${email}`,
+    );
+  }
+
+  deactivateUser(id: number): Observable<ApiResponse<User>> {
+    return this.http.patch<ApiResponse<User>>(
+      `${this.baseUrl}/deactive-user/${id}`,
+      null,
+    );
+  }
+
+  activateUser(id: number): Observable<ApiResponse<User>> {
+    return this.http.patch<ApiResponse<User>>(
+      `${this.baseUrl}/activate-user/${id}`,
+      null,
     );
   }
 }

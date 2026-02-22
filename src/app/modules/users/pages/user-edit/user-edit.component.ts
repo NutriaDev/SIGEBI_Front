@@ -12,10 +12,12 @@ import Swal from 'sweetalert2';
 export class UserEditComponent implements OnInit, OnChanges {
   userForm: FormGroup;
   loading = false;
+  isUserActive = true;
 
   showPassword = false;
   showConfirmPassword = false;
 
+  currentUserId!: number;
   searchId!: number;
   searchEmail!: string;
 
@@ -60,6 +62,9 @@ export class UserEditComponent implements OnInit, OnChanges {
 
   // 🔵 Rellenar formulario
   fillForm(user: any) {
+    this.currentUserId = user.idUsers;
+    this.isUserActive = user.active;
+
     this.userForm.patchValue({
       role: this.mapRoleNameToId(user.roleName),
       firstName: user.name,
@@ -103,6 +108,55 @@ export class UserEditComponent implements OnInit, OnChanges {
         this.loading = false;
       },
       error: () => this.showNotFound(),
+    });
+  }
+
+  toggleUserStatus() {
+    if (!this.currentUserId) return;
+
+    const action = this.isUserActive ? 'desactiva' : 'activa';
+
+    Swal.fire({
+      icon: 'warning',
+      title: `¿${action} usuario?`,
+      text: `El usuario será ${action}do.`,
+      showCancelButton: true,
+      confirmButtonText: `Sí, ${action}r`,
+      cancelButtonText: 'Cancelar',
+      buttonsStyling: false,
+      customClass: {
+        popup: 'sigebi-popup',
+        confirmButton: 'sigebi-confirm-btn',
+      },
+    }).then((result) => {
+      if (!result.isConfirmed) return;
+
+      this.loading = true;
+
+      const request$ = this.isUserActive
+        ? this.usersService.deactivateUser(this.currentUserId)
+        : this.usersService.activateUser(this.currentUserId);
+
+      request$.subscribe({
+        next: (response) => {
+          this.isUserActive = response.body.active;
+          this.fillForm(response.body);
+
+          Swal.fire({
+            icon: 'success',
+            title: `Usuario ${action}do correctamente`,
+            confirmButtonText: 'Aceptar',
+            buttonsStyling: false,
+            customClass: {
+              popup: 'sigebi-popup',
+              confirmButton: 'sigebi-confirm-btn',
+            },
+          });
+
+          this.loading = false;
+        },
+        error: () => this.showNotFound(),
+      });
     });
   }
 
