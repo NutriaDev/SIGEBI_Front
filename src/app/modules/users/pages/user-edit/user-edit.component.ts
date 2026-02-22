@@ -99,6 +99,42 @@ export class UserEditComponent implements OnInit, OnChanges {
     this.loadUserByEmail(this.searchEmail);
   }
 
+  deleteUserHard() {
+    if (!this.currentUserId) return;
+
+    Swal.fire({
+      icon: 'warning',
+      title: '¿Eliminar usuario?',
+      text: 'Esta acción no se puede deshacer.',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar',
+      buttonsStyling: false,
+      customClass: {
+        popup: 'sigebi-popup',
+        confirmButton: 'sigebi-confirm-btn',
+      },
+    }).then((result) => {
+      if (!result.isConfirmed) return;
+
+      this.loading = true;
+
+      this.usersService.deleteUserHard(this.currentUserId).subscribe({
+        next: () => {
+          Swal.fire({
+            icon: 'success',
+            title: 'Usuario eliminado correctamente',
+            confirmButtonText: 'Aceptar',
+          });
+
+          // 🔥 Aquí deberías cerrar el tab
+          // o redirigir a lista
+        },
+        error: () => this.showNotFound(),
+      });
+    });
+  }
+
   toggleUserStatusMethod() {
     if (!this.currentUserId) return;
 

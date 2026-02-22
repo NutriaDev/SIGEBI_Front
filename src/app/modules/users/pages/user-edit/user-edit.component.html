@@ -149,7 +149,7 @@
               !isUserActive,
           }"
           [disabled]="loading"
-          (click)="toggleUserStatus()"
+          (click)="toggleUserStatusMethod()"
         >
           {{ isUserActive ? "Bloquear" : "Activar" }}
         </button>
@@ -157,7 +157,8 @@
         <button
           type="button"
           class="btn-primary md:w-auto"
-          [disabled]="userForm.invalid || loading"
+          [disabled]="loading"
+          (click)="deleteUserHard()"
         >
           Eliminar
         </button>

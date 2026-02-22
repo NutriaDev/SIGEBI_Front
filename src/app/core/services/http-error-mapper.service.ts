@@ -72,11 +72,11 @@ export class HttpErrorMapperService {
       case 400:
         return error.error?.message || 'Datos inválidos.';
 
-      case 409:
-        return 'El correo ya está registrado.';
-
       case 403:
-        return 'No tienes permisos para crear usuarios.';
+        return 'No tienes permisos para eliminar usuarios.';
+
+      case 404:
+        return 'El usuario no existe o ya ha sido eliminado.';
 
       case 0:
         return 'No se pudo conectar con el servidor.';

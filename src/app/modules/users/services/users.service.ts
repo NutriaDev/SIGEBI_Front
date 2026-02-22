@@ -53,4 +53,10 @@ export class UsersService {
       null,
     );
   }
+
+  deleteUserHard(id: number): Observable<ApiResponse<User>> {
+    return this.http.delete<ApiResponse<User>>(
+      `${this.baseUrl}/deletehard-user/${id}`,
+    );
+  }
 }
