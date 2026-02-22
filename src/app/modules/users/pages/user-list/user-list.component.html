@@ -14,8 +14,27 @@
         class="bg-transparent rounded-bg-primary rounded-lg p-4 shadow-sm flex flex-col md:flex-row md:items-center md:justify-between gap-4"
       >
         <!-- Info -->
-        <div class="text-sm md:text-base font-medium text-text-main">
-          {{ user.roleName }} / {{ user.name }} {{ user.lastname }}
+        <div class="flex flex-col">
+          <!-- Nombre y Rol -->
+          <div class="text-sm md:text-base font-semibold text-text-main">
+            {{ user.roleName }} / {{ user.name }} {{ user.lastname }}
+          </div>
+
+          <!-- Email -->
+          <div class="text-xs md:text-sm text-gray-500">
+            {{ user.email }}
+          </div>
+
+          <!-- Estado -->
+          <div
+            class="text-xs md:text-sm font-medium mt-1"
+            [ngClass]="{
+              ' text-bg-primary': user.active,
+              ' text-red-600': !user.active,
+            }"
+          >
+            {{ user.active ? "Activo" : "Inactivo" }}
+          </div>
         </div>
 
         <!-- Acciones -->
