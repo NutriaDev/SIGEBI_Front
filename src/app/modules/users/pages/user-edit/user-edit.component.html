@@ -43,13 +43,12 @@
       <!-- ROL -->
       <div>
         <label class="block text-sm mb-1">Rol *</label>
-        <select formControlName="role" class="input w-full">
-          <option value="">Seleccionar rol</option>
-          <option value="1">SUPERADMIN</option>
-          <option value="2">ADMIN</option>
-          <option value="3">SUPERVISOR</option>
-          <option value="4">TECNICO</option>
-        </select>
+
+        <input
+          [value]="currentRoleName"
+          class="w-full px-4 py-2 rounded-md border bg-gray-100 text-gray-600 font-medium"
+          disabled
+        />
       </div>
 
       <!-- NOMBRE / APELLIDO -->

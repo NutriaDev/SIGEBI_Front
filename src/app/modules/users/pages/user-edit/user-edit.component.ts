@@ -1,7 +1,6 @@
 import { Component, OnInit, Input, OnChanges } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UsersService } from '../../services/users.service';
-import { strongPasswordValidator } from '../../validators/password.validator';
 import { letterValidator } from '../../validators/letter.validator';
 import Swal from 'sweetalert2';
 import { TabService } from 'app/modules/dashboard/services/tab.service';
@@ -20,6 +19,7 @@ export class UserEditComponent implements OnInit, OnChanges {
   showConfirmPassword = false;
 
   currentUserId!: number;
+  currentRoleName!: string;
   searchId!: number;
   searchEmail!: string;
 
@@ -35,7 +35,6 @@ export class UserEditComponent implements OnInit, OnChanges {
     private httpErrorMapperService: HttpErrorMapperService,
   ) {
     this.userForm = this.fb.group({
-      role: ['', Validators.required],
       firstName: ['', [Validators.required, letterValidator]],
       lastName: ['', [Validators.required, letterValidator]],
       birthDate: [''],
@@ -43,8 +42,6 @@ export class UserEditComponent implements OnInit, OnChanges {
       document: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       entity: ['', Validators.required],
-      password: ['', [Validators.required, strongPasswordValidator]],
-      confirmPassword: ['', Validators.required],
     });
   }
 
@@ -69,11 +66,12 @@ export class UserEditComponent implements OnInit, OnChanges {
 
   // 🔵 Rellenar formulario
   fillForm(user: any) {
+    this.currentRoleName = user.roleName;
     this.currentUserId = user.idUsers;
     this.isUserActive = user.active;
 
     this.userForm.patchValue({
-      role: this.mapRoleNameToId(user.roleName),
+      role: [{ value: this.currentRoleName, disabled: true }],
       firstName: user.name,
       lastName: user.lastname,
       birthDate: user.birthDate?.split('T')[0],
