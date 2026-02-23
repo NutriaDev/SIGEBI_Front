@@ -43,7 +43,9 @@ export class UserListComponent implements OnInit {
   }
 
   onBlock(user: User) {
-    this.tabService.openTab('Bloquear ' + user.name, UserEditComponent, {
+    const action = user.active ? 'Bloquear' : 'Activar';
+
+    this.tabService.openTab(`${action} ${user.name}`, UserEditComponent, {
       email: user.email,
       toogleUserStatus: true,
     });
