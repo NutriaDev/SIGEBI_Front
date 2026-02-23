@@ -4,9 +4,6 @@ import { EquipmentRoutingModule } from './equipment-routing.module';
 
 @NgModule({
   declarations: [],
-  imports: [
-    SharedModule,
-    EquipmentRoutingModule,
-  ],
+  imports: [SharedModule, EquipmentRoutingModule],
 })
 export class EquipmentModule {}

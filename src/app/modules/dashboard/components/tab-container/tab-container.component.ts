@@ -11,11 +11,12 @@ export class TabContainerComponent implements OnInit {
 
   constructor(private tabService: TabService) {}
 
-  private environment = inject(EnvironmentInjector);
+  environmentInjector = inject(EnvironmentInjector);
 
   ngOnInit(): void {
     this.tabService.tabs$.subscribe((tabs) => {
       this.tabs = tabs;
+      this.activeTabIndex = tabs.length - 1; // 👈 ESTA ES LA CLAVE
     });
   }
 

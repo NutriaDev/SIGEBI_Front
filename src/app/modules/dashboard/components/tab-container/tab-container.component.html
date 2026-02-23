@@ -27,6 +27,7 @@
     <ng-container
       *ngComponentOutlet="
         tabs[activeTabIndex].component;
+        environmentInjector: environmentInjector;
         inputs: tabs[activeTabIndex].data
       "
     >

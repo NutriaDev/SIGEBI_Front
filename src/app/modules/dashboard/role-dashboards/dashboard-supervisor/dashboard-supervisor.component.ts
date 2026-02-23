@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { TabService } from '../../services/tab.service';
 import { UserListComponent } from '../../../users/pages/user-list/user-list.component';
 import { ReportsModule } from '../../../reports/reports.module';
+import { EquipmentLifecycleComponent } from 'app/modules/equipment/pages/equipment-lifecycle/equipment-lifecycle.component';
 
 @Component({
   selector: 'app-dashboard-supervisor',
@@ -16,5 +17,12 @@ export class DashboardSupervisorComponent {
 
   openReports() {
     this.tabService.openTab('Reportes', ReportsModule);
+  }
+
+  openEquipmentLifecycle() {
+    this.tabService.openTab(
+      'Ciclo de Vida del Equipo',
+      EquipmentLifecycleComponent,
+    );
   }
 }

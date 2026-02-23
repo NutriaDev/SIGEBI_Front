@@ -1,9 +1,12 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { EquipmentLifecycleComponent } from './pages/equipment-lifecycle/equipment-lifecycle.component';
 
 const routes: Routes = [
-  // { path: '', component: EquipmentListPageComponent },
-  // { path: ':id', component: EquipmentDetailPageComponent },
+  {
+    path: 'equipment-lifecycle',
+    component: EquipmentLifecycleComponent,
+  },
 ];
 
 @NgModule({
