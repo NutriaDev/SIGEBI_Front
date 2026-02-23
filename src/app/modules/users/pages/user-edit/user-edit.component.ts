@@ -4,6 +4,8 @@ import { UsersService } from '../../services/users.service';
 import { strongPasswordValidator } from '../../validators/password.validator';
 import { letterValidator } from '../../validators/letter.validator';
 import Swal from 'sweetalert2';
+import { TabService } from 'app/modules/dashboard/services/tab.service';
+import { HttpErrorMapperService } from 'app/core/services/http-error-mapper.service';
 
 @Component({
   selector: 'app-user-edit',
@@ -24,10 +26,13 @@ export class UserEditComponent implements OnInit, OnChanges {
   @Input() email?: string;
   @Input() toogleUserStatus?: boolean;
   @Input() toogleUserDelete?: boolean;
+  activeTabIndex: any;
 
   constructor(
     private fb: FormBuilder,
     private usersService: UsersService,
+    private tabService: TabService,
+    private httpErrorMapperService: HttpErrorMapperService,
   ) {
     this.userForm = this.fb.group({
       role: ['', Validators.required],
@@ -90,7 +95,21 @@ export class UserEditComponent implements OnInit, OnChanges {
         this.fillForm(response.body);
         this.loading = false;
       },
-      error: () => this.showNotFound(),
+      error: (error) => {
+        const message = this.httpErrorMapperService.mapGetUserByIdError(error);
+
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: message,
+          customClass: {
+            popup: 'sigebi-popup',
+            confirmButton: 'sigebi-confirm-btn',
+          },
+        });
+
+        this.loading = false;
+      },
     });
   }
 
@@ -126,12 +145,31 @@ export class UserEditComponent implements OnInit, OnChanges {
             icon: 'success',
             title: 'Usuario eliminado correctamente',
             confirmButtonText: 'Aceptar',
+            customClass: {
+              popup: 'sigebi-popup',
+              confirmButton: 'sigebi-confirm-btn',
+            },
           });
 
           // 🔥 Aquí deberías cerrar el tab
           // o redirigir a lista
+          this.tabService.closeTab(this.activeTabIndex);
         },
-        error: () => this.showNotFound(),
+        error: (error) => {
+          const message = this.httpErrorMapperService.mapDeleteUserError(error);
+
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: message,
+            customClass: {
+              popup: 'sigebi-popup',
+              confirmButton: 'sigebi-confirm-btn',
+            },
+          });
+
+          this.loading = false;
+        },
       });
     });
   }
@@ -180,7 +218,22 @@ export class UserEditComponent implements OnInit, OnChanges {
 
           this.loading = false;
         },
-        error: () => this.showNotFound(),
+        error: (error) => {
+          const message =
+            this.httpErrorMapperService.mapDeactivateUserError(error);
+
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: message,
+            customClass: {
+              popup: 'sigebi-popup',
+              confirmButton: 'sigebi-confirm-btn',
+            },
+          });
+
+          this.loading = false;
+        },
       });
     });
   }
@@ -215,10 +268,23 @@ export class UserEditComponent implements OnInit, OnChanges {
 
           this.loading = false;
 
-          // 🔥 Aquí deberías cerrar el tab
-          // this.tabService.closeCurrentTab();
+          this.tabService.closeTab(this.activeTabIndex);
         },
-        error: () => this.showNotFound(),
+        error: (error) => {
+          const message = this.httpErrorMapperService.mapDeleteUserError(error);
+
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: message,
+            customClass: {
+              popup: 'sigebi-popup',
+              confirmButton: 'sigebi-confirm-btn',
+            },
+          });
+
+          this.loading = false;
+        },
       });
     });
   }
@@ -244,22 +310,21 @@ export class UserEditComponent implements OnInit, OnChanges {
           }, 100);
         }
       },
-      error: () => this.showNotFound(),
-    });
-  }
-  // 🔵 SweetAlert centralizado
-  showNotFound() {
-    this.loading = false;
+      error: (error) => {
+        const message =
+          this.httpErrorMapperService.mapGetUserByEmailError(error);
 
-    Swal.fire({
-      icon: 'error',
-      title: 'Usuario no encontrado',
-      text: 'No se encontró usuario con ese dato.',
-      confirmButtonText: 'Aceptar',
-      buttonsStyling: false,
-      customClass: {
-        popup: 'sigebi-popup',
-        confirmButton: 'sigebi-confirm-btn',
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: message,
+          customClass: {
+            popup: 'sigebi-popup',
+            confirmButton: 'sigebi-confirm-btn',
+          },
+        });
+
+        this.loading = false;
       },
     });
   }

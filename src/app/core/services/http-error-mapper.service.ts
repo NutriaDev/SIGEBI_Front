@@ -4,106 +4,144 @@ import { Injectable } from '@angular/core';
   providedIn: 'root',
 })
 export class HttpErrorMapperService {
+  private getBackendMessage(error: any): string | null {
+    return error?.error?.message || null;
+  }
+
+  private isConnectionError(error: any): boolean {
+    return error?.status === 0;
+  }
+
   mapLoginError(error: any): string {
+    if (this.isConnectionError(error)) {
+      return 'No se pudo conectar con el servidor.';
+    }
+
     switch (error.status) {
       case 401:
         return 'Correo o contraseña incorrectos.';
       case 403:
         return 'Tu cuenta está deshabilitada.';
-      case 0:
-        return 'No se pudo conectar con el servidor.';
       default:
-        return 'Error inesperado.';
+        return this.getBackendMessage(error) || 'Error inesperado.';
     }
   }
 
   mapCreateUserError(error: any): string {
-    if (!error || !error.status) {
-      return 'Error inesperado.';
+    if (this.isConnectionError(error)) {
+      return 'No se pudo conectar con el servidor.';
     }
 
     switch (error.status) {
       case 400:
-        return error.error?.message || 'Datos inválidos.';
-
+        return this.getBackendMessage(error) || 'Datos inválidos.';
       case 409:
-        return 'El correo ya está registrado.';
-
+        return this.getBackendMessage(error) || 'El correo ya está registrado.';
       case 403:
-        return 'No tienes permisos para crear usuarios.';
-
-      case 0:
-        return 'No se pudo conectar con el servidor.';
-
+        return 'No está autorizado para crear usuarios.';
       default:
         return 'Error inesperado.';
     }
   }
 
   mapUpdateUserError(error: any): string {
-    if (!error || !error.status) {
-      return 'Error inesperado.';
+    if (this.isConnectionError(error)) {
+      return 'No se pudo conectar con el servidor.';
     }
 
     switch (error.status) {
       case 400:
-        return error.error?.message || 'Datos inválidos.';
-
-      case 409:
-        return 'El correo ya está registrado.';
-
+        return this.getBackendMessage(error) || 'Datos inválidos.';
+      case 401:
+        return 'Sesión expirada. Inicie sesión nuevamente.';
       case 403:
-        return 'No tienes permisos para editar usuarios.';
-
-      case 0:
-        return 'No se pudo conectar con el servidor.';
-
+        return 'No está autorizado para realizar esta acción.';
+      case 404:
+        return 'El usuario no existe.';
       default:
         return 'Error inesperado.';
     }
   }
 
   mapDeleteUserError(error: any): string {
-    if (!error || !error.status) {
-      return 'Error inesperado.';
+    if (this.isConnectionError(error)) {
+      return 'No se pudo conectar con el servidor.';
     }
 
     switch (error.status) {
       case 400:
-        return error.error?.message || 'Datos inválidos.';
-
+        return (
+          this.getBackendMessage(error) || 'No se puede eliminar el usuario.'
+        );
       case 403:
-        return 'No tienes permisos para eliminar usuarios.';
-
+        return 'No está autorizado para eliminar usuarios.';
       case 404:
-        return 'El usuario no existe o ya ha sido eliminado.';
+        return 'El usuario no existe.';
+      default:
+        return 'Error inesperado.';
+    }
+  }
 
-      case 0:
-        return 'No se pudo conectar con el servidor.';
+  mapDeactivateUserError(error: any): string {
+    if (this.isConnectionError(error)) {
+      return 'No se pudo conectar con el servidor.';
+    }
 
+    switch (error.status) {
+      case 400:
+        return (
+          this.getBackendMessage(error) ||
+          'No se puede cambiar el estado del usuario.'
+        );
+      case 403:
+        return 'No está autorizado para cambiar el estado del usuario.';
+      case 404:
+        return 'El usuario no existe.';
+      default:
+        return 'Error inesperado.';
+    }
+  }
+
+  mapGetUserByIdError(error: any): string {
+    if (this.isConnectionError(error)) {
+      return 'No se pudo conectar con el servidor.';
+    }
+
+    switch (error.status) {
+      case 403:
+        return 'No está autorizado para realizar esta acción.';
+      case 404:
+        return 'El usuario no existe.';
+      default:
+        return this.getBackendMessage(error) || 'Error inesperado.';
+    }
+  }
+
+  mapGetUserByEmailError(error: any): string {
+    if (this.isConnectionError(error)) {
+      return 'No se pudo conectar con el servidor.';
+    }
+
+    switch (error.status) {
+      case 403:
+        return 'No está autorizado para realizar esta acción.';
+      case 404:
+        return 'El usuario no existe.';
+      case 400:
+        return this.getBackendMessage(error) || 'Correo inválido.';
       default:
         return 'Error inesperado.';
     }
   }
 
   mapGetAllUsersError(error: any): string {
-    if (!error || !error.status) {
-      return 'Error inesperado.';
+    if (this.isConnectionError(error)) {
+      return 'No se pudo conectar con el servidor.';
     }
 
     switch (error.status) {
-      case 400:
-        return error.error?.message || 'Datos inválidos.';
-
       case 403:
-        return 'No tienes permisos para realizar esta acción.';
-
-      case 404:
-        return 'No se encontró ningún usuario.';
-
-      case 0:
-        return 'No se pudo conectar con el servidor.';
-
+        return 'No está autorizado para consultar usuarios.';
       default:
         return 'Error inesperado.';
     }
