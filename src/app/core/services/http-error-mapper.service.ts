@@ -4,10 +4,39 @@ import { Injectable } from '@angular/core';
   providedIn: 'root',
 })
 export class HttpErrorMapperService {
-  private getBackendMessage(error: any): string | null {
-    return error?.error?.message || null;
+  private backendTranslations: Map<string, string> = new Map<string, string>([
+    ['El correo ya está registrado.', 'El correo ya está registrado.'],
+    [
+      'Superadmin cannot be deactivated.',
+      'El superadministrador no puede ser desactivado.',
+    ],
+    [
+      'Superadmin cannot be deleted.',
+      'El superadministrador no puede ser eliminado.',
+    ],
+    ['User not found.', 'El usuario no existe.'],
+    ['Email already exists.', 'El correo ya existe.'],
+    [
+      'User must be deactivated before deletion.',
+      'El usuario debe ser desactivado antes de ser eliminado.',
+    ],
+    [
+      'User must be at least 18 years old',
+      'El usuario debe tener al menos 18 años.',
+    ],
+    ['Phone number already exists', 'El número de teléfono ya existe.'],
+  ]);
+
+  private translateBackendMessage(message: string | null): string | null {
+    if (!message) return null;
+
+    return this.backendTranslations.get(message) || message;
   }
 
+  private getBackendMessage(error: any): string | null {
+    const message = error?.error?.message || null;
+    return this.translateBackendMessage(message);
+  }
   private isConnectionError(error: any): boolean {
     return error?.status === 0;
   }
