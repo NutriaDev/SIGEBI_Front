@@ -4,9 +4,8 @@
     <h2 class="text-lg text-white font-semibold">Editar Usuario</h2>
   </div>
 
-  <!-- Tabs -->
+  <!-- BUSQUEDA -->
   <div class="grid md:grid-cols-2 gap-4 mt-6">
-    <!-- Buscar por ID -->
     <div class="flex gap-2">
       <input
         type="number"
@@ -15,16 +14,11 @@
         [(ngModel)]="searchId"
         class="input w-full"
       />
-      <button
-        type="button"
-        class="btn-primary md:w-auto"
-        (click)="searchById()"
-      >
+      <button type="button" class="btn-primary" (click)="searchById()">
         Buscar
       </button>
     </div>
 
-    <!-- Buscar por Email -->
     <div class="flex gap-2">
       <input
         type="email"
@@ -33,11 +27,7 @@
         [(ngModel)]="searchEmail"
         class="input w-full"
       />
-      <button
-        type="button"
-        class="btn-primary md:w-auto"
-        (click)="searchByEmail()"
-      >
+      <button type="button" class="btn-primary" (click)="searchByEmail()">
         Buscar
       </button>
     </div>
@@ -47,9 +37,9 @@
     Cargando usuario...
   </div>
 
-  <!-- FORM CARD -->
+  <!-- FORM -->
   <div class="bg-transparent rounded-xl shadow-lg p-8">
-    <form [formGroup]="userForm" class="space-y-6">
+    <form [formGroup]="userForm" (ngSubmit)="onSubmit()" class="space-y-6">
       <!-- ROL -->
       <div>
         <label class="block text-sm mb-1">Rol *</label>
@@ -67,16 +57,6 @@
         <div>
           <label class="block text-sm mb-1">Nombres *</label>
           <input formControlName="firstName" class="input w-full" />
-
-          <div
-            *ngIf="
-              userForm.get('firstName')?.invalid &&
-              userForm.get('firstName')?.touched
-            "
-            class="text-sm text-red-500 mt-1"
-          >
-            Nombre inválido
-          </div>
         </div>
 
         <div>
@@ -123,8 +103,8 @@
         </select>
       </div>
 
-      <!-- BOTONES INTERMEDIOS -->
-      <div class="flex flex-col md:flex-row gap-4 pt-4">
+      <!-- 🔥 BOTONES INTERMEDIOS (NO TOCADOS) -->
+      <div class="flex flex-col text-center md:flex-row gap-4 pt-4">
         <button type="button" class="btn-primary md:w-auto">
           Ver Contraseña
         </button>
@@ -142,12 +122,7 @@
       <div class="flex flex-col md:flex-row justify-between gap-4 pt-8">
         <button
           type="button"
-          class="md:w-auto"
-          [ngClass]="{
-            'btn-primary': isUserActive,
-            'bg-primary text-white px-4 py-2 rounded-md shadow-sm hover:opacity-90':
-              !isUserActive,
-          }"
+          class="btn-primary"
           [disabled]="loading"
           (click)="toggleUserStatusMethod()"
         >
@@ -156,7 +131,7 @@
 
         <button
           type="button"
-          class="btn-primary md:w-auto"
+          class="btn-primary"
           [disabled]="loading"
           (click)="deleteUserHard()"
         >
@@ -164,8 +139,11 @@
         </button>
       </div>
 
+      <!-- ACTUALIZAR -->
       <div class="pt-4 text-center">
-        <button type="submit" class="btn-primary md:w-auto">Guardar</button>
+        <button type="submit" class="btn-primary" (click)="onSubmit()">
+          Actualizar
+        </button>
       </div>
     </form>
   </div>

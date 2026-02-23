@@ -20,8 +20,8 @@ export class UsersService {
     return this.http.get<ApiResponse<User[]>>(`${this.baseUrl}/get-all-users`);
   }
 
-  updateUser(payload: any) {
-    return this.http.patch(`${this.baseUrl}/update-user`, payload);
+  updateUser(id: number, payload: any) {
+    return this.http.patch(`${this.baseUrl}/edit-user/${id}`, payload);
   }
 
   getUserById(id: number): Observable<ApiResponse<User>> {

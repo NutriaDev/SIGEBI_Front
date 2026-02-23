@@ -328,4 +328,51 @@ export class UserEditComponent implements OnInit, OnChanges {
       },
     });
   }
+
+  onSubmit() {
+    console.log('SUBMIT EJECUTADO');
+    console.log('Form valid:', this.userForm.valid);
+    console.log('User ID:', this.currentUserId);
+    if (this.userForm.invalid || !this.currentUserId) return;
+
+    this.loading = true;
+
+    const payload = {
+      name: this.userForm.value.firstName,
+      lastName: this.userForm.value.lastName,
+      birthDate: this.userForm.value.birthDate,
+      phone: this.userForm.value.phone,
+      email: this.userForm.value.email,
+      companyId: this.userForm.value.entity,
+    };
+    this.usersService.updateUser(this.currentUserId, payload).subscribe({
+      next: () => {
+        Swal.fire({
+          icon: 'success',
+          title: 'Usuario actualizado correctamente',
+          confirmButtonText: 'Aceptar',
+          customClass: {
+            popup: 'sigebi-popup',
+            confirmButton: 'sigebi-confirm-btn',
+          },
+        });
+        this.loading = false;
+      },
+      error: (error) => {
+        const message = this.httpErrorMapperService.mapUpdateUserError(error);
+
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: message,
+          customClass: {
+            popup: 'sigebi-popup',
+            confirmButton: 'sigebi-confirm-btn',
+          },
+        });
+
+        this.loading = false;
+      },
+    });
+  }
 }
