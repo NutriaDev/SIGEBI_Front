@@ -61,6 +61,16 @@
         <div>
           <label class="block text-sm mb-1">Celular</label>
           <input formControlName="phone" class="input w-full" />
+
+          <div
+            *ngIf="
+              userForm.get('phone')?.errors?.['number'] &&
+              userForm.get('phone')?.touched
+            "
+            class="text-sm text-red-500 mt-1"
+          >
+            Solo se permiten números
+          </div>
         </div>
       </div>
 
@@ -69,11 +79,31 @@
         <div>
           <label class="block text-sm mb-1">Cédula / NIT *</label>
           <input formControlName="document" class="input w-full" />
+
+          <div
+            *ngIf="
+              userForm.get('document')?.errors?.['number'] &&
+              userForm.get('document')?.touched
+            "
+            class="text-sm text-red-500 mt-1"
+          >
+            Solo se permiten números
+          </div>
         </div>
 
         <div>
           <label class="block text-sm mb-1">Email *</label>
           <input type="email" formControlName="email" class="input w-full" />
+
+          <div
+            *ngIf="
+              userForm.get('email')?.errors?.['email'] &&
+              userForm.get('email')?.touched
+            "
+            class="text-sm text-red-500 mt-1"
+          >
+            Email inválido
+          </div>
         </div>
       </div>
 
@@ -90,6 +120,16 @@
             <option value="3">SANITAS</option>
             <option value="4">CLINICAX</option>
           </select>
+
+          <div
+            *ngIf="
+              userForm.get('entity')?.errors?.['required'] &&
+              userForm.get('entity')?.touched
+            "
+            class="text-sm text-red-500 mt-1"
+          >
+            Debe seleccionar una entidad
+          </div>
         </div>
 
         <!-- PASSWORD -->

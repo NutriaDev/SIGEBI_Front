@@ -1,4 +1,4 @@
-import { Component, Type } from '@angular/core';
+import { Component } from '@angular/core';
 import { AuthService } from '../../core/services/auth.service';
 import { TabService } from '../../modules/dashboard/services/tab.service';
 import { UserEditComponent } from '../../modules/users/pages/user-edit/user-edit.component';

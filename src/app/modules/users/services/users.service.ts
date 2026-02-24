@@ -1,6 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { User } from '../models/user.model';
+import { ApiResponse } from '@shared/models/response.model';
 
 @Injectable({
   providedIn: 'root',
@@ -12,5 +14,45 @@ export class UsersService {
 
   createUser(payload: any) {
     return this.http.post(`${this.baseUrl}/users-create`, payload);
+  }
+
+  getAllUsers(): Observable<ApiResponse<User[]>> {
+    return this.http.get<ApiResponse<User[]>>(`${this.baseUrl}/get-all-users`);
+  }
+
+  updateUser(id: number, payload: any) {
+    return this.http.patch(`${this.baseUrl}/edit-user/${id}`, payload);
+  }
+
+  getUserById(id: number): Observable<ApiResponse<User>> {
+    return this.http.get<ApiResponse<User>>(
+      `${this.baseUrl}/get-user-by-id/${id}`,
+    );
+  }
+
+  getUserByEmail(email: string): Observable<ApiResponse<User>> {
+    return this.http.get<ApiResponse<User>>(
+      `${this.baseUrl}/get-user-by-email/${email}`,
+    );
+  }
+
+  deactivateUser(id: number): Observable<ApiResponse<User>> {
+    return this.http.patch<ApiResponse<User>>(
+      `${this.baseUrl}/deactive-user/${id}`,
+      null,
+    );
+  }
+
+  activateUser(id: number): Observable<ApiResponse<User>> {
+    return this.http.patch<ApiResponse<User>>(
+      `${this.baseUrl}/activate-user/${id}`,
+      null,
+    );
+  }
+
+  deleteUserHard(id: number): Observable<ApiResponse<User>> {
+    return this.http.delete<ApiResponse<User>>(
+      `${this.baseUrl}/deletehard-user/${id}`,
+    );
   }
 }

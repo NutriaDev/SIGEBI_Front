@@ -14,21 +14,45 @@
       Utiliza el menú lateral para acceder a los módulos operativos disponibles
       según tu perfil.
     </p>
+  </div>
 
-    <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
-      <div class="card">
-        <h3 class="font-semibold mb-2">Tu Rol</h3>
-        <p>TÉCNICO</p>
-        <p>Sesión activa segura</p>
-      </div>
-
-      <div class="card">
-        <h3 class="font-semibold mb-2">Accesos Rápidos</h3>
-
-        <button class="btn-outline w-full mb-2" (click)="openReports()">
-          Ver Reportes
-        </button>
-      </div>
+  <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div class="card bg-transparent border-bg-primary">
+      <h3 class="font-semibold mb-2">Tu Rol</h3>
+      <p>
+        TÉCNICO
+        <span class="text-text-muted"> (Técnico/Operador) </span>
+      </p>
+      <p>Sesión activa segura</p>
     </div>
+
+    <div class="card">
+      <h3 class="font-semibold mb-2">Accesos Rápidos</h3>
+
+      <button class="btn-outline w-full mb-2" (click)="openReports()">
+        Ver Reportes
+      </button>
+    </div>
+  </div>
+
+  <!-- 🔥 BOTONES INFERIORES -->
+  <div class="flex flex-col md:flex-row gap-6 pt-6">
+    <a
+      href="https://github.com/NutriaDev/SIGEBI/tree/develop"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="bg-primary text-white px-6 py-3 rounded-lg shadow hover:opacity-90 transition w-full text-center block"
+    >
+      Descargar Manual de Usuario
+    </a>
+
+    <a
+      href="https://drive.google.com/file/d/1gBvFh6YzuFwSfpekIsQ9gM-h1SF5_gj8/view?usp=sharing"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="bg-primary text-white px-6 py-3 rounded-lg shadow hover:opacity-90 transition w-full text-center block"
+    >
+      Demo
+    </a>
   </div>
 </div>
