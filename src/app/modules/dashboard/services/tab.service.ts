@@ -23,6 +23,10 @@ export class TabService {
       return; // evita duplicados
     }
 
+    if (this.tabs.length >= 5) {
+      this.closeTab(0);
+    }
+
     this.tabs.push({ title, component, data });
     this.tabsSubject.next(this.tabs);
   }
