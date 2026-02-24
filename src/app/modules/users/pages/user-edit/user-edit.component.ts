@@ -328,9 +328,6 @@ export class UserEditComponent implements OnInit, OnChanges {
   }
 
   onSubmit() {
-    console.log('SUBMIT EJECUTADO');
-    console.log('Form valid:', this.userForm.valid);
-    console.log('User ID:', this.currentUserId);
     if (this.userForm.invalid || !this.currentUserId) return;
 
     this.loading = true;
