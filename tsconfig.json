@@ -21,7 +21,13 @@
     "lib": [
       "ES2022",
       "dom"
-    ]
+    ],
+    "baseUrl": "src",
+    "paths": {
+      "@shared/*": ["app/shared/*"],
+      "@users/*": ["app/modules/users/*"],
+      "@auth/*": ["app/modules/auth/*"],
+    }
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,

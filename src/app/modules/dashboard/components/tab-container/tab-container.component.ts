@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EnvironmentInjector, inject, OnInit } from '@angular/core';
 import { TabService, Tab } from '../../services/tab.service';
 
 @Component({
@@ -11,9 +11,12 @@ export class TabContainerComponent implements OnInit {
 
   constructor(private tabService: TabService) {}
 
+  environmentInjector = inject(EnvironmentInjector);
+
   ngOnInit(): void {
     this.tabService.tabs$.subscribe((tabs) => {
       this.tabs = tabs;
+      this.activeTabIndex = tabs.length - 1; // 👈 ESTA ES LA CLAVE
     });
   }
 

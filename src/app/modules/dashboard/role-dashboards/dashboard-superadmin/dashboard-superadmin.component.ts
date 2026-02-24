@@ -4,6 +4,7 @@ import { UserListComponent } from '../../../users/pages/user-list/user-list.comp
 import { UserCreateComponent } from '../../../users/pages/user-create/user-create.component';
 import { UserEditComponent } from '../../../users/pages/user-edit/user-edit.component';
 import { ReportsModule } from '../../../reports/reports.module';
+import { EquipmentLifecycleComponent } from 'app/modules/equipment/pages/equipment-lifecycle/equipment-lifecycle.component';
 
 @Component({
   selector: 'app-dashboard-superadmin',
@@ -25,5 +26,12 @@ export class DashboardSuperadminComponent {
 
   openReports() {
     this.tabService.openTab('Reportes', ReportsModule);
+  }
+
+  openEquipmentLifecycle() {
+    this.tabService.openTab(
+      'Ciclo de Vida del Equipo',
+      EquipmentLifecycleComponent,
+    );
   }
 }
