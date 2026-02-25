@@ -66,4 +66,9 @@ export class MainLayoutComponent {
     this.tabService.openTab('Editar Usuario', UserEditComponent);
     this.isSidebarOpen = false;
   }
+
+  openDeleteUser() {
+    this.tabService.openTab('Eliminar Usuario', UserListComponent);
+    this.isSidebarOpen = false;
+  }
 }

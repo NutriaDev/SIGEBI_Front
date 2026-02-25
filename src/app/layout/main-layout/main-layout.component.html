@@ -1,106 +1,113 @@
 <div class="min-h-screen bg-secondary relative lg:flex">
-
-
-
   <!-- ========================= -->
   <!-- OVERLAY (solo mobile) -->
   <!-- ========================= -->
-  <div *ngIf="isSidebarOpen"
-       (click)="toggleSidebar()"
-       class="fixed inset-0 bg-black/40 z-40 lg:hidden">
-  </div>
+  <div
+    *ngIf="isSidebarOpen"
+    (click)="toggleSidebar()"
+    class="fixed inset-0 bg-black/40 z-40 lg:hidden"
+  ></div>
 
   <!-- ========================= -->
   <!-- SIDEBAR -->
   <!-- ========================= -->
-<aside
-  class="fixed lg:relative z-50
-         w-64 bg-primary text-white flex flex-col p-6
-         rounded-xl shadow-2xl
-         top-4 left-4 bottom-4
-         lg:top-auto lg:left-auto lg:bottom-auto
-         lg:ml-8 lg:h-[92vh]
-         transform transition-transform duration-300
-         lg:translate-x-0"
-  [ngClass]="{
-    '-translate-x-full': !isSidebarOpen,
-    'translate-x-0': isSidebarOpen
-  }"
->
-
-
-
-
-    <h1 class="text-3xl text-white font-semibold text-center mb-12">
-      SIGEBI
-    </h1>
+  <aside
+    class="fixed lg:relative z-50 w-64 bg-primary text-white flex flex-col p-6 rounded-xl shadow-2xl top-4 left-4 bottom-4 lg:top-auto lg:left-auto lg:bottom-auto lg:ml-8 lg:h-[92vh] transform transition-transform duration-300 lg:translate-x-0"
+    [ngClass]="{
+      '-translate-x-full': !isSidebarOpen,
+      'translate-x-0': isSidebarOpen,
+    }"
+  >
+    <h1 class="text-3xl text-white font-semibold text-center mb-12">SIGEBI</h1>
 
     <nav class="flex flex-col gap-4 text-sm">
+      <a (click)="openEquipment()">Equipos Médicos</a>
+      <a (click)="openInventory()">Inventarios</a>
+      <a (click)="openMaintenance()">Mantenimiento</a>
 
-  <a (click)="openEquipment()">Equipos Médicos</a>
-  <a (click)="openInventory()">Inventarios</a>
-  <a (click)="openMaintenance()">Mantenimiento</a>
+      <ng-container *ngIf="has('reports.read')">
+        <a (click)="openReports()">Reportes</a>
+      </ng-container>
 
-  <ng-container *ngIf="has('reports.read')">
-    <a (click)="openReports()">Reportes</a>
-  </ng-container>
+      <ng-container
+        *ngIf="
+          hasAny([
+            'users.read.admin',
+            'users.read.supervisor',
+            'users.read.tecnico',
+          ])
+        "
+      >
+        <a class="btn-white" (click)="openUsers()">Usuarios</a>
+      </ng-container>
 
-  <ng-container *ngIf="has('users.read')">
-    <a class="btn-white" (click)="openUsers()">Usuarios</a>
-  </ng-container>
+      <ng-container
+        *ngIf="
+          hasAny([
+            'users.create.admin',
+            'users.create.supervisor',
+            'users.create.tecnico',
+          ])
+        "
+      >
+        <a class="btn-white" (click)="openCreateUser()">Nuevo Usuario</a>
+      </ng-container>
 
-  <ng-container *ngIf="has('users.create')">
-    <a class="btn-white" (click)="openCreateUser()">Nuevo Usuario</a>
-  </ng-container>
+      <ng-container
+        *ngIf="
+          hasAny([
+            'users.update.admin',
+            'users.update.supervisor',
+            'users.update.tecnico',
+          ])
+        "
+      >
+        <a class="btn-white" (click)="openEditUser()">Editar Usuario</a>
+      </ng-container>
 
-  <ng-container *ngIf="has('users.update')">
-    <a class="btn-white" (click)="openEditUser()">Editar Usuario</a>
-  </ng-container>
-
-</nav>
-
+      <ng-container
+        *ngIf="
+          hasAny([
+            'users.delete.admin',
+            'users.delete.supervisor',
+            'users.delete.tecnico',
+          ])
+        "
+      >
+        <a class="btn-white" (click)="openDeleteUser()">Eliminar Usuario</a>
+      </ng-container>
+    </nav>
 
     <div class="mt-auto pt-6 border-t border-primary-light">
       <button
         (click)="authService.logout()"
-        class="text-xs italic opacity-70 hover:opacity-100">
+        class="text-xs italic opacity-70 hover:opacity-100"
+      >
         Cerrar Sesión
       </button>
     </div>
-
   </aside>
 
   <!-- ========================= -->
   <!-- CONTENIDO -->
   <!-- ========================= -->
   <main class="flex-1 p-4 sm:p-6 md:p-8 lg:p-10">
-
     <!-- HEADER -->
     <div
-      class="bg-primary text-white rounded-lg shadow-lg
-            px-4 sm:px-6 md:px-8 py-4 sm:py-5
-            flex justify-between items-center mb-6 sm:mb-8">
-
+      class="bg-primary text-white rounded-lg shadow-lg px-4 sm:px-6 md:px-8 py-4 sm:py-5 flex justify-between items-center mb-6 sm:mb-8"
+    >
       <!-- LEFT -->
       <div class="flex items-center gap-4">
-
         <!-- BOTÓN HAMBURGUESA -->
-        <button
-          class="lg:hidden"
-          (click)="toggleSidebar()"
-        >
-          ☰
-        </button>
+        <button class="lg:hidden" (click)="toggleSidebar()">☰</button>
 
         <h2 class="text-white text-sm sm:text-base md:text-lg font-semibold">
           Bienvenido {{ authService.currentUser?.name }}
         </h2>
-
       </div>
 
       <!-- RIGHT -->
       <div class="flex items-center gap-4 sm:gap-6">
-
         <div class="hidden sm:block text-right">
           <p class="text-sm font-medium">
             {{ authService.currentUser?.email }}
@@ -112,27 +119,22 @@
 
         <!-- Avatar -->
         <div
-          class="h-9 w-9 sm:h-10 sm:w-10 rounded-full bg-white/30
-                 flex items-center justify-center font-bold">
+          class="h-9 w-9 sm:h-10 sm:w-10 rounded-full bg-white/30 flex items-center justify-center font-bold"
+        >
           {{ authService.currentUser?.name?.charAt(0) }}
         </div>
-
       </div>
     </div>
 
     <!-- TABLERO -->
     <div
-      class="bg-primary-light rounded-lg shadow-inner
-             p-4 sm:p-6 md:p-8 min-h-[65vh]">
-
-      <div class="bg-transparent rounded-lg border border-primary shadow-md h-full p-4 sm:p-6 md:p-10">
-
+      class="bg-primary-light rounded-lg shadow-inner p-4 sm:p-6 md:p-8 min-h-[65vh]"
+    >
+      <div
+        class="bg-transparent rounded-lg border border-primary shadow-md h-full p-4 sm:p-6 md:p-10"
+      >
         <router-outlet></router-outlet>
-
       </div>
-
     </div>
-
   </main>
-
 </div>
