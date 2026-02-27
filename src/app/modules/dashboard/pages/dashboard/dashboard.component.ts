@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../../../core/services/auth.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-dashboard',
@@ -10,6 +10,7 @@ export class DashboardComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private router: Router,
+    private route: ActivatedRoute,
   ) {}
 
   ngOnInit(): void {
@@ -31,11 +32,10 @@ export class DashboardComponent implements OnInit {
 
       case 'TECNICO':
         this.router.navigate(['dashboard/tecnico']);
-        break;
-
-      default:
-        this.router.navigate(['/auth/login']);
-        break;
     }
+  }
+
+  openEquipment() {
+    this.router.navigate(['equipment/lifecycle'], { relativeTo: this.route });
   }
 }
