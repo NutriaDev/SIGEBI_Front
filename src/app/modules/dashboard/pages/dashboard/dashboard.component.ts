@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../../../core/services/auth.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { TabService } from '../../services/tab.service';
+import { EquipmentLifecycleComponent } from 'app/modules/equipment/pages/equipment-lifecycle/equipment-lifecycle.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -11,6 +13,7 @@ export class DashboardComponent implements OnInit {
     private authService: AuthService,
     private router: Router,
     private route: ActivatedRoute,
+    private tabService: TabService,
   ) {}
 
   ngOnInit(): void {
@@ -36,6 +39,6 @@ export class DashboardComponent implements OnInit {
   }
 
   openEquipment() {
-    this.router.navigate(['equipment/lifecycle'], { relativeTo: this.route });
+    this.tabService.openTab('Equipment Lifecycle', EquipmentLifecycleComponent);
   }
 }

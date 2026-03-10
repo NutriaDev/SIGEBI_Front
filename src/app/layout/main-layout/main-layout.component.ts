@@ -8,6 +8,7 @@ import { MaintenanceModule } from '../../modules/maintenance/maintenance.module'
 import { ReportsModule } from '../../modules/reports/reports.module';
 import { InventoryModule } from '../../modules/inventory/inventory.module';
 import { EquipmentModule } from '../../modules/equipment/equipment.module';
+import { EquipmentLifecycleComponent } from 'app/modules/equipment/pages/equipment-lifecycle/equipment-lifecycle.component';
 
 @Component({
   selector: 'app-main-layout',
@@ -33,7 +34,7 @@ export class MainLayoutComponent {
   }
 
   openEquipment() {
-    this.tabService.openTab('Equipos Médicos', EquipmentModule);
+    this.tabService.openTab('Equipos Médicos', EquipmentLifecycleComponent);
     this.isSidebarOpen = false;
   }
 

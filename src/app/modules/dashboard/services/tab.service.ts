@@ -20,7 +20,8 @@ export class TabService {
     const existingIndex = this.tabs.findIndex((t) => t.title === title);
 
     if (existingIndex !== -1) {
-      return; // evita duplicados
+      this.tabsSubject.next([...this.tabs]);
+      return;
     }
 
     if (this.tabs.length >= 5) {
