@@ -1,5 +1,5 @@
 <div class="max-w-2xl mx-auto p-6">
-  <div class="bg-slate-200 rounded-lg shadow">
+  <div class="bg-white rounded-lg shadow">
     <div class="bg-primary text-white font-semibold px-4 py-2 rounded-t-lg">
       Registro de Área
     </div>
@@ -12,6 +12,7 @@
 
         <input
           type="text"
+          [(ngModel)]="searchText"
           placeholder="Ej: UCI, Laboratorio Clínico"
           class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-slate-500"
         />
@@ -35,6 +36,91 @@
         >
           Salir
         </button>
+      </div>
+
+      <div class="flex gap-3 mt-4">
+        <button
+          class="bg-primary text-white px-4 py-2 rounded"
+          (click)="showAreas()"
+        >
+          Areas Actuales
+        </button>
+
+        <button
+          class="bg-gray-400 text-white px-4 py-2 rounded"
+          (click)="showCreate()"
+        >
+          Crear un Area
+        </button>
+
+        <button
+          class="bg-gray-600 text-white px-4 py-2 rounded"
+          (click)="showUpdate()"
+        >
+          Desactivar un area
+        </button>
+      </div>
+
+      <div class="mt-6">
+        <!-- LISTADO -->
+        <div *ngIf="viewMode === 'list'">
+          <h3 class="font-semibold mb-3">Áreas actuales</h3>
+
+          <div
+            *ngFor="let area of areas"
+            class="flex justify-between border-b py-2"
+          >
+            <span>{{ area.name }}</span>
+
+            <button class="text-blue-500" (click)="selectArea(area)">
+              Editar
+            </button>
+          </div>
+        </div>
+
+        <!-- CREAR AREA -->
+        <div *ngIf="viewMode === 'create'" class="mt-4">
+          <h3 class="font-semibold mb-2">Crear nueva área</h3>
+
+          <input
+            [(ngModel)]="newAreaName"
+            placeholder="Nombre del área"
+            class="border p-2 rounded w-full"
+          />
+
+          <button
+            class="bg-primary text-white px-4 py-2 rounded mt-3"
+            (click)="createArea()"
+          >
+            Guardar Área
+          </button>
+        </div>
+
+        <!-- ACTUALIZAR / DESACTIVAR -->
+        <div *ngIf="viewMode === 'update'" class="mt-4">
+          <h3 class="font-semibold mb-2">Actualizar Área</h3>
+
+          <input
+            [(ngModel)]="selectedArea.name"
+            class="border p-2 rounded w-full"
+          />
+
+          <div class="flex gap-3 mt-3">
+            <button
+              class="bg-primary text-white px-4 py-2 rounded"
+              (click)="updateArea()"
+            >
+              Actualizar
+            </button>
+
+            <button
+              class="bg-red-500 text-white px-4 py-2 rounded"
+              (click)="deactivateArea()"
+            >
+              Desactivar
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
