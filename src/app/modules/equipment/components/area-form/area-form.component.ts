@@ -13,6 +13,7 @@ export class AreaFormComponent implements OnInit {
   areas: any[] = [];
   selectedArea: any = null;
   searchText = '';
+  searchId!: number;
   newAreaName = '';
   loading = false;
 
@@ -102,6 +103,92 @@ export class AreaFormComponent implements OnInit {
         });
 
         console.error(err);
+      },
+    });
+  }
+
+  searchAreaByName() {
+    if (!this.searchText) return;
+
+    this.areaService.getAreaByName(this.searchText).subscribe({
+      next: (res) => {
+        console.log('RESPESTA BACK', res);
+        const area = res.body;
+
+        Swal.fire({
+          icon: area.active ? 'success' : 'warning',
+          title: area.name,
+          text: area.active ? 'Área activada' : 'Área desactivada',
+          confirmButtonText: 'Aceptar',
+          buttonsStyling: false,
+          customClass: {
+            popup: 'sigebi-popup',
+            confirmButton: 'sigebi-confirm-btn',
+          },
+        });
+      },
+      error: () => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Área no encontrada',
+          text: 'No existe un área con ese nombre',
+          confirmButtonText: 'Aceptar',
+          buttonsStyling: false,
+          customClass: {
+            popup: 'sigebi-popup',
+            confirmButton: 'sigebi-confirm-btn',
+          },
+        });
+      },
+    });
+  }
+
+  searchAreaById() {
+    if (!this.searchId) return;
+
+    this.areaService.getAreaById(this.searchId).subscribe({
+      next: (res: any) => {
+        const area = res?.body;
+
+        if (!area) {
+          Swal.fire({
+            icon: 'error',
+            title: 'Área no encontrada',
+            text: 'No existe información para ese ID',
+            confirmButtonText: 'Aceptar',
+            buttonsStyling: false,
+            customClass: {
+              popup: 'sigebi-popup',
+              confirmButton: 'sigebi-confirm-btn',
+            },
+          });
+          return;
+        }
+
+        Swal.fire({
+          icon: area.active ? 'success' : 'warning',
+          title: area.name,
+          text: area.active ? 'Área activada' : 'Área desactivada',
+          confirmButtonText: 'Aceptar',
+          buttonsStyling: false,
+          customClass: {
+            popup: 'sigebi-popup',
+            confirmButton: 'sigebi-confirm-btn',
+          },
+        });
+      },
+      error: () => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Área no encontrada',
+          text: 'No existe un área con ese ID',
+          confirmButtonText: 'Aceptar',
+          buttonsStyling: false,
+          customClass: {
+            popup: 'sigebi-popup',
+            confirmButton: 'sigebi-confirm-btn',
+          },
+        });
       },
     });
   }

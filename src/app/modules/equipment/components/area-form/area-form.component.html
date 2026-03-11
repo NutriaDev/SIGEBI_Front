@@ -1,41 +1,52 @@
 <div class="max-w-2xl mx-auto p-6">
   <div class="bg-white rounded-lg shadow">
     <div class="bg-primary text-white font-semibold px-4 py-2 rounded-t-lg">
-      Registro de Área
+      Busqueda
     </div>
 
     <div class="p-6 space-y-4">
+      <!-- BUSCAR POR NOMBRE -->
       <div>
         <label class="block text-sm font-semibold mb-1">
-          Nombre del Área
+          Buscar por Nombre
         </label>
 
-        <input
-          type="text"
-          [(ngModel)]="searchText"
-          placeholder="Ej: UCI, Laboratorio Clínico"
-          class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-slate-500"
-        />
+        <div class="flex gap-3">
+          <input
+            type="text"
+            [(ngModel)]="searchText"
+            placeholder="Ej: UCI"
+            class="w-full border border-gray-300 rounded-md px-3 py-2"
+          />
+
+          <button
+            (click)="searchAreaByName()"
+            class="bg-primary text-white px-4 py-2 rounded-md"
+          >
+            Buscar
+          </button>
+        </div>
       </div>
 
-      <div class="flex gap-4 pt-4">
-        <button
-          class="bg-primary text-white px-5 py-2 rounded-md hover:bg-[#244040]"
-        >
-          Guardar
-        </button>
+      <!-- BUSCAR POR ID -->
+      <div>
+        <label class="block text-sm font-semibold mb-1"> Buscar por ID </label>
 
-        <button
-          class="bg-gray-400 text-white px-5 py-2 rounded-md hover:bg-gray-500"
-        >
-          Limpiar
-        </button>
+        <div class="flex gap-3">
+          <input
+            type="number"
+            [(ngModel)]="searchId"
+            placeholder="Ej: 1"
+            class="w-full border border-gray-300 rounded-md px-3 py-2"
+          />
 
-        <button
-          class="bg-gray-600 text-white px-5 py-2 rounded-md hover:bg-gray-700"
-        >
-          Salir
-        </button>
+          <button
+            (click)="searchAreaById()"
+            class="bg-primary text-white px-4 py-2 rounded-md"
+          >
+            Buscar
+          </button>
+        </div>
       </div>
 
       <div class="flex gap-3 mt-4">

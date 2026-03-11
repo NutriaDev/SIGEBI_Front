@@ -23,4 +23,12 @@ export class AreaService {
   createArea(request: CreateAreaRequest): Observable<any> {
     return this.http.post(this.api, request);
   }
+
+  getAreaByName(name: string) {
+    return this.http.get<any>(`${this.api}/name/${name}`);
+  }
+
+  getAreaById(id: number) {
+    return this.http.get<any>(`${this.api}/${id}`);
+  }
 }
