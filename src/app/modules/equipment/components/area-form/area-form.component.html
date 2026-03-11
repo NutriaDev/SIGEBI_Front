@@ -57,7 +57,7 @@
           class="bg-gray-600 text-white px-4 py-2 rounded"
           (click)="showUpdate()"
         >
-          Desactivar un area
+          Actualizar un area
         </button>
       </div>
 
@@ -91,8 +91,9 @@
           <button
             class="bg-primary text-white px-4 py-2 rounded mt-3"
             (click)="createArea()"
+            [disabled]="loading"
           >
-            Guardar Área
+            {{ loading ? "Guardando..." : "Guardar Área" }}
           </button>
         </div>
 

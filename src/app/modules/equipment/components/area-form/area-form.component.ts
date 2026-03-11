@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AreaService } from '../../services/area.service';
 import { Area } from '../../models/area';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-area-form',
@@ -13,6 +14,7 @@ export class AreaFormComponent implements OnInit {
   selectedArea: any = null;
   searchText = '';
   newAreaName = '';
+  loading = false;
 
   constructor(private areaService: AreaService) {}
 
@@ -45,7 +47,63 @@ export class AreaFormComponent implements OnInit {
   }
 
   createArea() {
-    console.log('Crear area', this.newAreaName);
+    if (!this.newAreaName) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Nombre requerido',
+        text: 'Debes ingresar un nombre para el área.',
+        confirmButtonText: 'Aceptar',
+        buttonsStyling: false,
+        customClass: {
+          popup: 'sigebi-popup',
+          confirmButton: 'sigebi-confirm-btn',
+        },
+      });
+      return;
+    }
+
+    const request = {
+      name: this.newAreaName,
+    };
+
+    this.loading = true;
+
+    this.areaService.createArea(request).subscribe({
+      next: (res) => {
+        this.loading = false;
+
+        this.newAreaName = '';
+
+        Swal.fire({
+          icon: 'success',
+          title: 'Área creada correctamente',
+          text: 'El área fue registrada en el sistema.',
+          confirmButtonText: 'Aceptar',
+          buttonsStyling: false,
+          customClass: {
+            popup: 'sigebi-popup',
+            confirmButton: 'sigebi-confirm-btn',
+          },
+        });
+      },
+      error: (err) => {
+        this.loading = false;
+
+        Swal.fire({
+          icon: 'error',
+          title: 'Error al crear el área',
+          text: 'Ocurrió un problema al registrar el área.',
+          confirmButtonText: 'Aceptar',
+          buttonsStyling: false,
+          customClass: {
+            popup: 'sigebi-popup',
+            confirmButton: 'sigebi-confirm-btn',
+          },
+        });
+
+        console.error(err);
+      },
+    });
   }
 
   updateArea() {
