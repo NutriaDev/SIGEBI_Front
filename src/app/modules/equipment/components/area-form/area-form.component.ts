@@ -1,16 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { AreaService } from '../../services/area.service';
-import { Area } from '../../models/area';
+import { ApiResponse } from '../../models/response';
 import Swal from 'sweetalert2';
+import { Area } from '../../models/area';
 
 @Component({
   selector: 'app-area-form',
   templateUrl: './area-form.component.html',
 })
 export class AreaFormComponent implements OnInit {
-  viewMode: 'list' | 'create' | 'update' | null = null;
+  viewMode: 'list' | 'create' | 'update' | null = 'list';
 
-  areas: any[] = [];
+  areas: Area[] = [];
   selectedArea: any = null;
   searchText = '';
   searchId!: number;
@@ -20,12 +21,11 @@ export class AreaFormComponent implements OnInit {
   constructor(private areaService: AreaService) {}
 
   ngOnInit(): void {
-    this.loadAreas();
+    this.showAreas();
   }
-
   loadAreas() {
-    this.areaService.getAllAreas().subscribe((res) => {
-      this.areas = res;
+    this.areaService.getAllAreas().subscribe((res: any) => {
+      this.areas = res.body.content;
     });
   }
 
@@ -112,7 +112,6 @@ export class AreaFormComponent implements OnInit {
 
     this.areaService.getAreaByName(this.searchText).subscribe({
       next: (res) => {
-        console.log('RESPESTA BACK', res);
         const area = res.body;
 
         Swal.fire({

@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Area } from '../models/area';
 import { CreateAreaRequest } from '../models/create-area-request';
+import { PageResponse } from '../models/page-response';
 
 @Injectable({
   providedIn: 'root',
@@ -12,8 +13,8 @@ export class AreaService {
 
   constructor(private http: HttpClient) {}
 
-  getAllAreas(): Observable<Area[]> {
-    return this.http.get<Area[]>(`${this.api}`);
+  getAllAreas(): Observable<any> {
+    return this.http.get<any>(`${this.api}`);
   }
 
   updateArea(id: number, name: string): Observable<any> {
