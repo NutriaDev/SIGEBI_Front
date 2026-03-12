@@ -38,19 +38,6 @@ export class AreaFormComponent implements OnInit {
     this.viewMode = 'create';
   }
 
-  showUpdate() {
-    if (!this.selectedArea) {
-      Swal.fire({
-        icon: 'info',
-        title: 'Selecciona un área',
-        text: 'Primero selecciona un área del listado.',
-      });
-      return;
-    }
-
-    this.viewMode = 'update';
-  }
-
   selectArea(area: Area) {
     console.log('AREA SELECCIONADA:', area);
     this.selectedArea = area;
@@ -115,6 +102,19 @@ export class AreaFormComponent implements OnInit {
         console.error(err);
       },
     });
+  }
+
+  showUpdate() {
+    if (!this.selectedArea) {
+      Swal.fire({
+        icon: 'info',
+        title: 'Selecciona un área',
+        text: 'Primero selecciona un área del listado.',
+      });
+      return;
+    }
+
+    this.viewMode = 'update';
   }
 
   searchAreaByName() {

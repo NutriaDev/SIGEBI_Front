@@ -1,9 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Area } from '../models/area';
 import { CreateAreaRequest } from '../models/create-area-request';
-import { PageResponse } from '../models/page-response';
 
 @Injectable({
   providedIn: 'root',
