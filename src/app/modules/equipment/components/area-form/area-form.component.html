@@ -1,4 +1,4 @@
-<div class="max-w-2xl mx-auto p-6">
+<div class="max-w-2xl mx-auto p-4 sm:p-6">
   <div class="bg-white rounded-lg shadow">
     <div class="bg-primary text-white font-semibold px-4 py-2 rounded-t-lg">
       Busqueda
@@ -11,7 +11,7 @@
           Buscar por Nombre
         </label>
 
-        <div class="flex gap-3">
+        <div class="flex flex-col sm:flex-row gap-3 mt-4">
           <input
             type="text"
             [(ngModel)]="searchText"
@@ -21,7 +21,7 @@
 
           <button
             (click)="searchAreaByName()"
-            class="bg-primary text-white px-4 py-2 rounded-md"
+            class="bg-primary text-white px-4 py-2 rounded-md w-full sm:w-auto"
           >
             Buscar
           </button>
@@ -32,7 +32,7 @@
       <div>
         <label class="block text-sm font-semibold mb-1"> Buscar por ID </label>
 
-        <div class="flex gap-3">
+        <div class="flex flex-col sm:flex-row gap-3 mt-4">
           <input
             type="number"
             [(ngModel)]="searchId"
@@ -42,30 +42,30 @@
 
           <button
             (click)="searchAreaById()"
-            class="bg-primary text-white px-4 py-2 rounded-md"
+            class="bg-primary text-white px-4 py-2 rounded-md w-full sm:w-auto"
           >
             Buscar
           </button>
         </div>
       </div>
 
-      <div class="flex gap-3 mt-4">
+      <div class="flex flex-col sm:flex-row gap-3 mt-4">
         <button
-          class="bg-primary text-white px-4 py-2 rounded"
+          class="bg-primary text-white px-4 py-2 rounded w-full sm:w-auto"
           (click)="showAreas()"
         >
           Areas Actuales
         </button>
 
         <button
-          class="bg-gray-400 text-white px-4 py-2 rounded"
+          class="bg-primary-400 text-white px-4 py-2 rounded w-full sm:w-auto"
           (click)="showCreate()"
         >
           Crear un Area
         </button>
 
         <button
-          class="bg-gray-600 text-white px-4 py-2 rounded"
+          class="bg-primary-200 text-white px-4 py-2 rounded w-full sm:w-auto"
           (click)="showUpdate()"
         >
           Actualizar un area
@@ -83,7 +83,10 @@
           >
             <span>{{ area.name }}</span>
 
-            <button class="text-blue-500" (click)="selectArea(area)">
+            <button
+              class="text-primary text-sm w-full sm:w-auto"
+              (click)="selectArea(area)"
+            >
               Editar
             </button>
           </div>
@@ -100,7 +103,7 @@
           />
 
           <button
-            class="bg-primary text-white px-4 py-2 rounded mt-3"
+            class="bg-primary text-white px-4 py-2 rounded mt-3 w-full sm:w-auto"
             (click)="createArea()"
             [disabled]="loading"
           >
@@ -117,9 +120,9 @@
             class="border p-2 rounded w-full"
           />
 
-          <div class="flex items-center gap-3 mt-3">
+          <div class="flex flex-col sm:flex-row sm:items-center gap-3 mt-3">
             <button
-              class="bg-primary text-white px-4 py-2 rounded"
+              class="bg-primary text-white px-4 py-2 rounded w-full sm:w-auto"
               (click)="updateArea()"
             >
               Actualizar
@@ -127,23 +130,15 @@
 
             <button
               (click)="toggleAreaStatus()"
-              class="px-4 py-2 rounded text-white"
-              [ngClass]="
-                selectedArea.active
-                  ? 'bg-red-500 hover:bg-red-600'
-                  : 'bg-green-500 hover:bg-green-600'
-              "
+              class="px-4 py-2 rounded text-white w-full sm:w-auto"
+              [ngClass]="selectedArea.active ? 'bg-primary-400' : 'bg-primary'"
             >
               {{ selectedArea.active ? "Desactivar Área" : "Activar Área" }}
             </button>
 
             <span
               class="text-xs px-2 py-1 rounded"
-              [ngClass]="
-                selectedArea.active
-                  ? 'bg-green-500 text-white'
-                  : 'bg-red-500 text-white'
-              "
+              [ngClass]="selectedArea.active ? 'text-primary' : 'text-red-600'"
             >
               {{ selectedArea.active ? "Activa" : "Inactiva" }}
             </span>
