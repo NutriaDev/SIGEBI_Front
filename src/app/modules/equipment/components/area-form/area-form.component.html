@@ -109,7 +109,7 @@
         </div>
 
         <!-- ACTUALIZAR / DESACTIVAR -->
-        <div *ngIf="viewMode === 'update'" class="mt-4">
+        <div *ngIf="viewMode === 'update' && selectedArea" class="mt-4">
           <h3 class="font-semibold mb-2">Actualizar Área</h3>
 
           <input
@@ -117,7 +117,7 @@
             class="border p-2 rounded w-full"
           />
 
-          <div class="flex gap-3 mt-3">
+          <div class="flex items-center gap-3 mt-3">
             <button
               class="bg-primary text-white px-4 py-2 rounded"
               (click)="updateArea()"
@@ -126,11 +126,27 @@
             </button>
 
             <button
-              class="bg-red-500 text-white px-4 py-2 rounded"
-              (click)="deactivateArea()"
+              (click)="toggleAreaStatus()"
+              class="px-4 py-2 rounded text-white"
+              [ngClass]="
+                selectedArea.active
+                  ? 'bg-red-500 hover:bg-red-600'
+                  : 'bg-green-500 hover:bg-green-600'
+              "
             >
-              Desactivar
+              {{ selectedArea.active ? "Desactivar Área" : "Activar Área" }}
             </button>
+
+            <span
+              class="text-xs px-2 py-1 rounded"
+              [ngClass]="
+                selectedArea.active
+                  ? 'bg-green-500 text-white'
+                  : 'bg-red-500 text-white'
+              "
+            >
+              {{ selectedArea.active ? "Activa" : "Inactiva" }}
+            </span>
           </div>
         </div>
       </div>

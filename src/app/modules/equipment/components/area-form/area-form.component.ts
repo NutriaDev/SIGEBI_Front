@@ -12,7 +12,7 @@ export class AreaFormComponent implements OnInit {
   viewMode: 'list' | 'create' | 'update' | null = 'list';
 
   areas: Area[] = [];
-  selectedArea: any = null;
+  selectedArea: Area | null = null;
   searchText = '';
   searchId!: number;
   newAreaName = '';
@@ -39,10 +39,20 @@ export class AreaFormComponent implements OnInit {
   }
 
   showUpdate() {
+    if (!this.selectedArea) {
+      Swal.fire({
+        icon: 'info',
+        title: 'Selecciona un área',
+        text: 'Primero selecciona un área del listado.',
+      });
+      return;
+    }
+
     this.viewMode = 'update';
   }
 
-  selectArea(area: any) {
+  selectArea(area: Area) {
+    console.log('AREA SELECCIONADA:', area);
     this.selectedArea = area;
     this.viewMode = 'update';
   }
@@ -196,15 +206,57 @@ export class AreaFormComponent implements OnInit {
     if (!this.selectedArea) return;
 
     this.areaService
-      .updateArea(this.selectedArea.areaId, this.searchText)
-      .subscribe(() => {
-        this.loadAreas();
-        this.selectedArea = null;
-        this.searchText = '';
+      .updateArea(
+        this.selectedArea.areaId,
+        this.selectedArea.name,
+        this.selectedArea.active,
+      )
+      .subscribe({
+        next: () => {
+          Swal.fire({
+            icon: 'success',
+            title: 'Área actualizada',
+            text: 'La información del área fue actualizada.',
+            confirmButtonText: 'Aceptar',
+            buttonsStyling: false,
+            customClass: {
+              popup: 'sigebi-popup',
+              confirmButton: 'sigebi-confirm-btn',
+            },
+          });
+
+          this.loadAreas();
+        },
+        error: (err) => {
+          console.error(err);
+
+          Swal.fire({
+            icon: 'error',
+            title: 'Error al actualizar',
+            text: 'No fue posible actualizar el área.',
+            confirmButtonText: 'Aceptar',
+          });
+        },
       });
   }
 
-  deactivateArea() {
-    console.log('Desactivar area', this.selectedArea);
+  toggleAreaStatus() {
+    if (!this.selectedArea) return;
+
+    const newStatus = !this.selectedArea!.active;
+
+    this.areaService
+      .updateArea(this.selectedArea.areaId, this.selectedArea.name, newStatus)
+      .subscribe(() => {
+        this.selectedArea!.active = newStatus;
+
+        Swal.fire({
+          icon: 'success',
+          title: newStatus ? 'Área activada' : 'Área desactivada',
+          confirmButtonText: 'Aceptar',
+        });
+
+        this.loadAreas();
+      });
   }
 }

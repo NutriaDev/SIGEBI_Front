@@ -17,8 +17,15 @@ export class AreaService {
     return this.http.get<any>(`${this.api}`);
   }
 
-  updateArea(id: number, name: string): Observable<any> {
-    return this.http.put(`${this.api}/${id}`, { name });
+  updateArea(id: number, name: string, active?: boolean): Observable<any> {
+    return this.http.put(`${this.api}/${id}`, {
+      name,
+      active,
+    });
+  }
+
+  deactivateArea(id: number): Observable<any> {
+    return this.http.patch(`${this.api}/${id}/deactivate`, {});
   }
 
   createArea(request: CreateAreaRequest): Observable<any> {
