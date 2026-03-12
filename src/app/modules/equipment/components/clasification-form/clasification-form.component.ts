@@ -80,5 +80,42 @@ export class ClasificationFormComponent implements OnInit {
       });
   }
 
-  searchClasificationById() {}
+  searchClasificationById() {
+    if (!this.searchId) return;
+
+    this.clasificationService.getClassificationById(this.searchId).subscribe({
+      next: (res: any) => {
+        const clasification = res?.body;
+
+        if (!clasification) {
+          Swal.fire({
+            icon: 'error',
+            title: 'Clasificación no encontrada',
+            text: 'No existe información para ese ID',
+            confirmButtonText: 'Aceptar',
+            buttonsStyling: false,
+            customClass: {
+              popup: 'sigebi-popup',
+              confirmButton: 'sigebi-confirm-btn',
+            },
+          });
+          return;
+        }
+
+        Swal.fire({
+          icon: clasification.active ? 'success' : 'warning',
+          title: clasification.name,
+          text: clasification.active
+            ? 'Clasificación activada'
+            : 'Clasificación desactivada',
+          confirmButtonText: 'Aceptar',
+          buttonsStyling: false,
+          customClass: {
+            popup: 'sigebi-popup',
+            confirmButton: 'sigebi-confirm-btn',
+          },
+        });
+      },
+    });
+  }
 }
