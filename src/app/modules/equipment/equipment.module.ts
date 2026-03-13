@@ -6,6 +6,7 @@ import { ClasificationFormComponent } from './components/clasification-form/clas
 import { StateFormComponent } from './components/state-form/state-form.component';
 import { LocationFormComponent } from './components/location-form/location-form.component';
 import { ProviderFormComponent } from './components/provider-form/provider-form.component';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -13,8 +14,8 @@ import { ProviderFormComponent } from './components/provider-form/provider-form.
     ClasificationFormComponent,
     StateFormComponent,
     LocationFormComponent,
-    ProviderFormComponent
+    ProviderFormComponent,
   ],
-  imports: [SharedModule, EquipmentRoutingModule],
+  imports: [SharedModule, EquipmentRoutingModule, FormsModule],
 })
 export class EquipmentModule {}

@@ -30,9 +30,7 @@ export class ClasificationService {
     return this.http.patch(`${this.api}/${id}/deactivate`, {});
   }
 
-  createAreaClassifications(
-    request: CreateClasificationRequest,
-  ): Observable<any> {
+  createClassifications(request: CreateClasificationRequest): Observable<any> {
     return this.http.post(this.api, request);
   }
 
