@@ -1,41 +1,136 @@
-<div class="bg-white p-6 rounded shadow">
-  <h3 class="font-bold mb-4">{{ title }}</h3>
-
-  <!-- BOTONES -->
-
-  <div class="flex gap-3 mb-4">
-    <button (click)="viewMode = 'list'">Listar</button>
-
-    <button (click)="viewMode = 'create'">Crear</button>
-  </div>
-
-  <!-- LIST -->
-
-  <div *ngIf="viewMode === 'list'">
-    <div *ngFor="let item of items" class="flex justify-between border-b py-2">
-      <span>{{ item.name }}</span>
-
-      <button (click)="select(item)">Editar</button>
+<div class="max-w-2xl mx-auto p-4 sm:p-6">
+  <div class="bg-white rounded-lg shadow">
+    <div class="bg-primary text-white font-semibold px-4 py-2 rounded-t-lg">
+      {{ title }}
     </div>
-  </div>
 
-  <!-- CREATE -->
+    <div class="p-6 space-y-4">
+      <!-- BUSCAR POR NOMBRE -->
+      <div>
+        <label class="block text-sm font-semibold mb-1"
+          >Buscar por Nombre</label
+        >
+        <div class="flex flex-col sm:flex-row gap-3 mt-4">
+          <input
+            type="text"
+            [(ngModel)]="searchText"
+            placeholder="Ej: UCI"
+            class="w-full border border-gray-300 rounded-md px-3 py-2"
+          />
+          <button
+            (click)="searchByName()"
+            class="bg-primary text-white px-4 py-2 rounded-md w-full sm:w-auto"
+          >
+            Buscar
+          </button>
+        </div>
+      </div>
 
-  <div *ngIf="viewMode === 'create'">
-    <input [(ngModel)]="newName" />
+      <!-- BUSCAR POR ID -->
+      <div>
+        <label class="block text-sm font-semibold mb-1">Buscar por ID</label>
+        <div class="flex flex-col sm:flex-row gap-3 mt-4">
+          <input
+            type="number"
+            [(ngModel)]="searchId"
+            placeholder="Ej: 1"
+            class="w-full border border-gray-300 rounded-md px-3 py-2"
+          />
+          <button
+            (click)="searchById()"
+            class="bg-primary text-white px-4 py-2 rounded-md w-full sm:w-auto"
+          >
+            Buscar
+          </button>
+        </div>
+      </div>
 
-    <button (click)="create()">Guardar</button>
-  </div>
+      <!-- BOTONES PRINCIPALES -->
+      <div class="flex flex-col sm:flex-row gap-3 mt-4">
+        <button
+          class="bg-primary text-white px-4 py-2 rounded w-full sm:w-auto"
+          (click)="viewMode = 'list'; load()"
+        >
+          {{ title }} Actuales
+        </button>
+        <button
+          class="bg-primary-400 text-white px-4 py-2 rounded w-full sm:w-auto"
+          (click)="viewMode = 'create'"
+        >
+          Crear {{ title }}
+        </button>
+        <button
+          class="bg-primary-200 text-white px-4 py-2 rounded w-full sm:w-auto"
+          (click)="viewMode = 'update'"
+        >
+          Actualizar {{ title }}
+        </button>
+      </div>
 
-  <!-- UPDATE -->
+      <div class="mt-6">
+        <!-- LISTADO -->
+        <div *ngIf="viewMode === 'list'">
+          <h3 class="font-semibold mb-3">{{ title }} actuales</h3>
+          <div
+            *ngFor="let item of items"
+            class="flex justify-between border-b py-2"
+          >
+            <span>{{ item.name }}</span>
+            <button
+              class="text-primary text-sm w-full sm:w-auto"
+              (click)="select(item)"
+            >
+              Editar
+            </button>
+          </div>
+        </div>
 
-  <div *ngIf="viewMode === 'update'">
-    <input [(ngModel)]="selected.name" />
+        <!-- CREAR -->
+        <div *ngIf="viewMode === 'create'" class="mt-4">
+          <h3 class="font-semibold mb-2">Crear {{ title }}</h3>
+          <input
+            [(ngModel)]="newName"
+            placeholder="Nombre"
+            class="border p-2 rounded w-full"
+          />
+          <button
+            class="bg-primary text-white px-4 py-2 rounded mt-3 w-full sm:w-auto"
+            (click)="create()"
+          >
+            Guardar
+          </button>
+        </div>
 
-    <div class="flex gap-2">
-      <button (click)="update()">Actualizar</button>
-
-      <button (click)="deactivate()">Desactivar</button>
+        <!-- ACTUALIZAR / DESACTIVAR -->
+        <div *ngIf="viewMode === 'update' && selected" class="mt-4">
+          <h3 class="font-semibold mb-2">Actualizar {{ title }}</h3>
+          <input
+            [(ngModel)]="selected.name"
+            class="border p-2 rounded w-full"
+          />
+          <div class="flex flex-col sm:flex-row sm:items-center gap-3 mt-3">
+            <button
+              class="bg-primary text-white px-4 py-2 rounded w-full sm:w-auto"
+              (click)="update()"
+            >
+              Actualizar
+            </button>
+            <button
+              (click)="deactivate()"
+              class="px-4 py-2 rounded text-white w-full sm:w-auto"
+              [ngClass]="selected.active ? 'bg-primary-400' : 'bg-primary'"
+            >
+              {{ selected.active ? "Desactivar" : "Activar" }}
+            </button>
+            <span
+              class="text-xs px-2 py-1 rounded"
+              [ngClass]="selected.active ? 'text-primary' : 'text-red-600'"
+            >
+              {{ selected.active ? "Activo" : "Inactivo" }}
+            </span>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>

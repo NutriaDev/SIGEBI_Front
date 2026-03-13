@@ -11,6 +11,8 @@ export class EquipmentCrudComponent implements OnInit {
   items: any[] = [];
   newName = '';
   selected: any = null;
+  searchText = '';
+  searchId: number | null = null;
 
   viewMode: 'list' | 'create' | 'update' = 'list';
 
@@ -23,6 +25,22 @@ export class EquipmentCrudComponent implements OnInit {
   load() {
     this.service.getAll().subscribe((res: any) => {
       this.items = res.body.content;
+    });
+  }
+
+  searchByName() {
+    if (!this.searchText) return;
+    this.service.getByName(this.searchText).subscribe((res: any) => {
+      this.items = res.body.content ?? [res.body];
+      this.viewMode = 'list';
+    });
+  }
+
+  searchById() {
+    if (!this.searchId) return;
+    this.service.getById(this.searchId).subscribe((res: any) => {
+      this.items = [res.body];
+      this.viewMode = 'list';
     });
   }
 
