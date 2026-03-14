@@ -22,10 +22,17 @@ export class EquipmentCrudComponent implements OnInit {
     this.load();
   }
 
+  private getId(): number {
+    return (
+      this.selected?.id ??
+      this.selected?.areaId ??
+      this.selected?.classificationId ??
+      this.selected?.stateId
+    );
+  }
+
   load() {
     this.service.getAll().subscribe((res: any) => {
-      // classifications: res.body.content (paginado)
-      // states, areas, etc: res.body directamente (lista simple)
       this.items = res.body.content ?? res.body;
     });
   }
@@ -48,7 +55,6 @@ export class EquipmentCrudComponent implements OnInit {
 
   create() {
     if (!this.newName) return;
-
     this.service.create({ name: this.newName }).subscribe(() => {
       this.newName = '';
       this.viewMode = 'list';
@@ -57,21 +63,25 @@ export class EquipmentCrudComponent implements OnInit {
   }
 
   select(item: any) {
-    this.selected = item;
+    console.log('item seleccionado:', item);
+    this.selected = { ...item };
     this.viewMode = 'update';
   }
 
   update() {
-    this.service
-      .update(this.selected.id, { name: this.selected.name })
-      .subscribe(() => {
-        this.viewMode = 'list';
-        this.load();
-      });
+    const id = this.getId();
+    console.log('update id:', id);
+    this.service.update(id, { name: this.selected.name }).subscribe(() => {
+      this.viewMode = 'list';
+      this.load();
+    });
   }
 
   deactivate() {
-    this.service.deactivate(this.selected.id).subscribe(() => {
+    const id = this.getId();
+    console.log('deactivate id:', id);
+    this.service.deactivate(id).subscribe(() => {
+      this.selected.active = !this.selected.active; // toggle local
       this.viewMode = 'list';
       this.load();
     });
