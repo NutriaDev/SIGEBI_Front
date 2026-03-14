@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-equipment-crud',
@@ -38,10 +39,25 @@ export class EquipmentCrudComponent implements OnInit {
   }
 
   searchByName() {
-    if (!this.searchText) return;
-    this.service.getByName(this.searchText).subscribe((res: any) => {
-      this.items = res.body.content ?? [res.body];
-      this.viewMode = 'list';
+    if (!this.searchText.trim()) return;
+    this.service.getByName(this.searchText.trim()).subscribe({
+      next: (res: any) => {
+        this.items = res.body.content ?? [res.body];
+        this.viewMode = 'list';
+      },
+      error: () => {
+        Swal.fire({
+          icon: 'warning',
+          title: 'No encontrado',
+          text: `No se encontró ningún resultado con el nombre "${this.searchText}"`,
+          confirmButtonText: 'Aceptar',
+          buttonsStyling: false,
+          customClass: {
+            popup: 'sigebi-popup',
+            confirmButton: 'sigebi-confirm-btn',
+          },
+        });
+      },
     });
   }
 
@@ -68,10 +84,37 @@ export class EquipmentCrudComponent implements OnInit {
     this.viewMode = 'update';
   }
 
+  goToUpdate() {
+    if (!this.selected) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Selecciona un elemento',
+        text: 'Debes buscar y seleccionar un elemento para editarlo.',
+        confirmButtonText: 'Aceptar',
+        buttonsStyling: false,
+        customClass: {
+          popup: 'sigebi-popup',
+          confirmButton: 'sigebi-confirm-btn',
+        },
+      });
+      return;
+    }
+    this.viewMode = 'update';
+  }
+
   update() {
     const id = this.getId();
-    console.log('update id:', id);
     this.service.update(id, { name: this.selected.name }).subscribe(() => {
+      Swal.fire({
+        icon: 'success',
+        title: 'Actualizado correctamente',
+        confirmButtonText: 'Aceptar',
+        buttonsStyling: false,
+        customClass: {
+          popup: 'sigebi-popup',
+          confirmButton: 'sigebi-confirm-btn',
+        },
+      });
       this.viewMode = 'list';
       this.load();
     });
