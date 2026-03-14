@@ -73,15 +73,20 @@
           <h3 class="font-semibold mb-3">{{ title }} actuales</h3>
           <div
             *ngFor="let item of items"
-            class="flex justify-between border-b py-2"
+            class="flex justify-between items-center border-b py-2"
           >
             <span>{{ item.name }}</span>
-            <button
-              class="text-primary text-sm w-full sm:w-auto"
-              (click)="select(item)"
-            >
-              Editar
-            </button>
+            <div class="flex items-center gap-3">
+              <span
+                class="text-xs px-2 py-1 rounded"
+                [ngClass]="item.active ? 'text-primary' : 'text-red-600'"
+              >
+                {{ item.active ? "Activo" : "Inactivo" }}
+              </span>
+              <button class="text-primary text-sm" (click)="select(item)">
+                Editar
+              </button>
+            </div>
           </div>
         </div>
 
