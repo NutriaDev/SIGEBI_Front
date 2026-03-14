@@ -24,7 +24,9 @@ export class EquipmentCrudComponent implements OnInit {
 
   load() {
     this.service.getAll().subscribe((res: any) => {
-      this.items = res.body.content;
+      // classifications: res.body.content (paginado)
+      // states, areas, etc: res.body directamente (lista simple)
+      this.items = res.body.content ?? res.body;
     });
   }
 
