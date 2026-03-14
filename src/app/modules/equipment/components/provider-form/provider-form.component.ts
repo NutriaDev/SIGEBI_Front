@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
+import { ProviderService } from '../../services/provider.service';
 
 @Component({
   selector: 'app-provider-form',
   templateUrl: './provider-form.component.html',
-  styleUrl: './provider-form.component.css'
 })
 export class ProviderFormComponent {
-
+  constructor(public service: ProviderService) {}
 }

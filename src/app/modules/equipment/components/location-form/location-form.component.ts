@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
+import { LocationService } from '../../services/location.service';
 
 @Component({
   selector: 'app-location-form',
   templateUrl: './location-form.component.html',
-  styleUrl: './location-form.component.css'
 })
 export class LocationFormComponent {
-
+  constructor(public service: LocationService) {}
 }
