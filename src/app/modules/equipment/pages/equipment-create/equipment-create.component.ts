@@ -107,29 +107,29 @@ export class EquipmentCreateComponent implements OnInit {
   loadCatalogs(): void {
     this.loading = true;
 
-    this.areaService.getAll().subscribe({
+    this.areaService.getActive().subscribe({
       next: (res: any) => (this.areas = res.body?.content ?? res.body ?? []),
       error: () => (this.errorMessage = 'Error cargando áreas'),
     });
 
-    this.clasificationService.getAll().subscribe({
+    this.clasificationService.getActive().subscribe({
       next: (res: any) =>
         (this.classifications = res.body?.content ?? res.body ?? []),
       error: () => {},
     });
 
-    this.providerService.getAll().subscribe({
+    this.providerService.getActive().subscribe({
       next: (res: any) =>
         (this.providers = res.body?.content ?? res.body ?? []),
       error: () => {},
     });
 
-    this.stateService.getAll().subscribe({
+    this.stateService.getActive().subscribe({
       next: (res: any) => (this.states = res.body?.content ?? res.body ?? []),
       error: () => {},
     });
 
-    this.locationService.getAll().subscribe({
+    this.locationService.getActive().subscribe({
       next: (res: any) => {
         this.locations = res.body?.content ?? res.body ?? [];
         this.loading = false;
