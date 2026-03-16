@@ -49,6 +49,7 @@
           <input
             type="text"
             [(ngModel)]="form.name"
+            (ngModelChange)="saveDraft()"
             placeholder="Nombre del equipo"
             class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
           />
@@ -56,11 +57,12 @@
 
         <div>
           <label class="block text-sm text-gray-500 mb-1"
-            >Marca<span class="text-red-500">*</span></label
+            >Marca <span class="text-red-500">*</span></label
           >
           <input
             type="text"
             [(ngModel)]="form.brand"
+            (ngModelChange)="saveDraft()"
             placeholder="Marca"
             class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
           />
@@ -68,11 +70,12 @@
 
         <div>
           <label class="block text-sm text-gray-500 mb-1"
-            >Modelo<span class="text-red-500">*</span></label
+            >Modelo <span class="text-red-500">*</span></label
           >
           <input
             type="text"
             [(ngModel)]="form.model"
+            (ngModelChange)="saveDraft()"
             placeholder="Modelo"
             class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
           />
@@ -85,6 +88,7 @@
           <input
             type="text"
             [(ngModel)]="form.serie"
+            (ngModelChange)="saveDraft()"
             placeholder="Serie"
             class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
           />
@@ -97,6 +101,7 @@
           <input
             type="text"
             [(ngModel)]="form.invima"
+            (ngModelChange)="saveDraft()"
             placeholder="Registro INVIMA"
             class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
           />
@@ -116,6 +121,7 @@
             >
             <select
               [(ngModel)]="form.areaId"
+              (ngModelChange)="saveDraft()"
               class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
             >
               <option [ngValue]="null" disabled>Seleccionar</option>
@@ -131,6 +137,7 @@
             >
             <select
               [(ngModel)]="form.locationId"
+              (ngModelChange)="saveDraft()"
               class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
             >
               <option [ngValue]="null" disabled>Seleccionar</option>
@@ -147,12 +154,15 @@
         <h3 class="font-semibold text-primary mb-4">Datos de Adquisición</h3>
         <div class="grid grid-cols-2 gap-4">
           <div class="col-span-2">
-            <label class="block text-sm text-gray-500 mb-1">Proveedor</label>
+            <label class="block text-sm text-gray-500 mb-1"
+              >Proveedor <span class="text-red-500">*</span></label
+            >
             <select
               [(ngModel)]="form.providerId"
+              (ngModelChange)="saveDraft()"
               class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
             >
-              <option [ngValue]="null">Seleccionar</option>
+              <option [ngValue]="null" disabled>Seleccionar</option>
               <option *ngFor="let p of providers" [ngValue]="p.providerId">
                 {{ p.name }}
               </option>
@@ -166,6 +176,7 @@
             <input
               type="date"
               [(ngModel)]="form.acquisitionDate"
+              (ngModelChange)="saveDraft()"
               class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
             />
           </div>
@@ -177,6 +188,7 @@
             <input
               type="number"
               [(ngModel)]="form.usefulLife"
+              (ngModelChange)="saveDraft()"
               placeholder="Ej: 10"
               min="1"
               class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
@@ -190,6 +202,7 @@
             <input
               type="date"
               [(ngModel)]="form.warrantyEnd"
+              (ngModelChange)="saveDraft()"
               class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
             />
           </div>
@@ -209,6 +222,7 @@
             >
             <select
               [(ngModel)]="form.maintenanceFrequency"
+              (ngModelChange)="saveDraft()"
               class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
             >
               <option [ngValue]="null" disabled>Seleccionar</option>
@@ -224,6 +238,7 @@
             >
             <select
               [(ngModel)]="form.calibrationFrequency"
+              (ngModelChange)="saveDraft()"
               class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
             >
               <option [ngValue]="null" disabled>Seleccionar</option>
@@ -246,6 +261,7 @@
             >
             <select
               [(ngModel)]="form.classificationId"
+              (ngModelChange)="saveDraft()"
               class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
             >
               <option [ngValue]="null" disabled>Seleccionar</option>
@@ -264,6 +280,7 @@
             >
             <select
               [(ngModel)]="form.riskLevel"
+              (ngModelChange)="saveDraft()"
               class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
             >
               <option value="" disabled>Seleccionar</option>
@@ -279,6 +296,7 @@
             >
             <select
               [(ngModel)]="form.stateId"
+              (ngModelChange)="saveDraft()"
               class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
             >
               <option [ngValue]="null" disabled>Seleccionar</option>

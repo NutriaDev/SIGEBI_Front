@@ -241,7 +241,17 @@ export class EquipmentCreateComponent implements OnInit {
   }
 
   goBack(): void {
-    this.router.navigate(['/equipment']);
+    Swal.fire({
+      icon: 'info',
+      title: 'Puedes cerrar esta pestaña',
+      text: 'Los cambios no guardados se perderán.',
+      confirmButtonText: 'Entendido',
+      buttonsStyling: false,
+      customClass: {
+        popup: 'sigebi-popup',
+        confirmButton: 'sigebi-confirm-btn',
+      },
+    });
   }
 
   private isFormValid(): boolean {
