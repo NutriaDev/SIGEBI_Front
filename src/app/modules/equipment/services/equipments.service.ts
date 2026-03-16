@@ -24,46 +24,52 @@ export class EquipmentsService extends EquipmentService<Equipment> {
     return this.http.get<ApiResponse<Equipment>>(`${this.url}/serie/${serie}`);
   }
 
-  getByArea(id: number, pageable?: any): Observable<ApiResponse<Equipment[]>> {
-    return this.http.get<ApiResponse<Equipment[]>>(`${this.url}/area/${id}`, {
-      params: pageable,
+  getByArea(
+    name: string,
+    pageable?: any,
+  ): Observable<ApiResponse<Equipment[]>> {
+    return this.http.get<ApiResponse<Equipment[]>>(`${this.url}/area`, {
+      params: { name, ...pageable },
     });
   }
 
   getByClassification(
-    id: number,
+    name: string,
     pageable?: any,
   ): Observable<ApiResponse<Equipment[]>> {
     return this.http.get<ApiResponse<Equipment[]>>(
-      `${this.url}/classification/${id}`,
-      { params: pageable },
+      `${this.url}/classification`,
+      {
+        params: { name, ...pageable },
+      },
     );
   }
 
   getByProvider(
-    id: number,
+    name: string,
     pageable?: any,
   ): Observable<ApiResponse<Equipment[]>> {
-    return this.http.get<ApiResponse<Equipment[]>>(
-      `${this.url}/provider/${id}`,
-      { params: pageable },
-    );
+    return this.http.get<ApiResponse<Equipment[]>>(`${this.url}/provider`, {
+      params: { name, ...pageable },
+    });
   }
 
-  getByState(id: number, pageable?: any): Observable<ApiResponse<Equipment[]>> {
-    return this.http.get<ApiResponse<Equipment[]>>(`${this.url}/state/${id}`, {
-      params: pageable,
+  getByState(
+    name: string,
+    pageable?: any,
+  ): Observable<ApiResponse<Equipment[]>> {
+    return this.http.get<ApiResponse<Equipment[]>>(`${this.url}/state`, {
+      params: { name, ...pageable },
     });
   }
 
   getByLocation(
-    id: number,
+    name: string,
     pageable?: any,
   ): Observable<ApiResponse<Equipment[]>> {
-    return this.http.get<ApiResponse<Equipment[]>>(
-      `${this.url}/location/${id}`,
-      { params: pageable },
-    );
+    return this.http.get<ApiResponse<Equipment[]>>(`${this.url}/location`, {
+      params: { name, ...pageable },
+    });
   }
 
   search(name: string, pageable?: any): Observable<ApiResponse<Equipment[]>> {
