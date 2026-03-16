@@ -70,11 +70,37 @@ export class EquipmentCrudComponent implements OnInit {
   }
 
   create() {
-    if (!this.newName) return;
-    this.service.create({ name: this.newName }).subscribe(() => {
-      this.newName = '';
-      this.viewMode = 'list';
-      this.load();
+    if (!this.newName.trim()) return;
+    this.service.create({ name: this.newName }).subscribe({
+      next: () => {
+        Swal.fire({
+          icon: 'success',
+          title: `${this.title} creado correctamente`,
+          confirmButtonText: 'Aceptar',
+          buttonsStyling: false,
+          customClass: {
+            popup: 'sigebi-popup',
+            confirmButton: 'sigebi-confirm-btn',
+          },
+        });
+        this.newName = '';
+        this.viewMode = 'list';
+        this.load();
+      },
+      error: (err: any) => {
+        const isDuplicate = err?.status === 409;
+        Swal.fire({
+          icon: 'error',
+          title: isDuplicate ? 'Nombre duplicado' : 'Error al crear',
+          text: err?.error?.message ?? `No se pudo crear ${this.title}`,
+          confirmButtonText: 'Entendido',
+          buttonsStyling: false,
+          customClass: {
+            popup: 'sigebi-popup',
+            confirmButton: 'sigebi-confirm-btn',
+          },
+        });
+      },
     });
   }
 

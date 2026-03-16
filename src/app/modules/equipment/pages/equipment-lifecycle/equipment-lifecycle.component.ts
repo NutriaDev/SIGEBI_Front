@@ -7,6 +7,7 @@ import { MaintenanceFreqPipe } from '../../pipes/maintenance-freq.pipe';
 import { Router } from '@angular/router';
 import { TabService } from 'app/modules/dashboard/services/tab.service';
 import { EquipmentCreateComponent } from '../equipment-create/equipment-create.component';
+import Swal from 'sweetalert2';
 
 interface SearchTab {
   key: string;
@@ -137,14 +138,22 @@ export class EquipmentLifecycleComponent {
     this.errorMessage = '';
     this.equipmentsService.getById(+this.quickIdValue).subscribe({
       next: (res: any) => {
-        console.log('RES COMPLETO:', res); // 👈 agrega esto
         this.openHV(res.body);
         this.loading = false;
       },
-      error: (err) => {
-        console.log('ERROR:', err); // 👈 y esto
-        this.errorMessage = 'No se encontró el equipo.';
+      error: () => {
         this.loading = false;
+        Swal.fire({
+          icon: 'error',
+          title: 'Equipo no encontrado',
+          text: `No existe un equipo con ID: ${this.quickIdValue}`,
+          confirmButtonText: 'Entendido',
+          buttonsStyling: false,
+          customClass: {
+            popup: 'sigebi-popup',
+            confirmButton: 'sigebi-confirm-btn',
+          },
+        });
       },
     });
   }
@@ -159,8 +168,18 @@ export class EquipmentLifecycleComponent {
         this.loading = false;
       },
       error: () => {
-        this.errorMessage = 'No se encontró el equipo.';
         this.loading = false;
+        Swal.fire({
+          icon: 'error',
+          title: 'Equipo no encontrado',
+          text: `No existe un equipo con serie: ${this.quickSerieValue}`,
+          confirmButtonText: 'Entendido',
+          buttonsStyling: false,
+          customClass: {
+            popup: 'sigebi-popup',
+            confirmButton: 'sigebi-confirm-btn',
+          },
+        });
       },
     });
   }
@@ -192,17 +211,28 @@ export class EquipmentLifecycleComponent {
       next: (res: any) => {
         const data = res.body;
 
-        // Para búsqueda avanzada siempre viene paginado
-        // Spring Page: { content: [], totalElements, ... }
         if (data && data.content) {
           const list: Equipment[] = data.content;
           this.allResults = list;
           this.results = [...list];
           this.loading = false;
+
+          if (list.length === 0) {
+            Swal.fire({
+              icon: 'info',
+              title: 'Sin resultados',
+              text: `No se encontraron equipos con ese criterio.`,
+              confirmButtonText: 'Entendido',
+              buttonsStyling: false,
+              customClass: {
+                popup: 'sigebi-popup',
+                confirmButton: 'sigebi-confirm-btn',
+              },
+            });
+          }
           return;
         }
 
-        // Resultado único (por si acaso)
         if (data && !Array.isArray(data)) {
           this.openHV(data as Equipment);
           this.loading = false;
@@ -211,9 +241,22 @@ export class EquipmentLifecycleComponent {
 
         this.loading = false;
       },
-      error: () => {
-        this.errorMessage = 'No se encontró ningún equipo con ese criterio.';
+      error: (err: any) => {
         this.loading = false;
+        const is404 = err?.status === 404;
+        Swal.fire({
+          icon: is404 ? 'info' : 'error',
+          title: is404 ? 'Sin resultados' : 'Error en la búsqueda',
+          text: is404
+            ? 'No se encontró ningún equipo con ese criterio.'
+            : 'Ocurrió un error al realizar la búsqueda.',
+          confirmButtonText: 'Entendido',
+          buttonsStyling: false,
+          customClass: {
+            popup: 'sigebi-popup',
+            confirmButton: 'sigebi-confirm-btn',
+          },
+        });
       },
     });
   }
