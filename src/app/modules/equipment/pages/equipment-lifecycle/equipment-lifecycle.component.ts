@@ -55,20 +55,6 @@ export class EquipmentLifecycleComponent {
 
   searchTabs: SearchTab[] = [
     {
-      key: 'id',
-      label: 'ID',
-      inputLabel: 'ID del equipo',
-      placeholder: 'Ej: 5',
-      endpoint: 'GET /api/equipments/{id}',
-    },
-    {
-      key: 'serie',
-      label: 'Serie',
-      inputLabel: 'Número de serie',
-      placeholder: 'Ej: EQ-123',
-      endpoint: 'GET /api/equipments/serie/{serie}',
-    },
-    {
       key: 'name',
       label: 'Nombre',
       inputLabel: 'Nombre del equipo',
@@ -145,10 +131,12 @@ export class EquipmentLifecycleComponent {
     this.errorMessage = '';
     this.equipmentsService.getById(+this.quickIdValue).subscribe({
       next: (res: any) => {
-        this.openHV(res.data);
+        console.log('RES COMPLETO:', res); // 👈 agrega esto
+        this.openHV(res.body);
         this.loading = false;
       },
-      error: () => {
+      error: (err) => {
+        console.log('ERROR:', err); // 👈 y esto
         this.errorMessage = 'No se encontró el equipo.';
         this.loading = false;
       },
@@ -161,7 +149,7 @@ export class EquipmentLifecycleComponent {
     this.errorMessage = '';
     this.equipmentsService.getBySerie(this.quickSerieValue.trim()).subscribe({
       next: (res: any) => {
-        this.openHV(res.data);
+        this.openHV(res.body);
         this.loading = false;
       },
       error: () => {
@@ -196,7 +184,7 @@ export class EquipmentLifecycleComponent {
 
     calls[this.selectedTab.key].subscribe({
       next: (res: any) => {
-        const data = res.data;
+        const data = res.body;
 
         // ID o Serie → resultado único → va directo a HV
         if (!Array.isArray(data)) {

@@ -1,4 +1,4 @@
-<div class="min-h-screen bg-transparent p-6">
+<div class="min-h-screen bg-transparent p-1">
   <div class="max-w-6xl mx-auto bg-white rounded-xl shadow-lg p-6">
     @if (view === "search") {
       <div
@@ -100,7 +100,7 @@
             {{ loading ? "Buscando..." : "Buscar" }}
           </button>
         </div>
-        <p class="text-xs text-gray-400 mb-4">{{ selectedTab.endpoint }}</p>
+        <!-- <p class="text-xs text-gray-400 mb-4">{{ selectedTab.endpoint }}</p> -->
 
         @if (allResults.length > 0) {
           <div class="border-t border-gray-200 pt-4">
