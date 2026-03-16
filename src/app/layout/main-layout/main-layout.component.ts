@@ -14,6 +14,7 @@ import { ClasificationFormComponent } from 'app/modules/equipment/components/cla
 import { StateFormComponent } from 'app/modules/equipment/components/state-form/state-form.component';
 import { LocationFormComponent } from 'app/modules/equipment/components/location-form/location-form.component';
 import { ProviderFormComponent } from 'app/modules/equipment/components/provider-form/provider-form.component';
+import { EquipmentCreateComponent } from 'app/modules/equipment/pages/equipment-create/equipment-create.component';
 
 @Component({
   selector: 'app-main-layout',
@@ -48,6 +49,10 @@ export class MainLayoutComponent {
   openEquipment() {
     this.tabService.openTab('Equipos Médicos', EquipmentLifecycleComponent);
     this.isSidebarOpen = false;
+  }
+
+  createEquipment() {
+    this.tabService.openTab('Crear Equipos medicos', EquipmentCreateComponent);
   }
 
   openEquipmentArea() {

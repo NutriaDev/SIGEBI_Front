@@ -3,6 +3,7 @@ import { AuthService } from '../../../../core/services/auth.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TabService } from '../../services/tab.service';
 import { EquipmentLifecycleComponent } from 'app/modules/equipment/pages/equipment-lifecycle/equipment-lifecycle.component';
+import { EquipmentCreateComponent } from 'app/modules/equipment/pages/equipment-create/equipment-create.component';
 
 @Component({
   selector: 'app-dashboard',
