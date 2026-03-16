@@ -9,6 +9,14 @@ const routes: Routes = [
         (c) => c.EquipmentLifecycleComponent,
       ),
   },
+
+  {
+    path: 'create',
+    loadComponent: () =>
+      import('./pages/equipment-create/equipment-create.component').then(
+        (c) => c.EquipmentCreateComponent,
+      ),
+  },
 ];
 
 @NgModule({

@@ -4,6 +4,9 @@ import { FormsModule } from '@angular/forms';
 import { Equipment } from '../../models/equipment';
 import { EquipmentsService } from '../../services/equipments.service';
 import { MaintenanceFreqPipe } from '../../pipes/maintenance-freq.pipe';
+import { Router } from '@angular/router';
+import { TabService } from 'app/modules/dashboard/services/tab.service';
+import { EquipmentCreateComponent } from '../equipment-create/equipment-create.component';
 
 interface SearchTab {
   key: string;
@@ -110,7 +113,10 @@ export class EquipmentLifecycleComponent {
     { key: 'model', label: 'Modelo' },
   ];
 
-  constructor(private equipmentsService: EquipmentsService) {
+  constructor(
+    private equipmentsService: EquipmentsService,
+    private tabService: TabService,
+  ) {
     this.selectedTab = this.searchTabs[0];
   }
 
@@ -257,6 +263,10 @@ export class EquipmentLifecycleComponent {
   private openHV(eq: Equipment) {
     this.equipment = eq;
     this.view = 'hv';
+  }
+
+  createEquipment() {
+    this.tabService.openTab('Crear Equipos', EquipmentCreateComponent);
   }
 
   goBack() {
