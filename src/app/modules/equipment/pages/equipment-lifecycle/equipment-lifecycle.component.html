@@ -1,216 +1,384 @@
 <div class="min-h-screen bg-transparent p-6">
-  <!-- CONTENEDOR PRINCIPAL -->
   <div class="max-w-6xl mx-auto bg-white rounded-xl shadow-lg p-6">
-    <!-- HEADER -->
-    <div
-      class="flex justify-between items-center bg-primary text-white px-6 py-3 rounded-lg mb-6"
-    >
-      <h2 class="text-lg font-semibold">Equipment Lifecycle - HV 01</h2>
-      <span class="text-sm opacity-90">Version 1.0.0</span>
-    </div>
-
-    <!-- GRID PRINCIPAL -->
-    <div class="grid lg:grid-cols-2 gap-6">
-      <!-- IMAGEN -->
-      <div class="bg-gray-100 rounded-lg overflow-hidden shadow">
-        <img
-          src="https://images.unsplash.com/photo-1581091870627-3c1b1f2c3d3f"
-          alt="Medical Equipment"
-          class="w-full h-full object-cover"
-        />
+    @if (view === "search") {
+      <div
+        class="flex justify-between items-center bg-primary text-white px-6 py-3 rounded-lg mb-6"
+      >
+        <h2 class="text-lg font-semibold">Hoja de vida del equipo</h2>
+        <span class="text-sm opacity-90">Buscar Equipo</span>
       </div>
 
-      <!-- DATOS GENERALES -->
-      <div class="space-y-4">
-        <div class="bg-gray-50 rounded-lg shadow p-4">
-          <h3 class="font-semibold text-primary mb-3">General Information</h3>
+      <!-- SECCIÓN 1: ID / SERIE -->
+      <div class="bg-gray-50 rounded-lg shadow p-4 mb-6">
+        <h3 class="font-semibold text-primary mb-3">Búsqueda directa</h3>
+        <p class="text-xs text-gray-400 mb-4">
+          Busca por ID o número de serie para ir directamente a la hoja de vida.
+        </p>
+        <div class="grid grid-cols-1 gap-4">
+          <div>
+            <label class="block text-sm text-gray-500 mb-2"
+              >ID del equipo</label
+            >
+            <div class="flex gap-2 items-center w-full">
+              <input
+                type="text"
+                [(ngModel)]="quickIdValue"
+                placeholder="Ej: 5"
+                (keydown.enter)="searchById()"
+                class="flex-1 min-w-0 border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+              />
+              <button
+                (click)="searchById()"
+                [disabled]="loading"
+                class="bg-primary text-white px-4 py-2 rounded-md shadow hover:opacity-90 disabled:opacity-50 text-sm whitespace-nowrap shrink-0"
+              >
+                Buscar
+              </button>
+            </div>
+            <p class="text-xs text-gray-400 mt-1">GET /api/equipments/:id</p>
+          </div>
+          <div>
+            <label class="block text-sm text-gray-500 mb-2"
+              >Número de serie</label
+            >
+            <div class="flex gap-2 items-center w-full">
+              <input
+                type="text"
+                [(ngModel)]="quickSerieValue"
+                placeholder="Ej: EQ-123"
+                (keydown.enter)="searchBySerie()"
+                class="flex-1 min-w-0 border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+              />
+              <button
+                (click)="searchBySerie()"
+                [disabled]="loading"
+                class="bg-primary text-white px-4 py-2 rounded-md shadow hover:opacity-90 disabled:opacity-50 text-sm whitespace-nowrap shrink-0"
+              >
+                Buscar
+              </button>
+            </div>
+            <p class="text-xs text-gray-400 mt-1">
+              GET /api/equipments/serie/:serie
+            </p>
+          </div>
+        </div>
+      </div>
 
+      <!-- SECCIÓN 2: FILTROS DINÁMICOS -->
+      <div class="bg-gray-50 rounded-lg shadow p-4 mb-6">
+        <h3 class="font-semibold text-primary mb-3">Búsqueda avanzada</h3>
+        <p class="text-xs text-gray-400 mb-4">
+          Selecciona un criterio, ingresa un valor y haz clic en Buscar para
+          cargar la lista. Luego puedes agregar más filtros para refinar.
+        </p>
+        <div class="flex flex-wrap gap-2 mb-4">
+          <button
+            *ngFor="let tab of searchTabs"
+            (click)="selectTab(tab)"
+            class="px-4 py-1.5 rounded-md border text-sm transition-all"
+            [class.bg-primary]="selectedTab.key === tab.key"
+            [class.text-white]="selectedTab.key === tab.key"
+            [class.border-transparent]="selectedTab.key === tab.key"
+            [class.text-gray-600]="selectedTab.key !== tab.key"
+          >
+            {{ tab.label }}
+          </button>
+        </div>
+        <div class="flex gap-2 items-center w-full">
+          <input
+            type="text"
+            [(ngModel)]="searchValue"
+            [placeholder]="selectedTab.placeholder"
+            (keydown.enter)="search()"
+            class="flex-1 min-w-0 border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+          />
+          <button
+            (click)="search()"
+            [disabled]="loading"
+            class="bg-primary text-white px-4 py-2 rounded-md shadow hover:opacity-90 disabled:opacity-50 text-sm whitespace-nowrap shrink-0"
+          >
+            {{ loading ? "Buscando..." : "Buscar" }}
+          </button>
+        </div>
+        <p class="text-xs text-gray-400 mb-4">{{ selectedTab.endpoint }}</p>
+
+        @if (allResults.length > 0) {
+          <div class="border-t border-gray-200 pt-4">
+            <p class="text-xs text-gray-500 mb-3 font-medium">
+              Refinar resultados
+            </p>
+            @if (activeFilters.length > 0) {
+              <div class="flex flex-wrap gap-2 mb-3">
+                <span
+                  *ngFor="let f of activeFilters"
+                  class="inline-flex items-center gap-1 bg-primary/10 text-primary text-xs px-3 py-1 rounded-full"
+                >
+                  {{ f.label }}: {{ f.value }}
+                  <button
+                    (click)="removeFilter(f.key)"
+                    class="ml-1 text-primary hover:text-red-500 font-bold leading-none"
+                  >
+                    ×
+                  </button>
+                </span>
+              </div>
+            }
+            <div class="flex gap-2 flex-wrap">
+              <select
+                [(ngModel)]="filterKey"
+                class="border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+              >
+                <option value="">Filtrar por...</option>
+                <option *ngFor="let opt of filterOptions" [value]="opt.key">
+                  {{ opt.label }}
+                </option>
+              </select>
+              <input
+                type="text"
+                [(ngModel)]="filterValue"
+                placeholder="Valor"
+                (keydown.enter)="addFilter()"
+                class="border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+              />
+              <button
+                (click)="addFilter()"
+                class="bg-primary text-white px-4 py-2 rounded-md shadow hover:opacity-90 text-sm"
+              >
+                + Agregar filtro
+              </button>
+            </div>
+          </div>
+        }
+      </div>
+
+      @if (errorMessage) {
+        <div
+          class="bg-red-50 border border-red-200 text-red-600 text-sm rounded-lg px-4 py-3 mb-4"
+        >
+          {{ errorMessage }}
+        </div>
+      }
+
+      <!-- SECCIÓN 3: LISTA DE RESULTADOS -->
+      @if (results.length > 0) {
+        <div class="bg-gray-50 rounded-lg shadow p-4">
+          <p class="text-xs text-gray-400 mb-3">
+            {{ results.length }} resultado(s)
+            <span *ngIf="activeFilters.length > 0"
+              >con {{ activeFilters.length }} filtro(s) activo(s)</span
+            >
+            — selecciona uno para ver la hoja de vida
+          </p>
+          <div class="space-y-2">
+            <div
+              *ngFor="let eq of results"
+              (click)="selectEquipment(eq)"
+              class="flex justify-between items-center bg-white border border-gray-200 rounded-md px-4 py-3 cursor-pointer hover:border-primary hover:shadow-sm transition-all"
+            >
+              <div>
+                <span class="font-medium text-sm">{{ eq.name }}</span>
+                <span class="text-gray-400 text-xs ml-2"
+                  >#{{ eq.equipmentId }} · {{ eq.serie }}</span
+                >
+                <span class="text-gray-400 text-xs ml-2"
+                  >· {{ eq.areaName }} · {{ eq.locationName }}</span
+                >
+              </div>
+              <div class="flex items-center gap-3">
+                <span
+                  class="text-xs px-2 py-0.5 rounded"
+                  [class.bg-green-100]="eq.active"
+                  [class.text-green-700]="eq.active"
+                  [class.bg-red-100]="!eq.active"
+                  [class.text-red-600]="!eq.active"
+                  >{{ eq.stateName }}</span
+                >
+                <span class="text-primary text-sm font-medium">Ver HV →</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      }
+
+      @if (searched && results.length === 0 && !loading && !errorMessage) {
+        <div class="text-center text-gray-400 text-sm py-10">
+          No se encontraron equipos con ese criterio.
+        </div>
+      }
+    }
+
+    <!-- SECCIÓN 4: HOJA DE VIDA -->
+    @if (view === "hv" && equipment) {
+      <div
+        class="flex justify-between items-center bg-primary text-white px-6 py-3 rounded-lg mb-6"
+      >
+        <h2 class="text-lg font-semibold">
+          Equipment Lifecycle - HV {{ equipment.equipmentId }}
+        </h2>
+        <div class="flex items-center gap-4">
+          <span class="text-sm opacity-90">Version 1.0.0</span>
+          <button
+            (click)="goBack()"
+            class="text-xs bg-white text-primary font-medium px-3 py-1 rounded-md hover:bg-gray-100 transition-all"
+          >
+            ← Volver
+          </button>
+        </div>
+      </div>
+
+      <div class="grid lg:grid-cols-2 gap-6">
+        <div class="bg-gray-100 rounded-lg overflow-hidden shadow">
+          <img
+            src="https://images.unsplash.com/photo-1581091870627-3c1b1f2c3d3f"
+            alt="Medical Equipment"
+            class="w-full h-full object-cover"
+          />
+        </div>
+        <div class="space-y-4">
+          <div class="bg-gray-50 rounded-lg shadow p-4">
+            <h3 class="font-semibold text-primary mb-3">General Information</h3>
+            <div class="space-y-2 text-sm">
+              <div class="flex justify-between border-b pb-1">
+                <span>Name:</span><span>{{ equipment.name }}</span>
+              </div>
+              <div class="flex justify-between border-b pb-1">
+                <span>Brand:</span><span>{{ equipment.brand }}</span>
+              </div>
+              <div class="flex justify-between border-b pb-1">
+                <span>Model:</span><span>{{ equipment.model }}</span>
+              </div>
+              <div class="flex justify-between border-b pb-1">
+                <span>Serial Number:</span><span>{{ equipment.serie }}</span>
+              </div>
+              <div class="flex justify-between border-b pb-1">
+                <span>Inventory ID:</span
+                ><span>{{ equipment.equipmentId }}</span>
+              </div>
+              <div class="flex justify-between">
+                <span>INVIMA Record:</span><span>{{ equipment.invima }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid lg:grid-cols-2 gap-6 mt-6">
+        <div class="bg-gray-50 rounded-lg shadow p-4">
+          <h3 class="font-semibold text-primary mb-3">Location Information</h3>
           <div class="space-y-2 text-sm">
             <div class="flex justify-between border-b pb-1">
-              <span>Name:</span>
-              <span>Computerized Tomograph</span>
+              <span>Service Area:</span><span>{{ equipment.areaName }}</span>
             </div>
-
             <div class="flex justify-between border-b pb-1">
-              <span>Brand:</span>
-              <span>XXX</span>
+              <span>Location:</span><span>{{ equipment.locationName }}</span>
             </div>
-
-            <div class="flex justify-between border-b pb-1">
-              <span>Model:</span>
-              <span>SDHG</span>
-            </div>
-
-            <div class="flex justify-between border-b pb-1">
-              <span>Serial Number:</span>
-              <span>15WESTRES234</span>
-            </div>
-
-            <div class="flex justify-between border-b pb-1">
-              <span>Inventory ID:</span>
-              <span>SUC_001</span>
-            </div>
-
             <div class="flex justify-between">
-              <span>INVIMA Record:</span>
-              <span>2021DM-001437</span>
+              <span>Classification:</span
+              ><span>{{ equipment.classificationName }}</span>
+            </div>
+          </div>
+        </div>
+        <div class="bg-gray-50 rounded-lg shadow p-4">
+          <h3 class="font-semibold text-primary mb-3">Maintenance</h3>
+          <div class="space-y-2 text-sm">
+            <div class="flex justify-between border-b pb-1">
+              <span>Provider:</span><span>{{ equipment.providerName }}</span>
+            </div>
+            <div class="flex justify-between border-b pb-1">
+              <span>Maintenance Period:</span>
+              <span>{{
+                equipment.maintenanceFrequency | maintenanceFreq
+              }}</span>
+            </div>
+            <div class="flex justify-between">
+              <span>Calibration Period:</span>
+              <span>{{
+                equipment.calibrationFrequency | maintenanceFreq
+              }}</span>
             </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <!-- SEGUNDA FILA -->
-    <div class="grid lg:grid-cols-2 gap-6 mt-6">
-      <!-- UBICACION -->
-      <div class="bg-gray-50 rounded-lg shadow p-4">
-        <h3 class="font-semibold text-primary mb-3">Location Information</h3>
-
-        <div class="space-y-2 text-sm">
-          <div class="flex justify-between border-b pb-1">
-            <span>Service Area:</span>
-            <span>Radiology Room 1</span>
+      <div class="grid lg:grid-cols-2 gap-6 mt-6">
+        <div class="bg-gray-50 rounded-lg shadow p-4">
+          <h3 class="font-semibold text-primary mb-3">Acquisition Data</h3>
+          <div class="space-y-2 text-sm">
+            <div class="flex justify-between border-b pb-1">
+              <span>Supplier:</span><span>{{ equipment.providerName }}</span>
+            </div>
+            <div class="flex justify-between border-b pb-1">
+              <span>Date:</span>
+              <span>{{ equipment.acquisitionDate | date: "dd/MM/yyyy" }}</span>
+            </div>
+            <div class="flex justify-between border-b pb-1">
+              <span>Useful Life:</span
+              ><span>{{ equipment.usefulLife }} years</span>
+            </div>
+            <div class="flex justify-between">
+              <span>Warranty:</span>
+              <span>{{ equipment.warrantyEnd | date: "dd/MM/yyyy" }}</span>
+            </div>
           </div>
-
-          <div class="flex justify-between border-b pb-1">
-            <span>Location:</span>
-            <span>Main Hospital</span>
-          </div>
-
-          <div class="flex justify-between">
-            <span>Type:</span>
-            <span>Specific Room</span>
+        </div>
+        <div class="bg-gray-50 rounded-lg shadow p-4">
+          <h3 class="font-semibold text-primary mb-3">Technical Data</h3>
+          <div class="space-y-2 text-sm">
+            <div class="flex justify-between border-b pb-1">
+              <span>Biomedical Classification:</span>
+              <span>{{ equipment.classificationName }}</span>
+            </div>
+            <div class="flex justify-between border-b pb-1">
+              <span>Risk Classification:</span
+              ><span>{{ equipment.riskLevel }}</span>
+            </div>
+            <div class="flex justify-between">
+              <span>Status:</span>
+              <span
+                class="text-xs px-2 py-0.5 rounded"
+                [class.bg-green-100]="equipment.active"
+                [class.text-green-700]="equipment.active"
+                [class.bg-red-100]="!equipment.active"
+                [class.text-red-600]="!equipment.active"
+                >{{ equipment.stateName }}</span
+              >
+            </div>
           </div>
         </div>
       </div>
 
-      <!-- MANTENIMIENTO -->
-      <div class="bg-gray-50 rounded-lg shadow p-4">
-        <h3 class="font-semibold text-primary mb-3">Maintenance</h3>
-
-        <div class="space-y-2 text-sm">
-          <div class="flex justify-between border-b pb-1">
-            <span>Responsible:</span>
-            <span>ENSOMED NM</span>
-          </div>
-
-          <div class="flex justify-between border-b pb-1">
-            <span>Contact:</span>
-            <span>321948472</span>
-          </div>
-
-          <div class="flex justify-between border-b pb-1">
-            <span>Email:</span>
-            <span>[EMAIL_ADDRESS]</span>
-          </div>
-
-          <div class="flex justify-between border-b pb-1">
-            <span>Maintenance Period:</span>
-            <span>SEMESTRAL</span>
-          </div>
-
-          <div class="flex justify-between">
-            <span>Calibration Period:</span>
-            <span>ANNUAL</span>
-          </div>
-        </div>
+      <div class="flex flex-wrap gap-4 justify-center mt-8">
+        <button
+          class="bg-primary text-white px-6 py-2 rounded-md shadow hover:opacity-90"
+        >
+          Crear Equipos
+        </button>
+        <button
+          class="bg-primary text-white px-6 py-2 rounded-md shadow hover:opacity-90"
+        >
+          Edit Informacion
+        </button>
+        <button
+          class="bg-primary text-white px-6 py-2 rounded-md shadow hover:opacity-90"
+        >
+          Generar Reporte
+        </button>
+        <button
+          class="bg-primary text-white px-6 py-2 rounded-md shadow hover:opacity-90"
+        >
+          Calendario de Mantenimiento
+        </button>
+        <button
+          class="bg-primary text-white px-6 py-2 rounded-md shadow hover:opacity-90"
+        >
+          Historial
+        </button>
+        <button
+          class="bg-primary text-white px-6 py-2 rounded-md shadow hover:opacity-90"
+        >
+          Ver Agenda
+        </button>
       </div>
-    </div>
-
-    <!-- TERCERA FILA -->
-    <div class="grid lg:grid-cols-2 gap-6 mt-6">
-      <!-- ADQUISICION -->
-      <div class="bg-gray-50 rounded-lg shadow p-4">
-        <h3 class="font-semibold text-primary mb-3">Acquisition Data</h3>
-
-        <div class="space-y-2 text-sm">
-          <div class="flex justify-between border-b pb-1">
-            <span>Supplier:</span>
-            <span>INBIOCOL</span>
-          </div>
-
-          <div class="flex justify-between border-b pb-1">
-            <span>Purchase Method:</span>
-            <span>DIRECT PURCHASE</span>
-          </div>
-
-          <div class="flex justify-between border-b pb-1">
-            <span>Date:</span>
-            <span>05/09/2023</span>
-          </div>
-
-          <div class="flex justify-between border-b pb-1">
-            <span>Useful Life:</span>
-            <span>10 YEARS</span>
-          </div>
-
-          <div class="flex justify-between">
-            <span>Warranty:</span>
-            <span>N/A</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- DATOS TECNICOS -->
-      <div class="bg-gray-50 rounded-lg shadow p-4">
-        <h3 class="font-semibold text-primary mb-3">Technical Data</h3>
-
-        <div class="space-y-2 text-sm">
-          <div class="flex justify-between border-b pb-1">
-            <span>Biomedical Classification:</span>
-            <span>Treatment</span>
-          </div>
-
-          <div class="flex justify-between border-b pb-1">
-            <span>Risk Classification:</span>
-            <span>N/A</span>
-          </div>
-
-          <div class="flex justify-between">
-            <span>Power Source:</span>
-            <span>Electricity</span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- BOTONES -->
-    <div class="flex flex-wrap gap-4 justify-center mt-8">
-      <button
-        class="bg-primary text-white px-6 py-2 rounded-md shadow hover:opacity-90"
-      >
-        Crear Equipos
-      </button>
-
-      <button
-        class="bg-primary text-white px-6 py-2 rounded-md shadow hover:opacity-90"
-      >
-        Edit Informacion
-      </button>
-
-      <button
-        class="bg-primary text-white px-6 py-2 rounded-md shadow hover:opacity-90"
-      >
-        Generar Reporte
-      </button>
-
-      <button
-        class="bg-primary text-white px-6 py-2 rounded-md shadow hover:opacity-90"
-      >
-        Calendario de Mantenimiento
-      </button>
-
-      <button
-        class="bg-primary text-white px-6 py-2 rounded-md shadow hover:opacity-90"
-      >
-        Historial
-      </button>
-
-      <button
-        class="bg-primary text-white px-6 py-2 rounded-md shadow hover:opacity-90"
-      >
-        Ver Agenda
-      </button>
-    </div>
+    }
   </div>
 </div>
