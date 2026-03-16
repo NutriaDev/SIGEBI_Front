@@ -8,6 +8,8 @@ import { ClasificationService } from '../../services/clasification.service';
 import { ProviderService } from '../../services/provider.service';
 import { StateService } from '../../services/state.service';
 import { LocationService } from '../../services/location.service';
+import Swal from 'sweetalert2';
+import { AuthService } from 'app/core/services/auth.service';
 
 @Component({
   selector: 'app-equipment-create',
@@ -77,12 +79,29 @@ export class EquipmentCreateComponent implements OnInit {
     private providerService: ProviderService,
     private stateService: StateService,
     private locationService: LocationService,
+    private authService: AuthService,
   ) {}
 
+  private readonly DRAFT_KEY = 'equipment_create_draft';
   ngOnInit(): void {
     this.loadCatalogs();
-    // TODO: asignar el ID del usuario logueado
-    // this.form.responsibleUserId = this.authService.currentUser.id;
+    this.loadDraft();
+    // Asignar el ID del usuario logueado desde el JWT
+    const userId = this.authService.currentUser?.sub;
+    if (userId) {
+      this.form.responsibleUserId = Number(userId);
+    }
+  }
+
+  saveDraft(): void {
+    sessionStorage.setItem(this.DRAFT_KEY, JSON.stringify(this.form));
+  }
+
+  private loadDraft(): void {
+    const draft = sessionStorage.getItem(this.DRAFT_KEY);
+    if (draft) {
+      this.form = { ...this.form, ...JSON.parse(draft) };
+    }
   }
 
   loadCatalogs(): void {
@@ -122,45 +141,103 @@ export class EquipmentCreateComponent implements OnInit {
   save(): void {
     if (!this.isFormValid()) return;
 
-    this.saving = true;
-    this.errorMessage = '';
+    Swal.fire({
+      icon: 'question',
+      title: '¿Registrar equipo?',
+      text: 'Se guardará el nuevo equipo médico en el sistema.',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, guardar',
+      cancelButtonText: 'Cancelar',
+      buttonsStyling: false,
+      customClass: {
+        popup: 'sigebi-popup',
+        confirmButton: 'sigebi-confirm-btn',
+      },
+    }).then((result) => {
+      if (!result.isConfirmed) return;
 
-    this.equipmentsService.create(this.form).subscribe({
-      next: () => {
-        this.saving = false;
-        this.successMessage = 'Equipo registrado exitosamente';
-        setTimeout(() => this.router.navigate(['/equipment']), 1500);
-      },
-      error: (err: any) => {
-        this.saving = false;
-        this.errorMessage =
-          err?.error?.message ?? 'Error al registrar el equipo';
-      },
+      this.saving = true;
+
+      this.equipmentsService.create(this.form).subscribe({
+        next: () => {
+          this.saving = false;
+          sessionStorage.removeItem(this.DRAFT_KEY);
+
+          Swal.fire({
+            icon: 'success',
+            title: 'Equipo registrado correctamente',
+            confirmButtonText: 'Aceptar',
+            buttonsStyling: false,
+            customClass: {
+              popup: 'sigebi-popup',
+              confirmButton: 'sigebi-confirm-btn',
+            },
+          }).then(() => {
+            this.router.navigate(['/equipment']);
+          });
+        },
+        error: (err: any) => {
+          this.saving = false;
+
+          const msg =
+            err?.error?.message ?? 'Ocurrió un error al registrar el equipo';
+          const isDuplicate = err?.status === 409;
+
+          Swal.fire({
+            icon: 'error',
+            title: isDuplicate ? 'Serie duplicada' : 'Error al registrar',
+            text: msg,
+            confirmButtonText: 'Entendido',
+            buttonsStyling: false,
+            customClass: {
+              popup: 'sigebi-popup',
+              confirmButton: 'sigebi-confirm-btn',
+            },
+          });
+        },
+      });
     });
   }
 
   clear(): void {
-    this.form = {
-      name: '',
-      brand: '',
-      model: '',
-      serie: '',
-      invima: '',
-      areaId: null,
-      locationId: null,
-      classificationId: null,
-      stateId: null,
-      riskLevel: '',
-      providerId: null,
-      maintenanceFrequency: null,
-      calibrationFrequency: null,
-      acquisitionDate: '',
-      usefulLife: null,
-      warrantyEnd: '',
-      responsibleUserId: this.form.responsibleUserId,
-    };
-    this.errorMessage = '';
-    this.successMessage = '';
+    Swal.fire({
+      icon: 'warning',
+      title: '¿Limpiar formulario?',
+      text: 'Se perderán todos los datos ingresados.',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, limpiar',
+      cancelButtonText: 'Cancelar',
+      buttonsStyling: false,
+      customClass: {
+        popup: 'sigebi-popup',
+        confirmButton: 'sigebi-confirm-btn',
+      },
+    }).then((result) => {
+      if (!result.isConfirmed) return;
+
+      sessionStorage.removeItem(this.DRAFT_KEY);
+      this.form = {
+        name: '',
+        brand: '',
+        model: '',
+        serie: '',
+        invima: '',
+        areaId: null,
+        locationId: null,
+        classificationId: null,
+        stateId: null,
+        riskLevel: '',
+        providerId: null,
+        maintenanceFrequency: null,
+        calibrationFrequency: null,
+        acquisitionDate: '',
+        usefulLife: null,
+        warrantyEnd: '',
+        responsibleUserId: Number(this.authService.currentUser?.sub) || null, // 👈
+      };
+      this.errorMessage = '';
+      this.successMessage = '';
+    });
   }
 
   goBack(): void {
@@ -174,6 +251,31 @@ export class EquipmentCreateComponent implements OnInit {
     }
     if (!this.form.serie.trim()) {
       this.errorMessage = 'La serie es requerida';
+      return false;
+    }
+    if (!this.form.brand.trim()) {
+      // 👈 agregar
+      this.errorMessage = 'La marca es requerida';
+      return false;
+    }
+    if (!this.form.model.trim()) {
+      // 👈 agregar
+      this.errorMessage = 'El modelo es requerido';
+      return false;
+    }
+    if (!this.form.invima.trim()) {
+      // 👈 agregar
+      this.errorMessage = 'El registro INVIMA es requerido';
+      return false;
+    }
+    if (!this.form.acquisitionDate) {
+      // 👈 agregar
+      this.errorMessage = 'La fecha de adquisición es requerida';
+      return false;
+    }
+    if (!this.form.providerId) {
+      // 👈 agregar
+      this.errorMessage = 'El proveedor es requerido';
       return false;
     }
     if (!this.form.areaId) {
@@ -190,6 +292,11 @@ export class EquipmentCreateComponent implements OnInit {
     }
     if (!this.form.classificationId) {
       this.errorMessage = 'La clasificación es requerida';
+      return false;
+    }
+    if (!this.form.responsibleUserId) {
+      // 👈 agregar (resolver el TODO)
+      this.errorMessage = 'Falta el usuario responsable';
       return false;
     }
     return true;

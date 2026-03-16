@@ -55,7 +55,9 @@
         </div>
 
         <div>
-          <label class="block text-sm text-gray-500 mb-1">Marca</label>
+          <label class="block text-sm text-gray-500 mb-1"
+            >Marca<span class="text-red-500">*</span></label
+          >
           <input
             type="text"
             [(ngModel)]="form.brand"
@@ -65,7 +67,9 @@
         </div>
 
         <div>
-          <label class="block text-sm text-gray-500 mb-1">Modelo</label>
+          <label class="block text-sm text-gray-500 mb-1"
+            >Modelo<span class="text-red-500">*</span></label
+          >
           <input
             type="text"
             [(ngModel)]="form.model"
@@ -88,7 +92,7 @@
 
         <div>
           <label class="block text-sm text-gray-500 mb-1"
-            >Registro INVIMA</label
+            >Registro INVIMA <span class="text-red-500">*</span></label
           >
           <input
             type="text"
@@ -157,7 +161,7 @@
 
           <div>
             <label class="block text-sm text-gray-500 mb-1"
-              >Fecha Adquisición</label
+              >Fecha Adquisición <span class="text-red-500">*</span></label
             >
             <input
               type="date"
