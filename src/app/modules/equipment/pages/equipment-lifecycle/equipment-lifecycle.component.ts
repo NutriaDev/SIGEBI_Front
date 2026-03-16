@@ -186,17 +186,23 @@ export class EquipmentLifecycleComponent {
       next: (res: any) => {
         const data = res.body;
 
-        // ID o Serie → resultado único → va directo a HV
-        if (!Array.isArray(data)) {
+        // Para búsqueda avanzada siempre viene paginado
+        // Spring Page: { content: [], totalElements, ... }
+        if (data && data.content) {
+          const list: Equipment[] = data.content;
+          this.allResults = list;
+          this.results = [...list];
+          this.loading = false;
+          return;
+        }
+
+        // Resultado único (por si acaso)
+        if (data && !Array.isArray(data)) {
           this.openHV(data as Equipment);
           this.loading = false;
           return;
         }
 
-        // Lista paginada de Spring → extraer content
-        const list: Equipment[] = (data as any).content ?? data;
-        this.allResults = list;
-        this.results = [...list];
         this.loading = false;
       },
       error: () => {
