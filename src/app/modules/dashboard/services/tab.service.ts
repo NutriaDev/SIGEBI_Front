@@ -20,6 +20,7 @@ export class TabService {
     const existingIndex = this.tabs.findIndex((t) => t.title === title);
 
     if (existingIndex !== -1) {
+      this.tabs[existingIndex].data = data;
       this.tabsSubject.next([...this.tabs]);
       return;
     }

@@ -65,6 +65,12 @@
                 {{ eq.stateName }}
               </span>
               <button
+                (click)="verHV(eq)"
+                class="bg-gray-700 text-white text-xs px-3 py-1.5 rounded-md hover:opacity-90 transition-all"
+              >
+                Ver HV →
+              </button>
+              <button
                 (click)="edit()"
                 class="bg-primary text-white text-xs px-3 py-1.5 rounded-md hover:opacity-90 transition-all"
               >
@@ -74,9 +80,7 @@
                 (click)="deactivate(eq)"
                 class="text-xs px-3 py-1.5 rounded-md text-white transition-all"
                 [class.bg-red-500]="eq.active"
-                [class.hover:bg-red-600]="eq.active"
                 [class.bg-green-600]="!eq.active"
-                [class.hover:bg-green-700]="!eq.active"
               >
                 {{ eq.active ? "Inactivar" : "Activar" }}
               </button>

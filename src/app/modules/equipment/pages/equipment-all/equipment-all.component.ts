@@ -5,6 +5,7 @@ import { EquipmentsService } from '../../services/equipments.service';
 import Swal from 'sweetalert2';
 import { TabService } from 'app/modules/dashboard/services/tab.service';
 import { EquipmentEditComponent } from '../equipment-edit/equipment-edit.component';
+import { EquipmentLifecycleComponent } from '../equipment-lifecycle/equipment-lifecycle.component';
 
 @Component({
   selector: 'app-equipment-all',
@@ -70,6 +71,14 @@ export class EquipmentAllComponent implements OnInit {
     if (page < 0 || page >= this.totalPages) return;
     this.currentPage = page;
     this.load();
+  }
+
+  verHV(eq: Equipment): void {
+    this.tabService.openTab(
+      'Ciclo de vida del Equipo',
+      EquipmentLifecycleComponent,
+      { equipmentId: eq.equipmentId }, // 👈 pasar el id
+    );
   }
 
   edit(): void {

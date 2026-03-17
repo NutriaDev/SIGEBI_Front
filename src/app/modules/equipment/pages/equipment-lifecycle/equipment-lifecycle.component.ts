@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Equipment } from '../../models/equipment';
@@ -114,11 +114,22 @@ export class EquipmentLifecycleComponent {
     { key: 'model', label: 'Modelo' },
   ];
 
+  @Input() equipmentId?: number;
+
   constructor(
     private equipmentsService: EquipmentsService,
     private tabService: TabService,
   ) {
     this.selectedTab = this.searchTabs[0];
+  }
+
+  ngOnInit(): void {
+    if (this.equipmentId) {
+      this.equipmentsService.getById(this.equipmentId).subscribe({
+        next: (res: any) => this.openHV(res.body),
+        error: () => {},
+      });
+    }
   }
 
   // ── Tabs ─────────────────────────────────────────────────
