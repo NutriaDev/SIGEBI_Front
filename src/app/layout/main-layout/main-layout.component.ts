@@ -48,7 +48,10 @@ export class MainLayoutComponent {
   }
 
   openEquipment() {
-    this.tabService.openTab('Equipos Médicos', EquipmentLifecycleComponent);
+    this.tabService.openTab(
+      'Busqueda Avanzada HDV',
+      EquipmentLifecycleComponent,
+    );
     this.isSidebarOpen = false;
   }
 
