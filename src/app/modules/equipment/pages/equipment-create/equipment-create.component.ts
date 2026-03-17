@@ -10,6 +10,7 @@ import { StateService } from '../../services/state.service';
 import { LocationService } from '../../services/location.service';
 import Swal from 'sweetalert2';
 import { AuthService } from 'app/core/services/auth.service';
+import { HttpErrorMapperService } from 'app/core/services/http-error-mapper.service';
 
 @Component({
   selector: 'app-equipment-create',
@@ -80,6 +81,7 @@ export class EquipmentCreateComponent implements OnInit {
     private stateService: StateService,
     private locationService: LocationService,
     private authService: AuthService,
+    private errorMapper: HttpErrorMapperService,
   ) {}
 
   private readonly DRAFT_KEY = 'equipment_create_draft';
@@ -141,6 +143,8 @@ export class EquipmentCreateComponent implements OnInit {
   save(): void {
     if (!this.isFormValid()) return;
 
+    console.log('FORM A ENVIAR:', JSON.stringify(this.form));
+
     Swal.fire({
       icon: 'question',
       title: '¿Registrar equipo?',
@@ -178,14 +182,11 @@ export class EquipmentCreateComponent implements OnInit {
         },
         error: (err: any) => {
           this.saving = false;
-
-          const msg =
-            err?.error?.message ?? 'Ocurrió un error al registrar el equipo';
-          const isDuplicate = err?.status === 409;
-
+          const msg = this.errorMapper.mapCreateEquipmentError(err);
           Swal.fire({
             icon: 'error',
-            title: isDuplicate ? 'Serie duplicada' : 'Error al registrar',
+            title:
+              err?.status === 409 ? 'Serie duplicada' : 'Error al registrar',
             text: msg,
             confirmButtonText: 'Entendido',
             buttonsStyling: false,

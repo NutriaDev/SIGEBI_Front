@@ -6,6 +6,7 @@ import Swal from 'sweetalert2';
 import { TabService } from 'app/modules/dashboard/services/tab.service';
 import { EquipmentEditComponent } from '../equipment-edit/equipment-edit.component';
 import { EquipmentLifecycleComponent } from '../equipment-lifecycle/equipment-lifecycle.component';
+import { HttpErrorMapperService } from 'app/core/services/http-error-mapper.service';
 
 @Component({
   selector: 'app-equipment-all',
@@ -26,6 +27,7 @@ export class EquipmentAllComponent implements OnInit {
   constructor(
     private equipmentsService: EquipmentsService,
     private tabService: TabService,
+    private errorMapper: HttpErrorMapperService,
   ) {}
 
   ngOnInit(): void {
@@ -122,11 +124,15 @@ export class EquipmentAllComponent implements OnInit {
           });
           this.load();
         },
-        error: () => {
+        error: (err: any) => {
+          const msg = this.errorMapper.mapToggleEquipmentError(
+            err,
+            action as 'activar' | 'inactivar',
+          );
           Swal.fire({
             icon: 'error',
             title: 'Error',
-            text: `No se pudo ${action} el equipo.`,
+            text: msg,
             confirmButtonText: 'Entendido',
             buttonsStyling: false,
             customClass: {
