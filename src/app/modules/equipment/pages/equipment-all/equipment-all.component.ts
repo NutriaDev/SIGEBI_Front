@@ -82,7 +82,9 @@ export class EquipmentAllComponent implements OnInit {
   }
 
   edit(eq: Equipment): void {
-    this.tabService.openTab('Editar Equipo', EquipmentEditComponent);
+    this.tabService.openTab('Editar Equipo', EquipmentEditComponent, {
+      equipmentId: eq.equipmentId,
+    });
   }
 
   toggleActive(eq: Equipment): void {

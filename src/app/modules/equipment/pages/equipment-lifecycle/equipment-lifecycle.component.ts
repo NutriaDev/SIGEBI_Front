@@ -8,6 +8,7 @@ import { Router } from '@angular/router';
 import { TabService } from 'app/modules/dashboard/services/tab.service';
 import { EquipmentCreateComponent } from '../equipment-create/equipment-create.component';
 import Swal from 'sweetalert2';
+import { EquipmentEditComponent } from '../equipment-edit/equipment-edit.component';
 
 interface SearchTab {
   key: string;
@@ -321,6 +322,12 @@ export class EquipmentLifecycleComponent {
 
   createEquipment() {
     this.tabService.openTab('Crear Equipos', EquipmentCreateComponent);
+  }
+
+  edit(eq: Equipment): void {
+    this.tabService.openTab('Editar Equipo', EquipmentEditComponent, {
+      equipmentId: eq.equipmentId,
+    });
   }
 
   goBack() {
