@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { Equipment } from '../../models/equipment';
 import { EquipmentsService } from '../../services/equipments.service';
 import Swal from 'sweetalert2';
+import { TabService } from 'app/modules/dashboard/services/tab.service';
+import { EquipmentEditComponent } from '../equipment-edit/equipment-edit.component';
 
 @Component({
   selector: 'app-equipment-all',
@@ -20,7 +22,10 @@ export class EquipmentAllComponent implements OnInit {
   totalElements = 0;
   totalPages = 0;
 
-  constructor(private equipmentsService: EquipmentsService) {}
+  constructor(
+    private equipmentsService: EquipmentsService,
+    private tabService: TabService,
+  ) {}
 
   ngOnInit(): void {
     this.load();
@@ -65,5 +70,59 @@ export class EquipmentAllComponent implements OnInit {
     if (page < 0 || page >= this.totalPages) return;
     this.currentPage = page;
     this.load();
+  }
+
+  edit(): void {
+    this.tabService.openTab('Editar Equipo', EquipmentEditComponent);
+  }
+
+  deactivate(eq: Equipment): void {
+    const action = eq.active ? 'inactivar' : 'activar';
+    const actionTitle = eq.active ? 'Inactivar equipo' : 'Activar equipo';
+
+    Swal.fire({
+      icon: 'warning',
+      title: `¿${actionTitle}?`,
+      text: `¿Deseas ${action} el equipo "${eq.name}"?`,
+      showCancelButton: true,
+      confirmButtonText: `Sí, ${action}`,
+      cancelButtonText: 'Cancelar',
+      buttonsStyling: false,
+      customClass: {
+        popup: 'sigebi-popup',
+        confirmButton: 'sigebi-confirm-btn',
+      },
+    }).then((result) => {
+      if (!result.isConfirmed) return;
+
+      this.equipmentsService.deactivate(eq.equipmentId).subscribe({
+        next: () => {
+          Swal.fire({
+            icon: 'success',
+            title: `Equipo ${action === 'inactivar' ? 'inactivado' : 'activado'} correctamente`,
+            confirmButtonText: 'Aceptar',
+            buttonsStyling: false,
+            customClass: {
+              popup: 'sigebi-popup',
+              confirmButton: 'sigebi-confirm-btn',
+            },
+          });
+          this.load();
+        },
+        error: () => {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: `No se pudo ${action} el equipo.`,
+            confirmButtonText: 'Entendido',
+            buttonsStyling: false,
+            customClass: {
+              popup: 'sigebi-popup',
+              confirmButton: 'sigebi-confirm-btn',
+            },
+          });
+        },
+      });
+    });
   }
 }
