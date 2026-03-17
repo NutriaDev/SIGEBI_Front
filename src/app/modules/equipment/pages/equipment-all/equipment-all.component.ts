@@ -44,8 +44,6 @@ export class EquipmentAllComponent implements OnInit {
 
     this.equipmentsService.getAll(pageable).subscribe({
       next: (res: any) => {
-        console.log('RES COMPLETO:', res); // 👈
-        console.log('BODY:', res.body); // 👈
         const data = res.body;
         this.equipments = data.content ?? data;
         this.totalElements = data.totalElements ?? this.equipments.length;
