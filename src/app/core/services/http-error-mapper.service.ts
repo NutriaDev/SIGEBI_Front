@@ -293,4 +293,23 @@ export class HttpErrorMapperService {
         return 'Error inesperado al consultar el equipo.';
     }
   }
+
+  mapCreateProviderError(error: any): string {
+    if (this.isConnectionError(error)) {
+      return 'No se pudo conectar con el servidor.';
+    }
+
+    switch (error.status) {
+      case 400:
+        return this.getBackendMessage(error) || 'Datos inválidos.';
+      case 403:
+        return 'No tiene permisos para crear proveedores.';
+      case 409:
+        return this.getBackendMessage(error) || 'El proveedor ya existe.';
+      case 500:
+        return 'No tiene permisos para realizar esta acción.'; // 👈 cubre el bug del backend
+      default:
+        return 'Error inesperado.';
+    }
+  }
 }

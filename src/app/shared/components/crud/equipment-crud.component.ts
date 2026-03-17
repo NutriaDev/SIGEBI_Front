@@ -108,10 +108,17 @@ export class EquipmentCrudComponent implements OnInit {
       },
       error: (err: any) => {
         const isDuplicate = err?.status === 409;
+        const isNoPermission = err?.status === 403 || err?.status === 500; // 👈
         Swal.fire({
           icon: 'error',
-          title: isDuplicate ? 'Nombre duplicado' : 'Error al crear',
-          text: err?.error?.message ?? `No se pudo crear ${this.title}`,
+          title: isNoPermission
+            ? 'Sin permisos'
+            : isDuplicate
+              ? 'Nombre duplicado'
+              : 'Error al crear',
+          text: isNoPermission
+            ? 'No tienes permisos para crear este recurso.'
+            : (err?.error?.message ?? `No se pudo crear ${this.title}`),
           confirmButtonText: 'Entendido',
           buttonsStyling: false,
           customClass: {
