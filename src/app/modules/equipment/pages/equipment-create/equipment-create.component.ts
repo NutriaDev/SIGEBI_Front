@@ -11,6 +11,8 @@ import { LocationService } from '../../services/location.service';
 import Swal from 'sweetalert2';
 import { AuthService } from 'app/core/services/auth.service';
 import { HttpErrorMapperService } from 'app/core/services/http-error-mapper.service';
+import { TabService } from 'app/modules/dashboard/services/tab.service';
+import { EquipmentAllComponent } from '../equipment-all/equipment-all.component';
 
 @Component({
   selector: 'app-equipment-create',
@@ -73,7 +75,6 @@ export class EquipmentCreateComponent implements OnInit {
   };
 
   constructor(
-    private router: Router,
     private equipmentsService: EquipmentsService,
     private areaService: AreaService,
     private clasificationService: ClasificationService,
@@ -82,6 +83,7 @@ export class EquipmentCreateComponent implements OnInit {
     private locationService: LocationService,
     private authService: AuthService,
     private errorMapper: HttpErrorMapperService,
+    private tabService: TabService,
   ) {}
 
   private readonly DRAFT_KEY = 'equipment_create_draft';
@@ -177,7 +179,7 @@ export class EquipmentCreateComponent implements OnInit {
               confirmButton: 'sigebi-confirm-btn',
             },
           }).then(() => {
-            this.router.navigate(['/equipment']);
+            this.tabService.openTab('Equipos Medicos', EquipmentAllComponent);
           });
         },
         error: (err: any) => {
