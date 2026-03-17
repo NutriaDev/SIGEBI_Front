@@ -66,21 +66,24 @@
               </span>
               <button
                 (click)="verHV(eq)"
-                class="bg-gray-700 text-white text-xs px-3 py-1.5 rounded-md hover:opacity-90 transition-all"
+                class="bg-primary text-white text-xs px-3 py-1.5 rounded-md hover:opacity-90 transition-all"
               >
                 Ver HV →
               </button>
               <button
-                (click)="edit()"
+                (click)="edit(eq)"
                 class="bg-primary text-white text-xs px-3 py-1.5 rounded-md hover:opacity-90 transition-all"
               >
                 Editar
               </button>
               <button
-                (click)="deactivate(eq)"
-                class="text-xs px-3 py-1.5 rounded-md text-white transition-all"
-                [class.bg-red-500]="eq.active"
-                [class.bg-green-600]="!eq.active"
+                (click)="toggleActive(eq)"
+                class="text-xs px-3 py-1.5 rounded-md text-white transition-all font-medium"
+                [ngClass]="
+                  eq.active
+                    ? 'bg-[#8b3a3a] hover:bg-[#6e2e2e]'
+                    : 'bg-[#263d42] hover:bg-[#121f23]'
+                "
               >
                 {{ eq.active ? "Inactivar" : "Activar" }}
               </button>

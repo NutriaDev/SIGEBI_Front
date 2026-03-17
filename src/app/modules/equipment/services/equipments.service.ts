@@ -77,4 +77,9 @@ export class EquipmentsService extends EquipmentService<Equipment> {
       params: { name, ...pageable },
     });
   }
+
+  activate(id: number): Observable<ApiResponse<void>> {
+    // 👈 agregar aquí
+    return this.http.patch<ApiResponse<void>>(`${this.url}/${id}/activate`, {});
+  }
 }

@@ -81,11 +81,11 @@ export class EquipmentAllComponent implements OnInit {
     );
   }
 
-  edit(): void {
+  edit(eq: Equipment): void {
     this.tabService.openTab('Editar Equipo', EquipmentEditComponent);
   }
 
-  deactivate(eq: Equipment): void {
+  toggleActive(eq: Equipment): void {
     const action = eq.active ? 'inactivar' : 'activar';
     const actionTitle = eq.active ? 'Inactivar equipo' : 'Activar equipo';
 
@@ -104,11 +104,15 @@ export class EquipmentAllComponent implements OnInit {
     }).then((result) => {
       if (!result.isConfirmed) return;
 
-      this.equipmentsService.deactivate(eq.equipmentId).subscribe({
+      const request$ = eq.active
+        ? this.equipmentsService.deactivate(eq.equipmentId) // 👈 activo → desactivar
+        : this.equipmentsService.activate(eq.equipmentId); // 👈 inactivo → activar
+
+      request$.subscribe({
         next: () => {
           Swal.fire({
             icon: 'success',
-            title: `Equipo ${action === 'inactivar' ? 'inactivado' : 'activado'} correctamente`,
+            title: `Equipo ${eq.active ? 'inactivado' : 'activado'} correctamente`,
             confirmButtonText: 'Aceptar',
             buttonsStyling: false,
             customClass: {
