@@ -14,8 +14,13 @@ export class EquipmentCrudComponent implements OnInit {
   selected: any = null;
   searchText = '';
   searchId: number | null = null;
-
   viewMode: 'list' | 'create' | 'update' = 'list';
+
+  // ── Paginación ──────────────────────────────────────────
+  currentPage = 0;
+  pageSize = 10;
+  totalElements = 0;
+  totalPages = 0;
 
   constructor() {}
 
@@ -33,9 +38,23 @@ export class EquipmentCrudComponent implements OnInit {
   }
 
   load() {
-    this.service.getAll().subscribe((res: any) => {
-      this.items = res.body.content ?? res.body;
+    const pageable = {
+      page: this.currentPage,
+      size: this.pageSize,
+      sort: 'active,desc',
+    }; // 👈 activos primero
+    this.service.getAll(pageable).subscribe((res: any) => {
+      const data = res.body;
+      this.items = data.content ?? data;
+      this.totalElements = data.totalElements ?? this.items.length;
+      this.totalPages = data.totalPages ?? 1;
     });
+  }
+
+  goToPage(page: number) {
+    if (page < 0 || page >= this.totalPages) return;
+    this.currentPage = page;
+    this.load();
   }
 
   searchByName() {

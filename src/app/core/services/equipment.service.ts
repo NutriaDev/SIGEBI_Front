@@ -8,8 +8,8 @@ export class EquipmentService<T> {
     protected url: string,
   ) {}
 
-  getAll(): Observable<ApiResponse<T[]>> {
-    return this.http.get<ApiResponse<T[]>>(this.url);
+  getAll(pageable?: any): Observable<ApiResponse<T[]>> {
+    return this.http.get<ApiResponse<T[]>>(this.url, { params: pageable });
   }
 
   getById(id: number): Observable<ApiResponse<T>> {

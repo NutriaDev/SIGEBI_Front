@@ -88,6 +88,32 @@
               </button>
             </div>
           </div>
+
+          <!-- ── Paginación ── -->
+          <div
+            class="flex justify-between items-center mt-4 text-sm text-gray-500"
+          >
+            <span
+              >{{ totalElements }} registros · Página {{ currentPage + 1 }} de
+              {{ totalPages }}</span
+            >
+            <div class="flex gap-2">
+              <button
+                (click)="goToPage(currentPage - 1)"
+                [disabled]="currentPage === 0"
+                class="px-3 py-1 rounded border border-gray-300 disabled:opacity-40 hover:bg-gray-100"
+              >
+                ← Anterior
+              </button>
+              <button
+                (click)="goToPage(currentPage + 1)"
+                [disabled]="currentPage >= totalPages - 1"
+                class="px-3 py-1 rounded border border-gray-300 disabled:opacity-40 hover:bg-gray-100"
+              >
+                Siguiente →
+              </button>
+            </div>
+          </div>
         </div>
 
         <!-- CREAR -->
