@@ -156,29 +156,65 @@ export class EquipmentCrudComponent implements OnInit {
 
   update() {
     const id = this.getId();
-    this.service.update(id, { name: this.selected.name }).subscribe(() => {
-      Swal.fire({
-        icon: 'success',
-        title: 'Actualizado correctamente',
-        confirmButtonText: 'Aceptar',
-        buttonsStyling: false,
-        customClass: {
-          popup: 'sigebi-popup',
-          confirmButton: 'sigebi-confirm-btn',
-        },
-      });
-      this.viewMode = 'list';
-      this.load();
+    this.service.update(id, { name: this.selected.name }).subscribe({
+      next: () => {
+        Swal.fire({
+          icon: 'success',
+          title: 'Actualizado correctamente',
+          confirmButtonText: 'Aceptar',
+          buttonsStyling: false,
+          customClass: {
+            popup: 'sigebi-popup',
+            confirmButton: 'sigebi-confirm-btn',
+          },
+        });
+        this.viewMode = 'list';
+        this.load();
+      },
+      error: (err: any) => {
+        const isNoPermission = err?.status === 403 || err?.status === 500;
+        Swal.fire({
+          icon: 'error',
+          title: isNoPermission ? 'Sin permisos' : 'Error al actualizar',
+          text: isNoPermission
+            ? 'No tienes permisos para actualizar este recurso.'
+            : (err?.error?.message ?? `No se pudo actualizar ${this.title}`),
+          confirmButtonText: 'Entendido',
+          buttonsStyling: false,
+          customClass: {
+            popup: 'sigebi-popup',
+            confirmButton: 'sigebi-confirm-btn',
+          },
+        });
+      },
     });
   }
 
   deactivate() {
     const id = this.getId();
-    console.log('deactivate id:', id);
-    this.service.deactivate(id).subscribe(() => {
-      this.selected.active = !this.selected.active; // toggle local
-      this.viewMode = 'list';
-      this.load();
+    this.service.deactivate(id).subscribe({
+      next: () => {
+        this.selected.active = !this.selected.active;
+        this.viewMode = 'list';
+        this.load();
+      },
+      error: (err: any) => {
+        const isNoPermission = err?.status === 403 || err?.status === 500;
+        Swal.fire({
+          icon: 'error',
+          title: isNoPermission ? 'Sin permisos' : 'Error al cambiar estado',
+          text: isNoPermission
+            ? 'No tienes permisos para cambiar el estado de este recurso.'
+            : (err?.error?.message ??
+              `No se pudo cambiar el estado de ${this.title}`),
+          confirmButtonText: 'Entendido',
+          buttonsStyling: false,
+          customClass: {
+            popup: 'sigebi-popup',
+            confirmButton: 'sigebi-confirm-btn',
+          },
+        });
+      },
     });
   }
 }
