@@ -8,6 +8,14 @@ import { MaintenanceModule } from '../../modules/maintenance/maintenance.module'
 import { ReportsModule } from '../../modules/reports/reports.module';
 import { InventoryModule } from '../../modules/inventory/inventory.module';
 import { EquipmentModule } from '../../modules/equipment/equipment.module';
+import { EquipmentLifecycleComponent } from 'app/modules/equipment/pages/equipment-lifecycle/equipment-lifecycle.component';
+import { AreaFormComponent } from 'app/modules/equipment/components/area-form/area-form.component';
+import { ClasificationFormComponent } from 'app/modules/equipment/components/clasification-form/clasification-form.component';
+import { StateFormComponent } from 'app/modules/equipment/components/state-form/state-form.component';
+import { LocationFormComponent } from 'app/modules/equipment/components/location-form/location-form.component';
+import { ProviderFormComponent } from 'app/modules/equipment/components/provider-form/provider-form.component';
+import { EquipmentCreateComponent } from 'app/modules/equipment/pages/equipment-create/equipment-create.component';
+import { EquipmentAllComponent } from 'app/modules/equipment/pages/equipment-all/equipment-all.component';
 
 @Component({
   selector: 'app-main-layout',
@@ -32,10 +40,53 @@ export class MainLayoutComponent {
     return this.authService.hasAnyPermission(permissions);
   }
 
+  // Module equpiments
+  equipmentMenuOpen = false;
+
+  toggleEquipmentMenu() {
+    this.equipmentMenuOpen = !this.equipmentMenuOpen;
+  }
+
   openEquipment() {
-    this.tabService.openTab('Equipos Médicos', EquipmentModule);
+    this.tabService.openTab(
+      'Busqueda Avanzada HDV',
+      EquipmentLifecycleComponent,
+    );
     this.isSidebarOpen = false;
   }
+
+  createEquipment() {
+    this.tabService.openTab('Crear Equipos medicos', EquipmentCreateComponent);
+  }
+
+  getAllEquipment() {
+    this.tabService.openTab('Equipos Médicos', EquipmentAllComponent);
+  }
+
+  openEquipmentArea() {
+    this.tabService.openTab('Area de equipos', AreaFormComponent);
+  }
+
+  openEquipmentClassification() {
+    this.tabService.openTab(
+      'Clasificacion de equipos',
+      ClasificationFormComponent,
+    );
+  }
+
+  openEquipmentState() {
+    this.tabService.openTab('Estado de un equipo', StateFormComponent);
+  }
+
+  openEquipmentLocation() {
+    this.tabService.openTab('Ubicacion de un equipo', LocationFormComponent);
+  }
+
+  openEquipmentProvider() {
+    this.tabService.openTab('Proveedores', ProviderFormComponent);
+  }
+
+  //Module Inventory
 
   openInventory() {
     this.tabService.openTab('Inventarios', InventoryModule);

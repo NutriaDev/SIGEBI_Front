@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../../../core/services/auth.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { TabService } from '../../services/tab.service';
+import { EquipmentLifecycleComponent } from 'app/modules/equipment/pages/equipment-lifecycle/equipment-lifecycle.component';
+import { EquipmentCreateComponent } from 'app/modules/equipment/pages/equipment-create/equipment-create.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -10,6 +13,8 @@ export class DashboardComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private router: Router,
+    private route: ActivatedRoute,
+    private tabService: TabService,
   ) {}
 
   ngOnInit(): void {
@@ -31,11 +36,10 @@ export class DashboardComponent implements OnInit {
 
       case 'TECNICO':
         this.router.navigate(['dashboard/tecnico']);
-        break;
-
-      default:
-        this.router.navigate(['/auth/login']);
-        break;
     }
+  }
+
+  openEquipment() {
+    this.tabService.openTab('Equipment Lifecycle', EquipmentLifecycleComponent);
   }
 }

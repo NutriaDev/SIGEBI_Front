@@ -1,0 +1,129 @@
+<div class="min-h-screen bg-transparent p-1">
+  <div class="max-w-6xl mx-auto bg-white rounded-xl shadow-lg p-6">
+    <!-- HEADER -->
+    <div
+      class="flex justify-between items-center bg-primary text-white px-6 py-3 rounded-lg mb-6"
+    >
+      <h2 class="text-lg font-semibold">Todos los Equipos Médicos</h2>
+      <span class="text-sm opacity-90"
+        >{{ totalElements }} equipos registrados</span
+      >
+    </div>
+
+    <!-- LOADING -->
+    @if (loading) {
+      <div
+        class="bg-blue-50 border border-blue-200 text-blue-600 text-sm rounded-lg px-4 py-3 mb-4"
+      >
+        Cargando equipos...
+      </div>
+    }
+
+    <!-- LISTA -->
+    @if (!loading && equipments.length > 0) {
+      <div class="bg-gray-50 rounded-lg shadow p-4">
+        <p class="text-xs text-gray-400 mb-3">
+          {{ totalElements }} equipo(s) · Página {{ currentPage + 1 }} de
+          {{ totalPages }}
+        </p>
+
+        <div class="space-y-2">
+          <div
+            *ngFor="let eq of equipments"
+            class="flex justify-between items-center bg-white border border-gray-200 rounded-md px-4 py-3 hover:shadow-sm transition-all"
+          >
+            <!-- Info -->
+            <div>
+              <span class="font-medium text-sm">{{ eq.name }}</span>
+              <span class="text-gray-400 text-xs ml-2"
+                >#{{ eq.equipmentId }} · {{ eq.serie }}</span
+              >
+              <span class="text-gray-400 text-xs ml-2"
+                >· {{ eq.areaName }} · {{ eq.locationName }}</span
+              >
+              <div class="text-gray-400 text-xs mt-0.5">
+                {{ eq.brand }} · {{ eq.model }} · {{ eq.classificationName }}
+              </div>
+              <span
+                class="text-xs font-medium mt-1 inline-block"
+                [class.text-green-700]="eq.active"
+                [class.text-red-600]="!eq.active"
+              >
+                {{ eq.active ? "Activo" : "Inactivo" }}
+              </span>
+            </div>
+
+            <!-- Botones -->
+            <div class="flex items-center gap-2 shrink-0">
+              <span
+                class="text-xs px-2 py-0.5 rounded mr-2"
+                [class.bg-green-100]="eq.active"
+                [class.text-green-700]="eq.active"
+                [class.bg-red-100]="!eq.active"
+                [class.text-red-600]="!eq.active"
+              >
+                {{ eq.stateName }}
+              </span>
+              <button
+                (click)="verHV(eq)"
+                class="bg-primary text-white text-xs px-3 py-1.5 rounded-md hover:opacity-90 transition-all"
+              >
+                Ver HV →
+              </button>
+              <button
+                (click)="edit(eq)"
+                class="bg-primary text-white text-xs px-3 py-1.5 rounded-md hover:opacity-90 transition-all"
+              >
+                Editar
+              </button>
+              <button
+                (click)="toggleActive(eq)"
+                class="text-xs px-3 py-1.5 rounded-md text-white transition-all font-medium"
+                [ngClass]="
+                  eq.active
+                    ? 'bg-[#4d6e75] hover:bg-[#4d6e75]'
+                    : 'bg-[#263d42] hover:bg-[#121f23]'
+                "
+              >
+                {{ eq.active ? "Inactivar" : "Activar" }}
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Paginación -->
+        <div
+          class="flex justify-between items-center mt-6 text-sm text-gray-500"
+        >
+          <span
+            >{{ totalElements }} registros · Página {{ currentPage + 1 }} de
+            {{ totalPages }}</span
+          >
+          <div class="flex gap-2">
+            <button
+              (click)="goToPage(currentPage - 1)"
+              [disabled]="currentPage === 0"
+              class="px-3 py-1 rounded border border-gray-300 disabled:opacity-40 hover:bg-gray-100 transition-all"
+            >
+              ← Anterior
+            </button>
+            <button
+              (click)="goToPage(currentPage + 1)"
+              [disabled]="currentPage >= totalPages - 1"
+              class="px-3 py-1 rounded border border-gray-300 disabled:opacity-40 hover:bg-gray-100 transition-all"
+            >
+              Siguiente →
+            </button>
+          </div>
+        </div>
+      </div>
+    }
+
+    <!-- VACÍO -->
+    @if (!loading && equipments.length === 0) {
+      <div class="text-center text-gray-400 text-sm py-10">
+        No hay equipos registrados.
+      </div>
+    }
+  </div>
+</div>

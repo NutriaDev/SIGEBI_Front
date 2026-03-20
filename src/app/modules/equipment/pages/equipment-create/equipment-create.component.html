@@ -1,0 +1,335 @@
+<div class="min-h-screen bg-transparent p-1">
+  <div class="max-w-6xl mx-auto bg-white rounded-xl shadow-lg p-6">
+    <!-- ══ HEADER ══════════════════════════════════════════════ -->
+    <div
+      class="flex justify-between items-center bg-primary text-white px-6 py-3 rounded-lg mb-6"
+    >
+      <h2 class="text-lg font-semibold">Registro de Equipos Médicos</h2>
+      <button
+        (click)="goBack()"
+        class="text-xs bg-white text-primary font-medium px-3 py-1 rounded-md hover:bg-gray-100 transition-all"
+      >
+        ← Volver
+      </button>
+    </div>
+
+    <!-- ══ LOADING ═════════════════════════════════════════════ -->
+    @if (loading) {
+      <div
+        class="bg-blue-50 border border-blue-200 text-blue-600 text-sm rounded-lg px-4 py-3 mb-4"
+      >
+        Cargando catálogos...
+      </div>
+    }
+
+    <!-- ══ ALERTAS ══════════════════════════════════════════════ -->
+    @if (errorMessage) {
+      <div
+        class="bg-red-50 border border-red-200 text-red-600 text-sm rounded-lg px-4 py-3 mb-4"
+      >
+        {{ errorMessage }}
+      </div>
+    }
+    @if (successMessage) {
+      <div
+        class="bg-green-50 border border-green-200 text-green-700 text-sm rounded-lg px-4 py-3 mb-4"
+      >
+        {{ successMessage }}
+      </div>
+    }
+
+    <!-- ══ DATOS GENERALES ══════════════════════════════════════ -->
+    <div class="bg-gray-50 rounded-lg shadow p-4 mb-6">
+      <h3 class="font-semibold text-primary mb-4">Datos Generales</h3>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm text-gray-500 mb-1"
+            >Nombre <span class="text-red-500">*</span></label
+          >
+          <input
+            type="text"
+            [(ngModel)]="form.name"
+            (ngModelChange)="saveDraft()"
+            placeholder="Nombre del equipo"
+            class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+          />
+        </div>
+
+        <div>
+          <label class="block text-sm text-gray-500 mb-1"
+            >Marca <span class="text-red-500">*</span></label
+          >
+          <input
+            type="text"
+            [(ngModel)]="form.brand"
+            (ngModelChange)="saveDraft()"
+            placeholder="Marca"
+            class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+          />
+        </div>
+
+        <div>
+          <label class="block text-sm text-gray-500 mb-1"
+            >Modelo <span class="text-red-500">*</span></label
+          >
+          <input
+            type="text"
+            [(ngModel)]="form.model"
+            (ngModelChange)="saveDraft()"
+            placeholder="Modelo"
+            class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+          />
+        </div>
+
+        <div>
+          <label class="block text-sm text-gray-500 mb-1"
+            >Serie <span class="text-red-500">*</span></label
+          >
+          <input
+            type="text"
+            [(ngModel)]="form.serie"
+            (ngModelChange)="saveDraft()"
+            placeholder="Serie"
+            class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+          />
+        </div>
+
+        <div>
+          <label class="block text-sm text-gray-500 mb-1"
+            >Registro INVIMA <span class="text-red-500">*</span></label
+          >
+          <input
+            type="text"
+            [(ngModel)]="form.invima"
+            (ngModelChange)="saveDraft()"
+            placeholder="Registro INVIMA"
+            class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+          />
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ FILA: UBICACIÓN + ADQUISICIÓN ═══════════════════════ -->
+    <div class="grid lg:grid-cols-2 gap-6 mb-6">
+      <!-- Ubicación -->
+      <div class="bg-gray-50 rounded-lg shadow p-4">
+        <h3 class="font-semibold text-primary mb-4">Datos de Ubicación</h3>
+        <div class="space-y-4">
+          <div>
+            <label class="block text-sm text-gray-500 mb-1"
+              >Área / Servicio <span class="text-red-500">*</span></label
+            >
+            <select
+              [(ngModel)]="form.areaId"
+              (ngModelChange)="saveDraft()"
+              class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+            >
+              <option [ngValue]="null" disabled>Seleccionar</option>
+              <option *ngFor="let a of areas" [ngValue]="a.areaId">
+                {{ a.name }}
+              </option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-sm text-gray-500 mb-1"
+              >Ubicación <span class="text-red-500">*</span></label
+            >
+            <select
+              [(ngModel)]="form.locationId"
+              (ngModelChange)="saveDraft()"
+              class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+            >
+              <option [ngValue]="null" disabled>Seleccionar</option>
+              <option *ngFor="let l of locations" [ngValue]="l.locationId">
+                {{ l.name }}
+              </option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Adquisición -->
+      <div class="bg-gray-50 rounded-lg shadow p-4">
+        <h3 class="font-semibold text-primary mb-4">Datos de Adquisición</h3>
+        <div class="grid grid-cols-2 gap-4">
+          <div class="col-span-2">
+            <label class="block text-sm text-gray-500 mb-1"
+              >Proveedor <span class="text-red-500">*</span></label
+            >
+            <select
+              [(ngModel)]="form.providerId"
+              (ngModelChange)="saveDraft()"
+              class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+            >
+              <option [ngValue]="null" disabled>Seleccionar</option>
+              <option *ngFor="let p of providers" [ngValue]="p.providerId">
+                {{ p.name }}
+              </option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-sm text-gray-500 mb-1"
+              >Fecha Adquisición <span class="text-red-500">*</span></label
+            >
+            <input
+              type="date"
+              [(ngModel)]="form.acquisitionDate"
+              (ngModelChange)="saveDraft()"
+              class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+            />
+          </div>
+
+          <div>
+            <label class="block text-sm text-gray-500 mb-1"
+              >Vida Útil (años)</label
+            >
+            <input
+              type="number"
+              [(ngModel)]="form.usefulLife"
+              (ngModelChange)="saveDraft()"
+              placeholder="Ej: 10"
+              min="1"
+              class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+            />
+          </div>
+
+          <div class="col-span-2">
+            <label class="block text-sm text-gray-500 mb-1"
+              >Fin de Garantía</label
+            >
+            <input
+              type="date"
+              [(ngModel)]="form.warrantyEnd"
+              (ngModelChange)="saveDraft()"
+              class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ FILA: MANTENIMIENTO + TÉCNICOS ══════════════════════ -->
+    <div class="grid lg:grid-cols-2 gap-6 mb-6">
+      <!-- Mantenimiento -->
+      <div class="bg-gray-50 rounded-lg shadow p-4">
+        <h3 class="font-semibold text-primary mb-4">Datos de Mantenimiento</h3>
+        <div class="space-y-4">
+          <div>
+            <label class="block text-sm text-gray-500 mb-1"
+              >Periodicidad de Mantenimiento</label
+            >
+            <select
+              [(ngModel)]="form.maintenanceFrequency"
+              (ngModelChange)="saveDraft()"
+              class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+            >
+              <option [ngValue]="null" disabled>Seleccionar</option>
+              <option *ngFor="let o of maintenanceOptions" [ngValue]="o.value">
+                {{ o.label }}
+              </option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-sm text-gray-500 mb-1"
+              >Periodicidad de Calibración</label
+            >
+            <select
+              [(ngModel)]="form.calibrationFrequency"
+              (ngModelChange)="saveDraft()"
+              class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+            >
+              <option [ngValue]="null" disabled>Seleccionar</option>
+              <option *ngFor="let o of maintenanceOptions" [ngValue]="o.value">
+                {{ o.label }}
+              </option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Técnicos -->
+      <div class="bg-gray-50 rounded-lg shadow p-4">
+        <h3 class="font-semibold text-primary mb-4">Datos Técnicos</h3>
+        <div class="space-y-4">
+          <div>
+            <label class="block text-sm text-gray-500 mb-1"
+              >Clasificación Biomédica
+              <span class="text-red-500">*</span></label
+            >
+            <select
+              [(ngModel)]="form.classificationId"
+              (ngModelChange)="saveDraft()"
+              class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+            >
+              <option [ngValue]="null" disabled>Seleccionar</option>
+              <option
+                *ngFor="let c of classifications"
+                [ngValue]="c.classificationId"
+              >
+                {{ c.name }}
+              </option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-sm text-gray-500 mb-1"
+              >Clasificación de Riesgo</label
+            >
+            <select
+              [(ngModel)]="form.riskLevel"
+              (ngModelChange)="saveDraft()"
+              class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+            >
+              <option value="" disabled>Seleccionar</option>
+              <option *ngFor="let r of riskLevels" [value]="r.value">
+                {{ r.label }}
+              </option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-sm text-gray-500 mb-1"
+              >Estado <span class="text-red-500">*</span></label
+            >
+            <select
+              [(ngModel)]="form.stateId"
+              (ngModelChange)="saveDraft()"
+              class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+            >
+              <option [ngValue]="null" disabled>Seleccionar</option>
+              <option *ngFor="let s of states" [ngValue]="s.stateId">
+                {{ s.name }}
+              </option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ ACCIONES ═════════════════════════════════════════════ -->
+    <div class="flex flex-wrap gap-4 justify-center mt-8">
+      <button
+        (click)="save()"
+        [disabled]="saving"
+        class="bg-primary text-white px-6 py-2 rounded-md shadow hover:opacity-90 disabled:opacity-50"
+      >
+        {{ saving ? "Guardando..." : "Guardar Equipo" }}
+      </button>
+      <button
+        (click)="clear()"
+        class="bg-gray-200 text-gray-700 px-6 py-2 rounded-md shadow hover:bg-gray-300"
+      >
+        Limpiar
+      </button>
+      <button
+        (click)="goBack()"
+        class="bg-primary text-white px-6 py-2 rounded-md shadow hover:opacity-90"
+      >
+        Salir
+      </button>
+    </div>
+  </div>
+</div>

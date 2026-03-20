@@ -17,6 +17,13 @@ const routes: Routes = [
       { path: 'superadmin', component: DashboardSuperadminComponent },
       { path: 'supervisor', component: DashboardSupervisorComponent },
       { path: 'tecnico', component: DashboardTecnicoComponent },
+      {
+        path: 'equipment',
+        loadChildren: () =>
+          import('../equipment/equipment.module').then(
+            (m) => m.EquipmentModule,
+          ),
+      },
     ],
   },
 ];

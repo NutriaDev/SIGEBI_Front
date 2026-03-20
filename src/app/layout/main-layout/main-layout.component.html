@@ -21,7 +21,26 @@
     <h1 class="text-3xl text-white font-semibold text-center mb-12">SIGEBI</h1>
 
     <nav class="flex flex-col gap-4 text-sm">
-      <a (click)="openEquipment()">Equipos Médicos</a>
+      <a (click)="toggleEquipmentMenu()" class="cursor-pointer">
+        Equipos Médicos
+      </a>
+
+      <div *ngIf="equipmentMenuOpen" class="flex flex-col ml-4 gap-2 mt-2">
+        <a (click)="openEquipment()">Busqueda Avanzada</a>
+        <a (click)="createEquipment()">Crear equipos medicos</a>
+        <a (click)="getAllEquipment()">Todos los equipos</a>
+
+        <a (click)="openEquipmentArea()">Área de Equipos</a>
+
+        <a (click)="openEquipmentClassification()">Clasificación</a>
+
+        <a (click)="openEquipmentState()">Estados</a>
+
+        <a (click)="openEquipmentLocation()">Ubicaciones</a>
+
+        <a (click)="openEquipmentProvider()">Proveedores</a>
+      </div>
+
       <a (click)="openInventory()">Inventarios</a>
       <a (click)="openMaintenance()">Mantenimiento</a>
 

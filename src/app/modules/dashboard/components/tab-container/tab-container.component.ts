@@ -9,12 +9,13 @@ export class TabContainerComponent implements OnInit {
   tabs: Tab[] = [];
   activeTabIndex = 0;
 
-  constructor(private tabService: TabService) {}
-
   environmentInjector = inject(EnvironmentInjector);
+
+  constructor(private tabService: TabService) {}
 
   ngOnInit(): void {
     this.tabService.tabs$.subscribe((tabs) => {
+      console.log('TABS:', tabs);
       this.tabs = tabs;
       this.activeTabIndex = tabs.length - 1; // 👈 ESTA ES LA CLAVE
     });
