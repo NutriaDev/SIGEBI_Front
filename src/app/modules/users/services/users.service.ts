@@ -8,7 +8,7 @@ import { ApiResponse } from '@shared/models/response.model';
   providedIn: 'root',
 })
 export class UsersService {
-  private baseUrl = 'http://localhost:8080/api';
+  private baseUrl = 'http://localhost:8080/api/users';
 
   constructor(private http: HttpClient) {}
 

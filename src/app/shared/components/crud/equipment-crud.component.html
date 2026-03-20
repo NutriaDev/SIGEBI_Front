@@ -1,0 +1,167 @@
+<div class="max-w-2xl mx-auto p-4 sm:p-6">
+  <div class="bg-white rounded-lg shadow">
+    <div class="bg-primary text-white font-semibold px-4 py-2 rounded-t-lg">
+      {{ title }}
+    </div>
+
+    <div class="p-6 space-y-4">
+      <!-- BUSCAR POR NOMBRE -->
+      <div>
+        <label class="block text-sm font-semibold mb-1"
+          >Buscar por Nombre</label
+        >
+        <div class="flex flex-col sm:flex-row gap-3 mt-4">
+          <input
+            type="text"
+            [(ngModel)]="searchText"
+            placeholder="Ej: UCI"
+            class="w-full border border-gray-300 rounded-md px-3 py-2"
+          />
+          <button
+            (click)="searchByName()"
+            class="bg-primary text-white px-4 py-2 rounded-md w-full sm:w-auto"
+          >
+            Buscar
+          </button>
+        </div>
+      </div>
+
+      <!-- BUSCAR POR ID -->
+      <div>
+        <label class="block text-sm font-semibold mb-1">Buscar por ID</label>
+        <div class="flex flex-col sm:flex-row gap-3 mt-4">
+          <input
+            type="number"
+            [(ngModel)]="searchId"
+            placeholder="Ej: 1"
+            class="w-full border border-gray-300 rounded-md px-3 py-2"
+          />
+          <button
+            (click)="searchById()"
+            class="bg-primary text-white px-4 py-2 rounded-md w-full sm:w-auto"
+          >
+            Buscar
+          </button>
+        </div>
+      </div>
+
+      <!-- BOTONES PRINCIPALES -->
+      <div class="flex flex-col sm:flex-row gap-3 mt-4">
+        <button
+          class="bg-primary text-white px-4 py-2 rounded w-full sm:w-auto"
+          (click)="viewMode = 'list'; load()"
+        >
+          {{ title }} Actuales
+        </button>
+        <button
+          class="bg-primary-400 text-white px-4 py-2 rounded w-full sm:w-auto"
+          (click)="viewMode = 'create'"
+        >
+          Crear {{ title }}
+        </button>
+        <button
+          class="bg-primary-200 text-white px-4 py-2 rounded w-full sm:w-auto"
+          (click)="goToUpdate()"
+        >
+          Actualizar {{ title }}
+        </button>
+      </div>
+
+      <div class="mt-6">
+        <!-- LISTADO -->
+        <div *ngIf="viewMode === 'list'">
+          <h3 class="font-semibold mb-3">{{ title }} actuales</h3>
+          <div
+            *ngFor="let item of items"
+            class="flex justify-between items-center border-b py-2"
+          >
+            <span>{{ item.name }}</span>
+            <div class="flex items-center gap-3">
+              <span
+                class="text-xs px-2 py-1 rounded"
+                [ngClass]="item.active ? 'text-primary' : 'text-red-600'"
+              >
+                {{ item.active ? "Activo" : "Inactivo" }}
+              </span>
+              <button class="text-primary text-sm" (click)="select(item)">
+                Editar
+              </button>
+            </div>
+          </div>
+
+          <!-- ── Paginación ── -->
+          <div
+            class="flex justify-between items-center mt-4 text-sm text-gray-500"
+          >
+            <span
+              >{{ totalElements }} registros · Página {{ currentPage + 1 }} de
+              {{ totalPages }}</span
+            >
+            <div class="flex gap-2">
+              <button
+                (click)="goToPage(currentPage - 1)"
+                [disabled]="currentPage === 0"
+                class="px-3 py-1 rounded border border-gray-300 disabled:opacity-40 hover:bg-gray-100"
+              >
+                ← Anterior
+              </button>
+              <button
+                (click)="goToPage(currentPage + 1)"
+                [disabled]="currentPage >= totalPages - 1"
+                class="px-3 py-1 rounded border border-gray-300 disabled:opacity-40 hover:bg-gray-100"
+              >
+                Siguiente →
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- CREAR -->
+        <div *ngIf="viewMode === 'create'" class="mt-4">
+          <h3 class="font-semibold mb-2">Crear {{ title }}</h3>
+          <input
+            [(ngModel)]="newName"
+            placeholder="Nombre"
+            class="border p-2 rounded w-full"
+          />
+          <button
+            class="bg-primary text-white px-4 py-2 rounded mt-3 w-full sm:w-auto"
+            (click)="create()"
+          >
+            Guardar
+          </button>
+        </div>
+
+        <!-- ACTUALIZAR / DESACTIVAR -->
+        <div *ngIf="viewMode === 'update' && selected" class="mt-4">
+          <h3 class="font-semibold mb-2">Actualizar {{ title }}</h3>
+          <input
+            [(ngModel)]="selected.name"
+            class="border p-2 rounded w-full"
+          />
+          <div class="flex flex-col sm:flex-row sm:items-center gap-3 mt-3">
+            <button
+              class="bg-primary text-white px-4 py-2 rounded w-full sm:w-auto"
+              (click)="update()"
+            >
+              Actualizar
+            </button>
+            <button
+              (click)="deactivate()"
+              class="px-4 py-2 rounded text-white w-full sm:w-auto"
+              [ngClass]="selected.active ? 'bg-primary-400' : 'bg-primary'"
+            >
+              {{ selected.active ? "Desactivar" : "Activar" }}
+            </button>
+            <span
+              class="text-xs px-2 py-1 rounded"
+              [ngClass]="selected.active ? 'text-primary' : 'text-red-600'"
+            >
+              {{ selected.active ? "Activo" : "Inactivo" }}
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
