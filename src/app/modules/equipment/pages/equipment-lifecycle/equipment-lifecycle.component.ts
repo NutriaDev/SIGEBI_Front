@@ -9,6 +9,7 @@ import { TabService } from 'app/modules/dashboard/services/tab.service';
 import { EquipmentCreateComponent } from '../equipment-create/equipment-create.component';
 import Swal from 'sweetalert2';
 import { EquipmentEditComponent } from '../equipment-edit/equipment-edit.component';
+import { MediaService } from 'app/core/services/media.service';
 
 interface SearchTab {
   key: string;
@@ -57,6 +58,10 @@ export class EquipmentLifecycleComponent {
   activeFilters: ActiveFilter[] = [];
   filterKey = '';
   filterValue = '';
+
+  // ── Images ───────────────────────────────────
+  imageUrl: string | null = null;
+  uploadingImage = false;
 
   searchTabs: SearchTab[] = [
     {
@@ -120,6 +125,7 @@ export class EquipmentLifecycleComponent {
   constructor(
     private equipmentsService: EquipmentsService,
     private tabService: TabService,
+    private mediaService: MediaService,
   ) {
     this.selectedTab = this.searchTabs[0];
   }
@@ -318,6 +324,94 @@ export class EquipmentLifecycleComponent {
   private openHV(eq: Equipment) {
     this.equipment = eq;
     this.view = 'hv';
+    this.loadingImage(eq.equipmentId);
+  }
+
+  loadingImage(equipmentId: number): void {
+    this.mediaService.getImage(equipmentId).subscribe({
+      next: (res: any) => {
+        this.imageUrl = res.body?.imageUrl ?? res.imageUrl ?? null;
+      },
+      error: () => {
+        this.imageUrl = null; // no tiene imagen aún
+      },
+    });
+  }
+
+  onImageSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (!input.files?.length || !this.equipment) return;
+
+    const file = input.files[0];
+    this.uploadingImage = true;
+
+    this.mediaService.uploadImage(this.equipment.equipmentId, file).subscribe({
+      next: (res: any) => {
+        this.imageUrl = res.body?.imageUrl ?? res.imageUrl;
+        this.uploadingImage = false;
+        Swal.fire({
+          icon: 'success',
+          title: 'Imagen subida correctamente',
+          confirmButtonText: 'Aceptar',
+          buttonsStyling: false,
+          customClass: {
+            popup: 'sigebi-popup',
+            confirmButton: 'sigebi-confirm-btn',
+          },
+        });
+      },
+      error: () => {
+        this.uploadingImage = false;
+        Swal.fire({
+          icon: 'error',
+          title: 'Error al subir imagen',
+          text: 'No se pudo subir la imagen del equipo.',
+          confirmButtonText: 'Entendido',
+          buttonsStyling: false,
+          customClass: {
+            popup: 'sigebi-popup',
+            confirmButton: 'sigebi-confirm-btn',
+          },
+        });
+      },
+    });
+  }
+
+  deleteImage(): void {
+    if (!this.equipment) return;
+
+    Swal.fire({
+      icon: 'warning',
+      title: '¿Eliminar imagen?',
+      text: 'Se eliminará la imagen del equipo.',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar',
+      buttonsStyling: false,
+      customClass: {
+        popup: 'sigebi-popup',
+        confirmButton: 'sigebi-confirm-btn',
+      },
+    }).then((result) => {
+      if (!result.isConfirmed) return;
+
+      this.mediaService.deleteImage(this.equipment!.equipmentId).subscribe({
+        next: () => {
+          this.imageUrl = null;
+          Swal.fire({
+            icon: 'success',
+            title: 'Imagen eliminada',
+            confirmButtonText: 'Aceptar',
+            buttonsStyling: false,
+            customClass: {
+              popup: 'sigebi-popup',
+              confirmButton: 'sigebi-confirm-btn',
+            },
+          });
+        },
+        error: () => {},
+      });
+    });
   }
 
   createEquipment() {
