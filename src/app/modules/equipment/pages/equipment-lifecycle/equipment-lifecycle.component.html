@@ -227,12 +227,64 @@
       </div>
 
       <div class="grid lg:grid-cols-2 gap-6">
-        <div class="bg-gray-100 rounded-lg overflow-hidden shadow">
-          <img
-            src="https://images.unsplash.com/photo-1581091870627-3c1b1f2c3d3f"
-            alt="Medical Equipment"
-            class="w-full h-full object-cover"
-          />
+        <!-- Imagen del equipo -->
+        <div
+          class="bg-gray-100 rounded-lg overflow-hidden shadow relative min-h-64"
+        >
+          @if (imageUrl) {
+            <img
+              [src]="imageUrl"
+              alt="Medical Equipment"
+              class="w-full h-full object-cover"
+            />
+            <button
+              (click)="deleteImage()"
+              class="absolute top-2 right-2 bg-red-500 text-white text-xs px-2 py-1 rounded-md hover:bg-red-600 transition-all"
+            >
+              Eliminar imagen
+            </button>
+          }
+
+          @if (!imageUrl) {
+            <div
+              class="flex flex-col items-center justify-center h-64 text-gray-400"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-12 w-12 mb-2 opacity-40"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="1.5"
+                  d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                />
+              </svg>
+              <span class="text-sm">Sin imagen</span>
+            </div>
+          }
+
+          <label
+            class="absolute bottom-2 left-1/2 -translate-x-1/2 cursor-pointer bg-primary text-white text-xs px-3 py-1.5 rounded-md hover:opacity-90 transition-all whitespace-nowrap"
+          >
+            {{
+              uploadingImage
+                ? "Subiendo..."
+                : imageUrl
+                  ? "Cambiar imagen"
+                  : "Subir imagen"
+            }}
+            <input
+              type="file"
+              accept="image/*"
+              class="hidden"
+              (change)="onImageSelected($event)"
+              [disabled]="uploadingImage"
+            />
+          </label>
         </div>
         <div class="space-y-4">
           <div class="bg-gray-50 rounded-lg shadow p-4">
