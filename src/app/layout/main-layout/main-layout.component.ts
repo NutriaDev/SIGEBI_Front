@@ -17,6 +17,7 @@ import { ProviderFormComponent } from 'app/modules/equipment/components/provider
 import { EquipmentCreateComponent } from 'app/modules/equipment/pages/equipment-create/equipment-create.component';
 import { EquipmentAllComponent } from 'app/modules/equipment/pages/equipment-all/equipment-all.component';
 import { InventoryListComponent } from 'app/modules/inventory/pages/inventory-list/inventory-list.component';
+import { MovementsListComponent } from 'app/modules/inventory/pages/movement-list/movement-list.component';
 
 @Component({
   selector: 'app-main-layout',
@@ -28,6 +29,7 @@ export class MainLayoutComponent {
     private tabService: TabService,
   ) {}
   isSidebarOpen = false;
+  inventoryMenuOpen = false;
 
   toggleSidebar() {
     this.isSidebarOpen = !this.isSidebarOpen;
@@ -89,8 +91,17 @@ export class MainLayoutComponent {
 
   //Module Inventory
 
-  openInventory() {
+  toggleInventoryMenu(): void {
+    this.inventoryMenuOpen = !this.inventoryMenuOpen;
+  }
+
+  openInventoryList() {
     this.tabService.openTab('Inventarios', InventoryListComponent);
+    this.isSidebarOpen = false;
+  }
+
+  openMovementsList() {
+    this.tabService.openTab('Movimientos', MovementsListComponent);
     this.isSidebarOpen = false;
   }
 
