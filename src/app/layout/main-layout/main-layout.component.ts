@@ -16,6 +16,7 @@ import { LocationFormComponent } from 'app/modules/equipment/components/location
 import { ProviderFormComponent } from 'app/modules/equipment/components/provider-form/provider-form.component';
 import { EquipmentCreateComponent } from 'app/modules/equipment/pages/equipment-create/equipment-create.component';
 import { EquipmentAllComponent } from 'app/modules/equipment/pages/equipment-all/equipment-all.component';
+import { InventoryListComponent } from 'app/modules/inventory/pages/inventory-list/inventory-list.component';
 
 @Component({
   selector: 'app-main-layout',
@@ -89,7 +90,7 @@ export class MainLayoutComponent {
   //Module Inventory
 
   openInventory() {
-    this.tabService.openTab('Inventarios', InventoryModule);
+    this.tabService.openTab('Inventarios', InventoryListComponent);
     this.isSidebarOpen = false;
   }
 
