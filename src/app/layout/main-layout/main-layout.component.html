@@ -46,8 +46,9 @@
       </a>
 
       <div *ngIf="inventoryMenuOpen" class="flex flex-col ml-4 gap-2 mt-2">
-        <a (click)="openInventoryList()">Lista de Inventarios</a>
+        <a (click)="openInventoryList()">Inventarios</a>
         <a (click)="openMovementsList()">Movimientos</a>
+        <a (click)="createInvetory()">Nuevo Inventario</a>
       </div>
       <a (click)="openMaintenance()">Mantenimiento</a>
 

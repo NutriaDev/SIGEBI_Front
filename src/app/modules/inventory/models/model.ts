@@ -72,6 +72,22 @@ export interface CreateMovementPayload {
   reason: string;
 }
 
+export interface InventoryDetailPayload {
+  equipmentId: number;
+  state: string;
+  observations: string | null;
+}
+
+export interface CreateInventoryPayload {
+  location: string;
+  locationId: number;
+  date: string | null; // yyyy-MM-dd
+  observations: string | null;
+  createdBy: number;
+  userRole: string;
+  details: InventoryDetailPayload[];
+}
+
 export interface UpdateEquipmentLocationPayload {
   locationId: number;
 }

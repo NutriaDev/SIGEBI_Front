@@ -18,6 +18,7 @@ import { EquipmentCreateComponent } from 'app/modules/equipment/pages/equipment-
 import { EquipmentAllComponent } from 'app/modules/equipment/pages/equipment-all/equipment-all.component';
 import { InventoryListComponent } from 'app/modules/inventory/pages/inventory-list/inventory-list.component';
 import { MovementsListComponent } from 'app/modules/inventory/pages/movement-list/movement-list.component';
+import { InventoryCreateComponent } from 'app/modules/inventory/components/inventory-create/inventory-create.component';
 
 @Component({
   selector: 'app-main-layout',
@@ -104,6 +105,13 @@ export class MainLayoutComponent {
     this.tabService.openTab('Movimientos', MovementsListComponent);
     this.isSidebarOpen = false;
   }
+
+  createInvetory() {
+    this.tabService.openTab('Crear inventario', InventoryCreateComponent);
+    this.isSidebarOpen = false;
+  }
+
+  //maintenance
 
   openMaintenance() {
     this.tabService.openTab('Mantenimiento', MaintenanceModule);

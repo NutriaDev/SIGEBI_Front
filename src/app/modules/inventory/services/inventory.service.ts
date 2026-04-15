@@ -10,6 +10,7 @@ import {
   PagedResponse,
   CreateMovementPayload,
   UpdateEquipmentLocationPayload,
+  CreateInventoryPayload,
 } from '../models/model';
 
 @Injectable({ providedIn: 'root' })
@@ -42,6 +43,12 @@ export class InventoryService {
     return this.http.get<InventoryWithDetailResponse>(
       `${this.inventoryUrl}/${id}`,
     );
+  }
+
+  createInventory(
+    payload: CreateInventoryPayload,
+  ): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>(this.inventoryUrl, payload);
   }
 
   // ─── Movements ──────────────────────────────────────────────────────────────
