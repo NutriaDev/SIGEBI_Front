@@ -11,7 +11,7 @@ export class LocationService extends EquipmentService<BaseEntity> {
     super(http, 'http://localhost:8080/api/locations');
   }
 
-  getActive(): Observable<ApiResponse<BaseEntity[]>> {
-    return this.http.get<ApiResponse<BaseEntity[]>>(`${this.url}/active`);
+  getAllActive(): Observable<ApiResponse<BaseEntity[]>> {
+    return this.http.get<ApiResponse<BaseEntity[]>>(`${this.url}/active/all`);
   }
 }
