@@ -8,12 +8,13 @@
     <!-- Equipo / Motivo -->
     <div class="grid grid-cols-2 gap-4">
       <div>
-        <label class="block text-sm mb-1">ID Equipo *</label>
+        <label class="block text-sm mb-1">Serial Equipo *</label>
         <input
-          type="number"
-          formControlName="equipmentId"
+          type="text"
+          formControlName="serial"
+          (blur)="onSerialChange()"
           class="input w-full"
-          placeholder="Ej: 8"
+          placeholder="Ej: M02221130080199"
         />
         <div
           *ngIf="

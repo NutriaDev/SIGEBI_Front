@@ -27,7 +27,8 @@ export class MovementCreateComponent {
     private inventoryService: InventoryService,
   ) {
     this.movementForm = this.fb.group({
-      equipmentId: ['', [Validators.required, Validators.min(1)]],
+      serial: ['', Validators.required],
+      equipmentId: [''],
       originLocationId: ['', [Validators.required, Validators.min(1)]],
       destinationLocationId: ['', [Validators.required, Validators.min(1)]],
       responsibleUserId: ['', [Validators.required, Validators.min(1)]],
@@ -103,6 +104,62 @@ export class MovementCreateComponent {
         });
 
         this.loading = false;
+      },
+    });
+  }
+
+  onSerialChange(): void {
+    const serial = this.movementForm.value.serial;
+
+    if (!serial) return;
+
+    this.inventoryService.getEquipmentBySerial(serial).subscribe({
+      next: (res: any) => {
+        const equipment = res?.body;
+
+        if (!equipment) {
+          Swal.fire({
+            icon: 'warning',
+            title: 'Equipo no encontrado',
+            text: 'No existe un equipo con ese serial.',
+            confirmButtonText: 'Aceptar',
+            buttonsStyling: false,
+            customClass: {
+              popup: 'sigebi-popup',
+              confirmButton: 'sigebi-confirm-btn',
+            },
+          });
+          return;
+        }
+
+        this.movementForm.patchValue({
+          equipmentId: equipment.id,
+          originLocationId: equipment.locationId,
+        });
+      },
+
+      error: (err) => {
+        let message = 'Error al consultar el equipo.';
+
+        if (err.status === 404) {
+          message = 'Equipo no encontrado.';
+        } else if (err.status === 403) {
+          message = 'No tienes permisos para consultar este equipo.';
+        } else if (err.status === 400) {
+          message = err.error?.message || 'Solicitud inválida.';
+        }
+
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: message,
+          confirmButtonText: 'Aceptar',
+          buttonsStyling: false,
+          customClass: {
+            popup: 'sigebi-popup',
+            confirmButton: 'sigebi-confirm-btn',
+          },
+        });
       },
     });
   }

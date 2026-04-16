@@ -87,4 +87,10 @@ export class InventoryService {
       body,
     );
   }
+
+  getEquipmentBySerial(serial: string): Observable<any> {
+    return this.http.get(`${this.movementsUrl}/equipments/by-serial`, {
+      params: { serial },
+    });
+  }
 }
