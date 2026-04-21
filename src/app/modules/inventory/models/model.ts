@@ -65,10 +65,9 @@ export interface MovementFilters {
 // ─── Payloads de escritura ────────────────────────────────────────────────────
 
 export interface CreateMovementPayload {
-  equipmentId: number;
+  serial: string;
   originLocationId: number;
   destinationLocationId: number;
-  responsibleUserId: number;
   reason: string;
 }
 

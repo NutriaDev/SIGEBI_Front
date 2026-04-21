@@ -18,8 +18,8 @@
         />
         <div
           *ngIf="
-            movementForm.get('equipmentId')?.invalid &&
-            movementForm.get('equipmentId')?.touched
+            movementForm.get('serial')?.invalid &&
+            movementForm.get('serial')?.touched
           "
           class="text-xs text-red-500 mt-1"
         >
@@ -85,26 +85,6 @@
         >
           Requerido
         </div>
-      </div>
-    </div>
-
-    <!-- Responsable -->
-    <div>
-      <label class="block text-sm mb-1">ID Responsable *</label>
-      <input
-        type="number"
-        formControlName="responsibleUserId"
-        class="input w-full"
-        placeholder="Ej: 1"
-      />
-      <div
-        *ngIf="
-          movementForm.get('responsibleUserId')?.invalid &&
-          movementForm.get('responsibleUserId')?.touched
-        "
-        class="text-xs text-red-500 mt-1"
-      >
-        Requerido
       </div>
     </div>
 

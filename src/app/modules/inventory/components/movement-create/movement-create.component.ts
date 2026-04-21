@@ -28,10 +28,8 @@ export class MovementCreateComponent {
   ) {
     this.movementForm = this.fb.group({
       serial: ['', Validators.required],
-      equipmentId: [''],
       originLocationId: ['', [Validators.required, Validators.min(1)]],
       destinationLocationId: ['', [Validators.required, Validators.min(1)]],
-      responsibleUserId: ['', [Validators.required, Validators.min(1)]],
       reason: ['', Validators.required],
     });
   }
@@ -53,15 +51,16 @@ export class MovementCreateComponent {
       return;
     }
 
-    const payload: CreateMovementPayload = {
-      equipmentId: Number(this.movementForm.value.equipmentId),
+    const payload = {
+      serial: this.movementForm.value.serial?.trim(), // 🔥 ESTE ES EL FIX
       originLocationId: Number(this.movementForm.value.originLocationId),
       destinationLocationId: Number(
         this.movementForm.value.destinationLocationId,
       ),
-      responsibleUserId: Number(this.movementForm.value.responsibleUserId),
       reason: this.movementForm.value.reason,
     };
+
+    console.log('PAYLOAD REAL:', payload); // 🔥 DEBUG
 
     this.loading = true;
 
@@ -83,6 +82,8 @@ export class MovementCreateComponent {
         this.created.emit();
       },
       error: (err) => {
+        console.error('ERROR BACK:', err);
+
         let message = 'Error al registrar el movimiento.';
 
         if (err.status === 404) message = 'Equipo o ubicación no encontrados.';
@@ -109,50 +110,36 @@ export class MovementCreateComponent {
   }
 
   onSerialChange(): void {
-    const serial = this.movementForm.value.serial;
+    const raw = this.movementForm.value.serial;
+
+    const serial = (raw || '').trim().replace(/\s+/g, '');
+
+    console.log('SERIAL LIMPIO:', JSON.stringify(serial));
 
     if (!serial) return;
 
     this.inventoryService.getEquipmentBySerial(serial).subscribe({
       next: (res: any) => {
-        const equipment = res?.body;
-
-        if (!equipment) {
-          Swal.fire({
-            icon: 'warning',
-            title: 'Equipo no encontrado',
-            text: 'No existe un equipo con ese serial.',
-            confirmButtonText: 'Aceptar',
-            buttonsStyling: false,
-            customClass: {
-              popup: 'sigebi-popup',
-              confirmButton: 'sigebi-confirm-btn',
-            },
-          });
-          return;
-        }
+        const equipment = res.body ?? res;
 
         this.movementForm.patchValue({
-          equipmentId: equipment.id,
           originLocationId: equipment.locationId,
         });
+        Swal.fire({
+          icon: 'info',
+          title: 'Equipo encontrado',
+          text: `Ubicación origen: ${equipment.locationId}`,
+          timer: 1500,
+          showConfirmButton: false,
+        });
       },
-
       error: (err) => {
-        let message = 'Error al consultar el equipo.';
-
-        if (err.status === 404) {
-          message = 'Equipo no encontrado.';
-        } else if (err.status === 403) {
-          message = 'No tienes permisos para consultar este equipo.';
-        } else if (err.status === 400) {
-          message = err.error?.message || 'Solicitud inválida.';
-        }
+        console.error('ERROR REAL:', err);
 
         Swal.fire({
           icon: 'error',
           title: 'Error',
-          text: message,
+          text: err.error?.error || 'Equipo no encontrado',
           confirmButtonText: 'Aceptar',
           buttonsStyling: false,
           customClass: {
