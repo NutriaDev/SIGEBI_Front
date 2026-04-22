@@ -1,0 +1,177 @@
+<div class="min-h-screen bg-transparent p-1">
+  <div class="max-w-6xl mx-auto bg-white rounded-xl shadow-lg p-6">
+    <!-- HEADER -->
+    <div
+      class="flex justify-between items-center bg-primary text-white px-6 py-3 rounded-lg mb-6"
+    >
+      <h2 class="text-lg font-semibold">Movimientos de Equipos</h2>
+      <button
+        (click)="showCreateModal = true"
+        class="bg-white text-primary text-sm font-semibold px-4 py-1.5 rounded-lg hover:opacity-90 transition"
+      >
+        + Registrar Movimiento
+      </button>
+    </div>
+
+    <!-- FILTROS -->
+    <div class="grid md:grid-cols-4 gap-4 mb-6">
+      <div>
+        <label class="block text-xs text-gray-500 mb-1">ID Equipo</label>
+        <input
+          type="number"
+          [(ngModel)]="filterEquipmentId"
+          class="input w-full"
+          placeholder="Ej: 8"
+        />
+      </div>
+
+      <div>
+        <label class="block text-xs text-gray-500 mb-1">ID Ubicación</label>
+        <input
+          type="number"
+          [(ngModel)]="filterLocationId"
+          class="input w-full"
+          placeholder="Ej: 6"
+        />
+      </div>
+
+      <div>
+        <label class="block text-xs text-gray-500 mb-1">Fecha</label>
+        <input type="date" [(ngModel)]="filterDate" class="input w-full" />
+      </div>
+
+      <div class="flex items-end gap-2">
+        <button
+          (click)="applyFilters()"
+          class="bg-primary text-white text-sm px-4 py-2 rounded-lg hover:opacity-90 transition flex-1"
+        >
+          Buscar
+        </button>
+        <button
+          (click)="clearFilters()"
+          class="border border-gray-300 text-gray-500 text-sm px-4 py-2 rounded-lg hover:bg-gray-50 transition"
+        >
+          Limpiar
+        </button>
+      </div>
+    </div>
+
+    <!-- LOADING -->
+    @if (loading) {
+      <div
+        class="bg-blue-50 border border-blue-200 text-blue-600 text-sm rounded-lg px-4 py-3 mb-4"
+      >
+        Cargando movimientos...
+      </div>
+    }
+
+    <!-- LISTA -->
+    @if (!loading && movements.length > 0) {
+      <div class="bg-gray-50 rounded-lg shadow p-4">
+        <p class="text-xs text-gray-400 mb-3">
+          {{ totalElements }} movimiento(s) · Página {{ currentPage + 1 }} de
+          {{ totalPages }}
+        </p>
+
+        <div class="space-y-2">
+          <div
+            *ngFor="let mv of movements"
+            class="bg-white border border-gray-200 rounded-md px-4 py-3 hover:shadow-sm transition-all"
+          >
+            <div class="flex justify-between items-start">
+              <!-- Info principal -->
+              <div class="flex-1">
+                <div class="flex items-center gap-2 flex-wrap">
+                  <span class="font-medium text-sm"
+                    >Equipo #{{ mv.equipmentId }}</span
+                  >
+                  <span
+                    class="text-xs px-2 py-0.5 rounded font-medium bg-gray-100 text-gray-600"
+                  >
+                    {{ mv.reason }}
+                  </span>
+                </div>
+
+                <!-- Origen → Destino (IDs) -->
+                <div class="flex items-center gap-2 mt-1 text-xs text-gray-500">
+                  <span class="bg-gray-100 px-2 py-0.5 rounded"
+                    >Loc. {{ mv.originLocationId }}</span
+                  >
+                  <span class="text-gray-400">→</span>
+                  <span
+                    class="bg-primary/10 text-primary px-2 py-0.5 rounded font-medium"
+                  >
+                    Loc Destino. {{ mv.destinationLocationId }}
+                  </span>
+                  <span
+                    class="bg-primary/10 text-primary px-2 py-0.5 rounded font-medium"
+                  >
+                    Usuario Responsable. {{ mv.responsibleUserId }}
+                  </span>
+                </div>
+
+                <div class="text-xs text-gray-400 mt-1">
+                  Responsable ID: {{ mv.responsibleUserId }} · Fecha:
+                  {{ mv.date | date: "dd/MM/yyyy" }} · Creado:
+                  {{ mv.createdAt | date: "dd/MM/yyyy HH:mm" }}
+                </div>
+              </div>
+
+              <span class="text-xs text-gray-300 ml-4"
+                >#MV{{ mv.movementId }}</span
+              >
+            </div>
+          </div>
+        </div>
+
+        <!-- Paginación -->
+        <div
+          class="flex justify-between items-center mt-6 text-sm text-gray-500"
+        >
+          <span
+            >{{ totalElements }} registros · Página {{ currentPage + 1 }} de
+            {{ totalPages }}</span
+          >
+          <div class="flex gap-2">
+            <button
+              (click)="goToPage(currentPage - 1)"
+              [disabled]="currentPage === 0"
+              class="px-3 py-1 rounded border border-gray-300 disabled:opacity-40 hover:bg-gray-100 transition-all"
+            >
+              ← Anterior
+            </button>
+            <button
+              (click)="goToPage(currentPage + 1)"
+              [disabled]="currentPage >= totalPages - 1"
+              class="px-3 py-1 rounded border border-gray-300 disabled:opacity-40 hover:bg-gray-100 transition-all"
+            >
+              Siguiente →
+            </button>
+          </div>
+        </div>
+      </div>
+    }
+
+    <!-- VACÍO -->
+    @if (!loading && movements.length === 0) {
+      <div class="text-center text-gray-400 text-sm py-10">
+        No hay movimientos registrados para los filtros seleccionados.
+      </div>
+    }
+  </div>
+</div>
+
+<!-- MODAL: Registrar movimiento -->
+@if (showCreateModal) {
+  <div
+    class="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4"
+    (click)="showCreateModal = false"
+  >
+    <div (click)="$event.stopPropagation()" class="w-full max-w-lg">
+      <app-movement-create
+        (created)="onMovementCreated()"
+        (cancelled)="showCreateModal = false"
+      />
+    </div>
+  </div>
+}

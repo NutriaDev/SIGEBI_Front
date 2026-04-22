@@ -177,7 +177,7 @@ export class EquipmentEditComponent implements OnInit, OnDestroy {
       next: (res: any) => (this.states = res.body?.content ?? res.body ?? []),
       error: () => {},
     });
-    this.locationService.getActive().subscribe({
+    this.locationService.getAllActive().subscribe({
       next: (res: any) =>
         (this.locations = res.body?.content ?? res.body ?? []),
       error: () => {},

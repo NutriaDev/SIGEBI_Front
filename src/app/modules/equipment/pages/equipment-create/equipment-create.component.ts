@@ -13,11 +13,13 @@ import { AuthService } from 'app/core/services/auth.service';
 import { HttpErrorMapperService } from 'app/core/services/http-error-mapper.service';
 import { TabService } from 'app/modules/dashboard/services/tab.service';
 import { EquipmentAllComponent } from '../equipment-all/equipment-all.component';
+import { MatSelectModule } from '@angular/material/select';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 @Component({
   selector: 'app-equipment-create',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, MatSelectModule, MatFormFieldModule],
   templateUrl: './equipment-create.component.html',
 })
 export class EquipmentCreateComponent implements OnInit {
@@ -133,9 +135,9 @@ export class EquipmentCreateComponent implements OnInit {
       error: () => {},
     });
 
-    this.locationService.getActive().subscribe({
+    this.locationService.getAllActive().subscribe({
       next: (res: any) => {
-        this.locations = res.body?.content ?? res.body ?? [];
+        this.locations = res.body ?? [];
         this.loading = false;
       },
       error: () => (this.loading = false),
@@ -267,27 +269,22 @@ export class EquipmentCreateComponent implements OnInit {
       return false;
     }
     if (!this.form.brand.trim()) {
-      // 👈 agregar
       this.errorMessage = 'La marca es requerida';
       return false;
     }
     if (!this.form.model.trim()) {
-      // 👈 agregar
       this.errorMessage = 'El modelo es requerido';
       return false;
     }
     if (!this.form.invima.trim()) {
-      // 👈 agregar
       this.errorMessage = 'El registro INVIMA es requerido';
       return false;
     }
     if (!this.form.acquisitionDate) {
-      // 👈 agregar
       this.errorMessage = 'La fecha de adquisición es requerida';
       return false;
     }
     if (!this.form.providerId) {
-      // 👈 agregar
       this.errorMessage = 'El proveedor es requerido';
       return false;
     }
@@ -308,7 +305,6 @@ export class EquipmentCreateComponent implements OnInit {
       return false;
     }
     if (!this.form.responsibleUserId) {
-      // 👈 agregar (resolver el TODO)
       this.errorMessage = 'Falta el usuario responsable';
       return false;
     }

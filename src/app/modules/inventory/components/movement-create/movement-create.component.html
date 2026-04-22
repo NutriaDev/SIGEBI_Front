@@ -1,0 +1,109 @@
+<div class="bg-white rounded-xl shadow-lg p-6">
+  <!-- Header -->
+  <div class="bg-primary px-5 py-3 rounded-lg mb-6">
+    <h2 class="text-white font-semibold text-base">Registrar Movimiento</h2>
+  </div>
+
+  <form [formGroup]="movementForm" (ngSubmit)="submit()" class="space-y-5">
+    <!-- Equipo / Motivo -->
+    <div class="grid grid-cols-2 gap-4">
+      <div>
+        <label class="block text-sm mb-1">Serial Equipo *</label>
+        <input
+          type="text"
+          formControlName="serial"
+          (blur)="onSerialChange()"
+          class="input w-full"
+          placeholder="Ej: M02221130080199"
+        />
+        <div
+          *ngIf="
+            movementForm.get('serial')?.invalid &&
+            movementForm.get('serial')?.touched
+          "
+          class="text-xs text-red-500 mt-1"
+        >
+          Requerido
+        </div>
+      </div>
+
+      <div>
+        <label class="block text-sm mb-1">Motivo *</label>
+        <select formControlName="reason" class="input w-full">
+          <option value="">Seleccionar...</option>
+          <option *ngFor="let r of reasons" [value]="r.value">
+            {{ r.label }}
+          </option>
+        </select>
+        <div
+          *ngIf="
+            movementForm.get('reason')?.invalid &&
+            movementForm.get('reason')?.touched
+          "
+          class="text-xs text-red-500 mt-1"
+        >
+          Requerido
+        </div>
+      </div>
+    </div>
+
+    <!-- Origen / Destino -->
+    <div class="grid grid-cols-2 gap-4">
+      <div>
+        <label class="block text-sm mb-1">Ubicación Origen *</label>
+        <input
+          type="number"
+          formControlName="originLocationId"
+          class="input w-full"
+          placeholder="ID ubicación origen"
+        />
+        <div
+          *ngIf="
+            movementForm.get('originLocationId')?.invalid &&
+            movementForm.get('originLocationId')?.touched
+          "
+          class="text-xs text-red-500 mt-1"
+        >
+          Requerido
+        </div>
+      </div>
+
+      <div>
+        <label class="block text-sm mb-1">Ubicación Destino *</label>
+        <input
+          type="number"
+          formControlName="destinationLocationId"
+          class="input w-full"
+          placeholder="ID ubicación destino"
+        />
+        <div
+          *ngIf="
+            movementForm.get('destinationLocationId')?.invalid &&
+            movementForm.get('destinationLocationId')?.touched
+          "
+          class="text-xs text-red-500 mt-1"
+        >
+          Requerido
+        </div>
+      </div>
+    </div>
+
+    <!-- Botones -->
+    <div class="flex gap-3 pt-2">
+      <button
+        type="submit"
+        [disabled]="loading"
+        class="bg-primary text-white px-6 py-2.5 rounded-lg shadow hover:opacity-90 transition flex-1 disabled:opacity-50"
+      >
+        {{ loading ? "Registrando..." : "Registrar Movimiento" }}
+      </button>
+      <button
+        type="button"
+        (click)="cancelled.emit()"
+        class="border border-gray-300 text-gray-500 px-6 py-2.5 rounded-lg hover:bg-gray-50 transition"
+      >
+        Cancelar
+      </button>
+    </div>
+  </form>
+</div>

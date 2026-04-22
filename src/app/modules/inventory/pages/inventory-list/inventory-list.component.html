@@ -1,0 +1,141 @@
+<div class="min-h-screen bg-transparent p-1">
+  <div class="max-w-6xl mx-auto bg-white rounded-xl shadow-lg p-6">
+    <!-- HEADER -->
+    <div
+      class="flex justify-between items-center bg-primary text-white px-6 py-3 rounded-lg mb-6"
+    >
+      <h2 class="text-lg font-semibold">Inventario de Equipos</h2>
+      <span class="text-sm opacity-90">{{ totalElements }} registros</span>
+    </div>
+
+    <!-- FILTROS -->
+    <div class="grid md:grid-cols-3 gap-4 mb-6">
+      <div>
+        <label class="block text-xs text-gray-500 mb-1"
+          >Filtrar por fecha</label
+        >
+        <input
+          type="date"
+          [(ngModel)]="filterDate"
+          class="input w-full"
+          placeholder="yyyy-MM-dd"
+        />
+      </div>
+
+      <div>
+        <label class="block text-xs text-gray-500 mb-1"
+          >Filtrar por ubicación (ID)</label
+        >
+        <input
+          type="number"
+          [(ngModel)]="filterLocationId"
+          class="input w-full"
+          placeholder="Ej: 1"
+        />
+      </div>
+
+      <div class="flex items-end gap-2">
+        <button
+          (click)="applyFilters()"
+          class="bg-primary text-white text-sm px-4 py-2 rounded-lg hover:opacity-90 transition flex-1"
+        >
+          Buscar
+        </button>
+        <button
+          (click)="clearFilters()"
+          class="border border-gray-300 text-gray-500 text-sm px-4 py-2 rounded-lg hover:bg-gray-50 transition"
+        >
+          Limpiar
+        </button>
+      </div>
+    </div>
+
+    <!-- LOADING -->
+    @if (loading) {
+      <div
+        class="bg-blue-50 border border-blue-200 text-blue-600 text-sm rounded-lg px-4 py-3 mb-4"
+      >
+        Cargando inventarios...
+      </div>
+    }
+
+    <!-- TABLA -->
+    @if (!loading && inventories.length > 0) {
+      <div class="bg-gray-50 rounded-lg shadow p-4">
+        <p class="text-xs text-gray-400 mb-3">
+          {{ totalElements }} registro(s) · Página {{ currentPage + 1 }} de
+          {{ totalPages }}
+        </p>
+
+        <!-- Cabecera tabla -->
+        <div
+          class="grid grid-cols-5 gap-2 px-4 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wide border-b border-gray-200"
+        >
+          <span>ID</span>
+          <span>Ubicación</span>
+          <span>Fecha</span>
+          <span>Observaciones</span>
+          <span>Creado</span>
+        </div>
+
+        <!-- Filas -->
+        <div class="space-y-1 mt-1">
+          <div
+            *ngFor="let item of inventories"
+            class="grid grid-cols-5 gap-2 items-center bg-white border border-gray-100 rounded-md px-4 py-3 hover:shadow-sm transition-all text-sm"
+          >
+            <span class="text-gray-400 text-xs font-medium"
+              >#{{ item.inventoryId }}</span
+            >
+            <span class="font-medium text-sm">{{ item.location }}</span>
+            <span class="text-gray-600 text-xs">{{
+              item.date | date: "dd/MM/yyyy"
+            }}</span>
+            <span
+              class="text-gray-500 text-xs truncate"
+              [title]="item.observations"
+            >
+              {{ item.observations || "—" }}
+            </span>
+            <span class="text-gray-400 text-xs">{{
+              item.createdAt | date: "dd/MM/yyyy HH:mm"
+            }}</span>
+          </div>
+        </div>
+
+        <!-- Paginación -->
+        <div
+          class="flex justify-between items-center mt-6 text-sm text-gray-500"
+        >
+          <span
+            >{{ totalElements }} registros · Página {{ currentPage + 1 }} de
+            {{ totalPages }}</span
+          >
+          <div class="flex gap-2">
+            <button
+              (click)="goToPage(currentPage - 1)"
+              [disabled]="currentPage === 0"
+              class="px-3 py-1 rounded border border-gray-300 disabled:opacity-40 hover:bg-gray-100 transition-all"
+            >
+              ← Anterior
+            </button>
+            <button
+              (click)="goToPage(currentPage + 1)"
+              [disabled]="currentPage >= totalPages - 1"
+              class="px-3 py-1 rounded border border-gray-300 disabled:opacity-40 hover:bg-gray-100 transition-all"
+            >
+              Siguiente →
+            </button>
+          </div>
+        </div>
+      </div>
+    }
+
+    <!-- VACÍO -->
+    @if (!loading && inventories.length === 0) {
+      <div class="text-center text-gray-400 text-sm py-10">
+        No hay inventarios registrados para los filtros seleccionados.
+      </div>
+    }
+  </div>
+</div>
