@@ -16,6 +16,9 @@ import { LocationFormComponent } from 'app/modules/equipment/components/location
 import { ProviderFormComponent } from 'app/modules/equipment/components/provider-form/provider-form.component';
 import { EquipmentCreateComponent } from 'app/modules/equipment/pages/equipment-create/equipment-create.component';
 import { EquipmentAllComponent } from 'app/modules/equipment/pages/equipment-all/equipment-all.component';
+import { InventoryListComponent } from 'app/modules/inventory/pages/inventory-list/inventory-list.component';
+import { MovementsListComponent } from 'app/modules/inventory/pages/movement-list/movement-list.component';
+import { InventoryCreateComponent } from 'app/modules/inventory/components/inventory-create/inventory-create.component';
 
 @Component({
   selector: 'app-main-layout',
@@ -27,6 +30,7 @@ export class MainLayoutComponent {
     private tabService: TabService,
   ) {}
   isSidebarOpen = false;
+  inventoryMenuOpen = false;
 
   toggleSidebar() {
     this.isSidebarOpen = !this.isSidebarOpen;
@@ -88,10 +92,26 @@ export class MainLayoutComponent {
 
   //Module Inventory
 
-  openInventory() {
-    this.tabService.openTab('Inventarios', InventoryModule);
+  toggleInventoryMenu(): void {
+    this.inventoryMenuOpen = !this.inventoryMenuOpen;
+  }
+
+  openInventoryList() {
+    this.tabService.openTab('Inventarios', InventoryListComponent);
     this.isSidebarOpen = false;
   }
+
+  openMovementsList() {
+    this.tabService.openTab('Movimientos', MovementsListComponent);
+    this.isSidebarOpen = false;
+  }
+
+  createInvetory() {
+    this.tabService.openTab('Crear inventario', InventoryCreateComponent);
+    this.isSidebarOpen = false;
+  }
+
+  //maintenance
 
   openMaintenance() {
     this.tabService.openTab('Mantenimiento', MaintenanceModule);

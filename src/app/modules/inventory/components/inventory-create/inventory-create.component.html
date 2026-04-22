@@ -1,0 +1,210 @@
+<div class="max-w-5xl mx-auto">
+  <!-- HEADER -->
+  <div class="bg-primary px-6 py-4 rounded-lg shadow mb-8">
+    <h2 class="text-lg text-white font-semibold">Crear Inventario Físico</h2>
+  </div>
+
+  <!-- FORM -->
+  <div class="bg-transparent rounded-xl shadow-lg p-8">
+    <form [formGroup]="inventoryForm" (ngSubmit)="submit()" class="space-y-6">
+      <!-- UBICACIÓN / ID UBICACIÓN -->
+      <div class="grid md:grid-cols-2 gap-6">
+        <div>
+          <label class="block text-sm mb-1">Nombre de Ubicación *</label>
+          <input
+            formControlName="location"
+            class="input w-full"
+            placeholder="Ej: SALAS DE CIRUGÍA"
+          />
+          <div
+            *ngIf="
+              inventoryForm.get('location')?.invalid &&
+              inventoryForm.get('location')?.touched
+            "
+            class="text-sm text-red-500 mt-1"
+          >
+            Requerido
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-sm mb-1">ID Ubicación *</label>
+          <input
+            type="number"
+            formControlName="locationId"
+            class="input w-full"
+            placeholder="Ej: 1"
+          />
+          <div
+            *ngIf="
+              inventoryForm.get('locationId')?.invalid &&
+              inventoryForm.get('locationId')?.touched
+            "
+            class="text-sm text-red-500 mt-1"
+          >
+            Requerido
+          </div>
+        </div>
+      </div>
+
+      <!-- FECHA / OBSERVACIONES GENERALES -->
+      <div class="grid md:grid-cols-2 gap-6">
+        <div>
+          <label class="block text-sm mb-1">Fecha del inventario</label>
+          <input type="date" formControlName="date" class="input w-full" />
+        </div>
+
+        <div>
+          <label class="block text-sm mb-1">Observaciones generales</label>
+          <input
+            formControlName="observations"
+            class="input w-full"
+            placeholder="Opcional"
+          />
+        </div>
+      </div>
+
+      <!-- CREADO POR / ROL -->
+      <div class="grid md:grid-cols-2 gap-6">
+        <div>
+          <label class="block text-sm mb-1">ID Responsable *</label>
+          <input
+            type="number"
+            formControlName="createdBy"
+            class="input w-full"
+            placeholder="Ej: 1"
+          />
+          <div
+            *ngIf="
+              inventoryForm.get('createdBy')?.invalid &&
+              inventoryForm.get('createdBy')?.touched
+            "
+            class="text-sm text-red-500 mt-1"
+          >
+            Requerido
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-sm mb-1">Rol del responsable *</label>
+          <select formControlName="userRole" class="input w-full">
+            <option value="">Seleccionar rol...</option>
+            <option *ngFor="let r of roles" [value]="r">{{ r }}</option>
+          </select>
+          <div
+            *ngIf="
+              inventoryForm.get('userRole')?.invalid &&
+              inventoryForm.get('userRole')?.touched
+            "
+            class="text-sm text-red-500 mt-1"
+          >
+            Requerido
+          </div>
+        </div>
+      </div>
+
+      <!-- ─── DETALLES DE EQUIPOS ───────────────────────────────────────── -->
+      <div>
+        <div class="flex justify-between items-center mb-3">
+          <h3 class="text-sm font-semibold text-gray-700">
+            Equipos en inventario *
+          </h3>
+          <button
+            type="button"
+            (click)="addDetail()"
+            class="text-xs bg-primary text-white px-3 py-1.5 rounded-lg hover:opacity-90 transition"
+          >
+            + Agregar equipo
+          </button>
+        </div>
+
+        <!-- Cabecera -->
+        <div
+          class="grid grid-cols-12 gap-3 px-3 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wide border-b border-gray-200 mb-2"
+        >
+          <span class="col-span-3">ID Equipo</span>
+          <span class="col-span-3">Estado</span>
+          <span class="col-span-5">Observaciones</span>
+          <span class="col-span-1"></span>
+        </div>
+
+        <!-- Filas dinámicas -->
+        <div formArrayName="details" class="space-y-3">
+          <div
+            *ngFor="let detail of details.controls; let i = index"
+            [formGroupName]="i"
+            class="grid grid-cols-12 gap-3 items-start bg-gray-50 rounded-lg px-3 py-3 border border-gray-100"
+          >
+            <!-- ID Equipo -->
+            <div class="col-span-3">
+              <input
+                type="number"
+                formControlName="equipmentId"
+                class="input w-full"
+                placeholder="Ej: 8"
+              />
+              <div
+                *ngIf="
+                  detail.get('equipmentId')?.invalid &&
+                  detail.get('equipmentId')?.touched
+                "
+                class="text-xs text-red-500 mt-1"
+              >
+                Requerido
+              </div>
+            </div>
+
+            <!-- Estado -->
+            <div class="col-span-3">
+              <select formControlName="state" class="input w-full">
+                <option value="">Estado...</option>
+                <option *ngFor="let s of states" [value]="s">{{ s }}</option>
+              </select>
+              <div
+                *ngIf="
+                  detail.get('state')?.invalid && detail.get('state')?.touched
+                "
+                class="text-xs text-red-500 mt-1"
+              >
+                Requerido
+              </div>
+            </div>
+
+            <!-- Observaciones -->
+            <div class="col-span-5">
+              <input
+                formControlName="observations"
+                class="input w-full"
+                placeholder="Opcional"
+              />
+            </div>
+
+            <!-- Eliminar -->
+            <div class="col-span-1 flex items-center pt-1">
+              <button
+                type="button"
+                (click)="removeDetail(i)"
+                [disabled]="details.length === 1"
+                class="text-red-400 hover:text-red-600 transition disabled:opacity-30 text-lg leading-none"
+                title="Eliminar"
+              >
+                ✕
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- BOTÓN -->
+      <div class="pt-4 text-center">
+        <button
+          type="submit"
+          [disabled]="loading"
+          class="bg-primary text-white px-8 py-3 rounded-lg shadow hover:opacity-90 transition disabled:opacity-50"
+        >
+          {{ loading ? "Registrando..." : "Crear Inventario" }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
