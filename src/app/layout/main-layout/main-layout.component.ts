@@ -118,6 +118,8 @@ export class MainLayoutComponent {
     this.isSidebarOpen = false;
   }
 
+  //reports and audit
+
   openReports() {
     this.tabService.openTab('Reportes', ReportsModule);
     this.isSidebarOpen = false;

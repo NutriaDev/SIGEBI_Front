@@ -1,12 +1,18 @@
 import { NgModule } from '@angular/core';
 import { SharedModule } from '../../shared/shared.module';
 import { MaintenanceRoutingModule } from './maintenance-routing.module';
+import { MaintenanceCreateComponent } from './pages/maintenance-create/maintenance-create.component';
+import { MaintenanceScheduleComponent } from './pages/maintenance-schedule/maintenance-schedule.component';
+import { MaintenanceListComponent } from './pages/maintenance-list/maintenance-list.component';
+import { MaintenanceOverdueComponent } from './pages/maintenance-overdue/maintenance-overdue.component';
 
 @NgModule({
-  declarations: [],
-  imports: [
-    SharedModule,
-    MaintenanceRoutingModule,
+  declarations: [
+    MaintenanceCreateComponent,
+    MaintenanceScheduleComponent,
+    MaintenanceListComponent,
+    MaintenanceOverdueComponent,
   ],
+  imports: [SharedModule, MaintenanceRoutingModule],
 })
 export class MaintenanceModule {}
