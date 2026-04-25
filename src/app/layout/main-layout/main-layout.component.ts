@@ -19,6 +19,10 @@ import { EquipmentAllComponent } from 'app/modules/equipment/pages/equipment-all
 import { InventoryListComponent } from 'app/modules/inventory/pages/inventory-list/inventory-list.component';
 import { MovementsListComponent } from 'app/modules/inventory/pages/movement-list/movement-list.component';
 import { InventoryCreateComponent } from 'app/modules/inventory/components/inventory-create/inventory-create.component';
+import { MaintenanceCreateComponent } from 'app/modules/maintenance/pages/maintenance-create/maintenance-create.component';
+import { MaintenanceListComponent } from 'app/modules/maintenance/pages/maintenance-list/maintenance-list.component';
+import { MaintenanceScheduleComponent } from 'app/modules/maintenance/pages/maintenance-schedule/maintenance-schedule.component';
+import { MaintenanceOverdueComponent } from 'app/modules/maintenance/pages/maintenance-overdue/maintenance-overdue.component';
 
 @Component({
   selector: 'app-main-layout',
@@ -30,7 +34,9 @@ export class MainLayoutComponent {
     private tabService: TabService,
   ) {}
   isSidebarOpen = false;
+  equipmentMenuOpen = false;
   inventoryMenuOpen = false;
+  maintenanceMenuOpen = false;
 
   toggleSidebar() {
     this.isSidebarOpen = !this.isSidebarOpen;
@@ -45,7 +51,6 @@ export class MainLayoutComponent {
   }
 
   // Module equpiments
-  equipmentMenuOpen = false;
 
   toggleEquipmentMenu() {
     this.equipmentMenuOpen = !this.equipmentMenuOpen;
@@ -111,10 +116,35 @@ export class MainLayoutComponent {
     this.isSidebarOpen = false;
   }
 
-  //maintenance
+  //module maintenance
 
-  openMaintenance() {
-    this.tabService.openTab('Mantenimiento', MaintenanceModule);
+  toggleMaintenanceMenu() {
+    this.maintenanceMenuOpen = !this.maintenanceMenuOpen;
+  }
+
+  createMaintenance() {
+    this.tabService.openTab(
+      'Registrar mantenimiento',
+      MaintenanceCreateComponent,
+    );
+    this.isSidebarOpen = false;
+  }
+
+  scheduleMaintenance() {
+    this.tabService.openTab(
+      'Programar Mantenimiento',
+      MaintenanceScheduleComponent,
+    );
+    this.isSidebarOpen = false;
+  }
+
+  listMaintenance() {
+    this.tabService.openTab('Mantenimientos', MaintenanceListComponent);
+    this.isSidebarOpen = false;
+  }
+
+  overdueMaintenance() {
+    this.tabService.openTab('Alertas', MaintenanceOverdueComponent);
     this.isSidebarOpen = false;
   }
 
