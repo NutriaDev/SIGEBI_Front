@@ -22,8 +22,9 @@ export class MaintenanceListComponent implements OnInit {
 
   readonly maintenanceTypes = [
     { value: '', label: 'Todos' },
-    { value: 'MP', label: 'MP – Preventivo' },
-    { value: 'MCP', label: 'MCP – Correctivo Programado' },
+    { value: 1, label: 'PREVENTIVO' },
+    { value: 2, label: 'CORRECTIVO' },
+    { value: 3, label: 'CALIBRACION' },
   ];
 
   constructor(

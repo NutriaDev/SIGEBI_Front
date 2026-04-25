@@ -2,18 +2,18 @@
 
 export interface MaintenanceRequest {
   equipmentId: number;
-  type: string; // 'MP' | 'MCP'
-  date: string; // ISO LocalDateTime string
+  maintenanceType: number;
+  date: string;
   description: string;
   technicianId: number;
-  nextMaintenanceDate?: string;
+  nextMaintenanceDate?: string | undefined;
 }
 
 export interface MaintenanceScheduleRequest {
   equipmentId: number;
   scheduledDate: string;
-  type: string;
-  notes?: string;
+  maintenanceType: number;
+  notes?: string | undefined;
 }
 
 // ─── Response DTOs ──────────────────────────────────────────────────────────

@@ -42,7 +42,7 @@ export class MaintenanceService {
     equipmentId: number,
     fromDate: string,
     toDate: string,
-    type?: string,
+    type?: number,
     page: number = 0,
     size: number = 10,
   ): Observable<ApiResponse<PageResponse<MaintenanceResponse>>> {
@@ -54,7 +54,7 @@ export class MaintenanceService {
       .set('size', size.toString());
 
     if (type) {
-      params = params.set('type', type);
+      params = params.set('maintenanceType', type.toString());
     }
 
     return this.http.get<ApiResponse<PageResponse<MaintenanceResponse>>>(

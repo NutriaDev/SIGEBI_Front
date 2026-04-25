@@ -14,8 +14,9 @@ export class MaintenanceScheduleComponent implements OnInit {
   errorMsg = '';
 
   readonly maintenanceTypes = [
-    { value: 'MP', label: 'MP – Mantenimiento Preventivo' },
-    { value: 'MCP', label: 'MCP – Mantenimiento Correctivo Programado' },
+    { value: 1, label: 'PREVENTIVO' },
+    { value: 2, label: 'CORRECTIVO' },
+    { value: 3, label: 'CALIBRACION' },
   ];
 
   constructor(
@@ -54,10 +55,12 @@ export class MaintenanceScheduleComponent implements OnInit {
 
     const value = this.form.value;
     const payload = {
-      ...value,
+      equipmentId: value.equipmentId,
+      maintenanceType: value.type,
       scheduledDate: value.scheduledDate
         ? new Date(value.scheduledDate).toISOString()
-        : null,
+        : '',
+      notes: value.notes || undefined,
     };
 
     this.maintenanceService.scheduleMaintenance(payload).subscribe({

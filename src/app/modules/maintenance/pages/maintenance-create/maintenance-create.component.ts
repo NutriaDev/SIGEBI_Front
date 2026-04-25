@@ -14,8 +14,9 @@ export class MaintenanceCreateComponent implements OnInit {
   errorMsg = '';
 
   readonly maintenanceTypes = [
-    { value: 'MP', label: 'MP – Mantenimiento Preventivo' },
-    { value: 'MCP', label: 'MCP – Mantenimiento Correctivo Programado' },
+    { value: 1, label: 'PREVENTIVO' },
+    { value: 2, label: 'CORRECTIVO' },
+    { value: 3, label: 'CALIBRACION' },
   ];
 
   constructor(
@@ -56,13 +57,24 @@ export class MaintenanceCreateComponent implements OnInit {
 
     const value = this.form.value;
 
-    // Convert HTML datetime-local to ISO string expected by backend
+    const formatLocalDateTime = (dateStr: string) => {
+      if (!dateStr) return '';
+      const date = new Date(dateStr);
+      date.setSeconds(0);
+      date.setMilliseconds(0);
+      const pad = (n: number) => n.toString().padStart(2, '0');
+      return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
+    };
+
     const payload = {
-      ...value,
-      date: value.date ? new Date(value.date).toISOString() : null,
+      equipmentId: value.equipmentId,
+      maintenanceType: value.type,
+      date: formatLocalDateTime(value.date),
+      description: value.description,
+      technicianId: value.technicianId,
       nextMaintenanceDate: value.nextMaintenanceDate
-        ? new Date(value.nextMaintenanceDate).toISOString()
-        : null,
+        ? formatLocalDateTime(value.nextMaintenanceDate)
+        : undefined,
     };
 
     this.maintenanceService.registerMaintenance(payload).subscribe({
