@@ -1,1 +1,165 @@
-<p>maintenance-overdue works!</p>
+<div class="p-6">
+  <!-- Header -->
+  <div
+    class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6"
+  >
+    <div>
+      <h1 class="text-xl font-semibold text-primary">
+        Mantenimientos Vencidos
+      </h1>
+      <p class="text-sm text-text-muted mt-0.5">
+        Equipos con mantenimiento programado no ejecutado a tiempo
+      </p>
+    </div>
+    <div
+      *ngIf="!loading && totalElements > 0"
+      class="inline-flex items-center gap-2 bg-red-50 border border-red-200 text-red-700 rounded-lg px-4 py-2 text-sm font-bold whitespace-nowrap"
+    >
+      <span>&#9888;</span>
+      {{ totalElements }} vencido{{ totalElements !== 1 ? "s" : "" }}
+    </div>
+  </div>
+
+  <!-- Loading skeleton -->
+  <div *ngIf="loading" class="card space-y-3">
+    <div class="h-4 bg-secondary rounded animate-pulse w-1/3"></div>
+    <div
+      *ngFor="let i of [1, 2, 3, 4, 5]"
+      class="h-11 bg-secondary-light rounded animate-pulse"
+    ></div>
+  </div>
+
+  <!-- Error -->
+  <div *ngIf="!loading && errorMsg" class="card">
+    <div
+      class="flex items-center gap-2 bg-red-50 border border-red-200 text-red-800 rounded-md px-4 py-3 text-sm mb-4"
+    >
+      <span>&#9888;</span> {{ errorMsg }}
+    </div>
+    <button class="btn-primary w-auto px-5 py-2 text-sm" (click)="load(0)">
+      Reintentar
+    </button>
+  </div>
+
+  <!-- Results Card -->
+  <div *ngIf="!loading && !errorMsg" class="card">
+    <!-- Empty state -->
+    <div *ngIf="records.length === 0" class="text-center py-14">
+      <p class="text-5xl text-green-500 mb-3">&#10003;</p>
+      <p class="text-base font-semibold text-green-700">Sin vencimientos</p>
+      <p class="text-sm text-text-muted mt-1">
+        Todos los mantenimientos están al día.
+      </p>
+    </div>
+
+    <!-- Table -->
+    <ng-container *ngIf="records.length > 0">
+      <!-- Summary -->
+      <div
+        class="flex justify-between items-center mb-4 pb-3 border-b border-secondary"
+      >
+        <span class="text-sm font-semibold text-primary">
+          Mostrando {{ startRecord }}–{{ endRecord }} de
+          {{ totalElements }} registro{{ totalElements !== 1 ? "s" : "" }}
+        </span>
+        <span *ngIf="totalPages > 1" class="text-xs text-text-muted">
+          Página {{ currentPage + 1 }} de {{ totalPages }}
+        </span>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm border-collapse">
+          <thead>
+            <tr
+              class="bg-primary text-secondary-light text-xs uppercase tracking-wider"
+            >
+              <th class="px-4 py-3 text-left rounded-tl-md">ID</th>
+              <th class="px-4 py-3 text-left">N° Serie</th>
+              <th class="px-4 py-3 text-left">Equipo</th>
+              <th class="px-4 py-3 text-left">Servicio</th>
+              <th class="px-4 py-3 text-left">Tipo</th>
+              <th class="px-4 py-3 text-left">Fecha Programada</th>
+              <th class="px-4 py-3 text-left">Días Vencido</th>
+              <th class="px-4 py-3 text-left rounded-tr-md">Notas</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              *ngFor="let row of records"
+              class="border-b border-secondary last:border-0 hover:bg-red-50 transition-colors"
+            >
+              <td class="px-4 py-3 font-bold text-red-700">#{{ row.id }}</td>
+              <td class="px-4 py-3 font-mono text-xs text-text-muted">
+                {{ row.serialNumber }}
+              </td>
+              <td class="px-4 py-3 font-semibold text-primary">
+                {{ row.equipmentName }}
+              </td>
+              <td class="px-4 py-3 text-text-main">{{ row.service }}</td>
+              <td class="px-4 py-3">
+                <span
+                  *ngIf="row.type === 'MP'"
+                  class="inline-block px-2 py-0.5 rounded-full text-xs font-bold bg-blue-100 text-blue-800"
+                >
+                  MP
+                </span>
+                <span
+                  *ngIf="row.type === 'MCP'"
+                  class="inline-block px-2 py-0.5 rounded-full text-xs font-bold bg-amber-100 text-amber-800"
+                >
+                  MCP
+                </span>
+              </td>
+              <td class="px-4 py-3 whitespace-nowrap text-text-main">
+                {{ row.scheduledDate | date: "dd/MM/yyyy HH:mm" }}
+              </td>
+              <td class="px-4 py-3">
+                <span
+                  [class]="
+                    (row.daysOverdue ?? 0) > 30
+                      ? 'inline-block px-2 py-0.5 rounded-full text-xs font-bold bg-red-800 text-white'
+                      : 'inline-block px-2 py-0.5 rounded-full text-xs font-bold bg-red-100 text-red-700'
+                  "
+                >
+                  {{ row.daysOverdue ?? "—" }} días
+                </span>
+              </td>
+              <td
+                class="px-4 py-3 max-w-[160px] truncate text-text-muted"
+                [title]="row.notes"
+              >
+                {{ row.notes || "—" }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Pagination -->
+      <div
+        *ngIf="totalPages > 1"
+        class="flex justify-between items-center mt-4 pt-4 border-t border-secondary"
+      >
+        <span class="text-xs text-text-muted">
+          {{ startRecord }}–{{ endRecord }} de {{ totalElements }}
+        </span>
+        <div class="flex gap-2">
+          <button
+            class="btn-white text-xs px-3 py-1.5 disabled:opacity-40 disabled:cursor-not-allowed"
+            (click)="prevPage()"
+            [disabled]="currentPage === 0"
+          >
+            &#8592; Anterior
+          </button>
+          <button
+            class="btn-white text-xs px-3 py-1.5 disabled:opacity-40 disabled:cursor-not-allowed"
+            (click)="nextPage()"
+            [disabled]="currentPage >= totalPages - 1"
+          >
+            Siguiente &#8594;
+          </button>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</div>
