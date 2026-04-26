@@ -12,6 +12,7 @@ export class MaintenanceCreateComponent implements OnInit {
   loading = false;
   successMsg = '';
   errorMsg = '';
+  currentUserName: string = '';
 
   readonly maintenanceTypes = [
     { value: 1, label: 'PREVENTIVO' },
@@ -30,14 +31,29 @@ export class MaintenanceCreateComponent implements OnInit {
       equipmentId: [null, [Validators.required, Validators.min(1)]],
       type: ['', Validators.required],
       date: ['', Validators.required],
-      description: ['', [Validators.required, Validators.minLength(5)]],
-      technicianId: [null, [Validators.required, Validators.min(1)]],
+      issueDescription: ['', [Validators.required, Validators.minLength(20)]],
       nextMaintenanceDate: [''],
     });
+
+    const user = this.getUserFromToken();
+
+    this.currentUserName = user?.name || user?.sub || 'Usuario autenticado';
   }
 
   get f() {
     return this.form.controls;
+  }
+
+  getUserFromToken(): any {
+    const token = localStorage.getItem('token');
+    if (!token) return null;
+
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      return payload;
+    } catch {
+      return null;
+    }
   }
 
   isInvalid(field: string): boolean {
@@ -70,11 +86,7 @@ export class MaintenanceCreateComponent implements OnInit {
       equipmentId: value.equipmentId,
       maintenanceType: value.type,
       date: formatLocalDateTime(value.date),
-      description: value.description,
-      technicianId: value.technicianId,
-      nextMaintenanceDate: value.nextMaintenanceDate
-        ? formatLocalDateTime(value.nextMaintenanceDate)
-        : undefined,
+      issueDescription: value.issueDescription,
     };
 
     this.maintenanceService.registerMaintenance(payload).subscribe({

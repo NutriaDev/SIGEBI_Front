@@ -4,9 +4,8 @@ export interface MaintenanceRequest {
   equipmentId: number;
   maintenanceType: number;
   date: string;
-  description: string;
-  technicianId: number;
-  nextMaintenanceDate?: string | undefined;
+  issueDescription: string;
+  nextMaintenanceDate?: string;
 }
 
 export interface MaintenanceScheduleRequest {
