@@ -169,4 +169,9 @@ export class MaintenanceListComponent implements OnInit {
 
     return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
   }
+
+  onAssignTechnician(record: MaintenanceUnifiedResponse): void {
+    console.log('Asignar técnico a:', record);
+    // aquí va la lógica: abrir modal, navegar, etc.
+  }
 }
