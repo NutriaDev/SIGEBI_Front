@@ -8,6 +8,7 @@ import {
   MaintenanceResponse,
   MaintenanceScheduleRequest,
   MaintenanceScheduleResponse,
+  MaintenanceUnifiedResponse,
   PageResponse,
 } from '../models/model';
 
@@ -75,5 +76,23 @@ export class MaintenanceService {
     return this.http.get<
       ApiResponse<PageResponse<MaintenanceScheduleResponse>>
     >(`${this.apiUrl}/overdue`, { params });
+  }
+
+  // maintenance.service.ts
+  // ── GET /maintenance/timeline ─────────────────────────────────────────────
+  getTimeline(
+    equipmentId: number,
+    page: number = 0,
+    size: number = 10,
+  ): Observable<ApiResponse<PageResponse<MaintenanceUnifiedResponse>>> {
+    const params = new HttpParams()
+      .set('equipmentId', equipmentId.toString())
+      .set('page', page.toString())
+      .set('size', size.toString());
+
+    return this.http.get<ApiResponse<PageResponse<MaintenanceUnifiedResponse>>>(
+      `${this.apiUrl}/timeline`,
+      { params },
+    );
   }
 }

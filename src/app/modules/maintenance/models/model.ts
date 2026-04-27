@@ -42,6 +42,15 @@ export interface MaintenanceScheduleResponse {
   daysOverdue?: number;
 }
 
+export interface MaintenanceUnifiedResponse {
+  id: number;
+  equipmentId: number;
+  type: string;
+  date: string;
+  status: string;
+  source: 'SCHEDULE' | 'MAINTENANCE';
+}
+
 // ─── Pagination ─────────────────────────────────────────────────────────────
 
 export interface PageResponse<T> {
