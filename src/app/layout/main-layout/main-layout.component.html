@@ -44,13 +44,21 @@
       <a (click)="toggleInventoryMenu()" class="cursor-pointer">
         Inventarios
       </a>
-
       <div *ngIf="inventoryMenuOpen" class="flex flex-col ml-4 gap-2 mt-2">
         <a (click)="openInventoryList()">Inventarios</a>
         <a (click)="openMovementsList()">Movimientos</a>
         <a (click)="createInvetory()">Nuevo Inventario</a>
       </div>
-      <a (click)="openMaintenance()">Mantenimiento</a>
+
+      <!-- Maintenance -->
+      <a (click)="toggleMaintenanceMenu()">Mantenimiento</a>
+
+      <div *ngIf="maintenanceMenuOpen" class="flex flex-col ml-4 gap-2 mt-2">
+        <a (click)="createMaintenance()">Registrar mantenimientos</a>
+        <a (click)="scheduleMaintenance()">Programar mantenimientos</a>
+        <a (click)="listMaintenance()">Mantenimientos</a>
+        <a (click)="overdueMaintenance()">Alertas</a>
+      </div>
 
       <ng-container *ngIf="has('reports.read')">
         <a (click)="openReports()">Reportes</a>
