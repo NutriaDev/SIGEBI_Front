@@ -64,45 +64,6 @@
         </div>
       </div>
 
-      <!-- CREADO POR / ROL -->
-      <div class="grid md:grid-cols-2 gap-6">
-        <div>
-          <label class="block text-sm mb-1">ID Responsable *</label>
-          <input
-            type="number"
-            formControlName="createdBy"
-            class="input w-full"
-            placeholder="Ej: 1"
-          />
-          <div
-            *ngIf="
-              inventoryForm.get('createdBy')?.invalid &&
-              inventoryForm.get('createdBy')?.touched
-            "
-            class="text-sm text-red-500 mt-1"
-          >
-            Requerido
-          </div>
-        </div>
-
-        <div>
-          <label class="block text-sm mb-1">Rol del responsable *</label>
-          <select formControlName="userRole" class="input w-full">
-            <option value="">Seleccionar rol...</option>
-            <option *ngFor="let r of roles" [value]="r">{{ r }}</option>
-          </select>
-          <div
-            *ngIf="
-              inventoryForm.get('userRole')?.invalid &&
-              inventoryForm.get('userRole')?.touched
-            "
-            class="text-sm text-red-500 mt-1"
-          >
-            Requerido
-          </div>
-        </div>
-      </div>
-
       <!-- ─── DETALLES DE EQUIPOS ───────────────────────────────────────── -->
       <div>
         <div class="flex justify-between items-center mb-3">
