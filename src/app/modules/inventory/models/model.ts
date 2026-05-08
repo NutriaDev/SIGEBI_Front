@@ -78,12 +78,9 @@ export interface InventoryDetailPayload {
 }
 
 export interface CreateInventoryPayload {
-  location: string;
   locationId: number;
-  date: string | null; // yyyy-MM-dd
+  date: string | null;
   observations: string | null;
-  createdBy: number;
-  userRole: string;
   details: InventoryDetailPayload[];
 }
 
