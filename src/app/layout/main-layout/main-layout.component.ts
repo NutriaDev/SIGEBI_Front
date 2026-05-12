@@ -4,10 +4,7 @@ import { TabService } from '../../modules/dashboard/services/tab.service';
 import { UserEditComponent } from '../../modules/users/pages/user-edit/user-edit.component';
 import { UserCreateComponent } from '../../modules/users/pages/user-create/user-create.component';
 import { UserListComponent } from '../../modules/users/pages/user-list/user-list.component';
-import { MaintenanceModule } from '../../modules/maintenance/maintenance.module';
-import { ReportsModule } from '../../modules/reports/reports.module';
-import { InventoryModule } from '../../modules/inventory/inventory.module';
-import { EquipmentModule } from '../../modules/equipment/equipment.module';
+import { ServiceReportCreateComponent } from '../../modules/reports/pages/service-report-create/service-report-create.component';
 import { EquipmentLifecycleComponent } from 'app/modules/equipment/pages/equipment-lifecycle/equipment-lifecycle.component';
 import { AreaFormComponent } from 'app/modules/equipment/components/area-form/area-form.component';
 import { ClasificationFormComponent } from 'app/modules/equipment/components/clasification-form/clasification-form.component';
@@ -37,6 +34,7 @@ export class MainLayoutComponent {
   equipmentMenuOpen = false;
   inventoryMenuOpen = false;
   maintenanceMenuOpen = false;
+  reportMenuOpen = false;
 
   toggleSidebar() {
     this.isSidebarOpen = !this.isSidebarOpen;
@@ -150,10 +148,19 @@ export class MainLayoutComponent {
 
   //reports and audit
 
-  openReports() {
-    this.tabService.openTab('Reportes', ReportsModule);
+  toggleReportMenu() {
+    this.reportMenuOpen = !this.reportMenuOpen;
+  }
+
+  openServiceReportCreate() {
+    this.tabService.openTab(
+      'Reporte de Servicio',
+      ServiceReportCreateComponent,
+    );
     this.isSidebarOpen = false;
   }
+
+  //users
 
   openUsers() {
     this.tabService.openTab('Usuarios', UserListComponent);

@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { ServiceReportCreateComponent } from './pages/service-report-create/service-report-create.component';
 
 const routes: Routes = [
-  // { path: '', component: ReportsListPageComponent },
-  // { path: ':id', component: ReportDetailPageComponent },
+  { path: 'service-report-create', component: ServiceReportCreateComponent },
 ];
 
 @NgModule({

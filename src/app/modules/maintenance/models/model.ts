@@ -18,7 +18,7 @@ export interface MaintenanceScheduleRequest {
 // ─── Response DTOs ──────────────────────────────────────────────────────────
 
 export interface MaintenanceResponse {
-  id: number;
+  idMaintenance: number;
   serialNumber: string;
   assetNumber: string;
   equipmentName: string;
