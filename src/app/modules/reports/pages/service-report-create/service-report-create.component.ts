@@ -5,6 +5,7 @@ import { ReportsService } from '../../services/reports.service';
 import { ServiceReportRequest } from '../../models/service-report-request.model';
 import { SparePartItem } from '../../models/spare-part-item.model';
 import { TabService } from 'app/modules/dashboard/services/tab.service';
+import { environment } from 'environments/environment';
 
 @Component({
   selector: 'app-service-report-create',
@@ -17,6 +18,8 @@ export class ServiceReportCreateComponent implements OnInit {
   errorMsg = '';
   @Input() maintenanceId!: number;
   hasSpares = false;
+  pdfPath: string = '';
+  protected environment = environment;
 
   constructor(
     private fb: FormBuilder,
@@ -101,7 +104,8 @@ export class ServiceReportCreateComponent implements OnInit {
     this.reportsService.createServiceReport(payload).subscribe({
       next: (res) => {
         this.loading = false;
-        this.successMsg = `Reporte generado correctamente. PDF: ${res.body?.pdfPath ?? ''}`;
+        this.pdfPath = res.body?.pdfPath ?? '';
+        this.successMsg = `Reporte generado correctamente. PDF: ${this.pdfPath}`;
         this.form.reset();
         this.sparePartsArray.clear();
         this.hasSpares = false;
