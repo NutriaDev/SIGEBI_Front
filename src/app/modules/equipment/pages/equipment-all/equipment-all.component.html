@@ -30,60 +30,60 @@
         <div class="space-y-2">
           <div
             *ngFor="let eq of equipments"
-            class="flex justify-between items-center bg-white border border-gray-200 rounded-md px-4 py-3 hover:shadow-sm transition-all"
+            class="flex flex-col sm:flex-row sm:justify-between sm:items-center bg-white border border-gray-200 rounded-md px-4 py-3 hover:shadow-sm transition-all gap-3"
           >
-            <!-- Info -->
-            <div>
-              <span class="font-medium text-sm">{{ eq.name }}</span>
-              <span class="text-gray-400 text-xs ml-2"
-                >#{{ eq.equipmentId }} · {{ eq.serie }}</span
-              >
-              <span class="text-gray-400 text-xs ml-2"
-                >· {{ eq.areaName }} · {{ eq.locationName }}</span
-              >
+            <!-- Infos -->
+            <div class="flex-1 min-w-0">
+              <div class="flex flex-wrap items-center gap-x-2 gap-y-0.5">
+                <span class="font-medium text-sm">{{ eq.name }}</span>
+                <span class="text-gray-400 text-xs"
+                  >#{{ eq.equipmentId }} · {{ eq.serie }}</span
+                >
+                <span class="text-gray-400 text-xs"
+                  >· {{ eq.areaName }} · {{ eq.locationName }}</span
+                >
+              </div>
               <div class="text-gray-400 text-xs mt-0.5">
                 {{ eq.brand }} · {{ eq.model }} · {{ eq.classificationName }}
               </div>
-              <span
-                class="text-xs font-medium mt-1 inline-block"
-                [class.text-green-700]="eq.active"
-                [class.text-red-600]="!eq.active"
-              >
-                {{ eq.active ? "Activo" : "Inactivo" }}
-              </span>
+              <div class="flex items-center gap-2 mt-1">
+                <span
+                  class="text-xs font-medium"
+                  [class.text-green-700]="eq.active"
+                  [class.text-red-600]="!eq.active"
+                >
+                  {{ eq.active ? "Activo" : "Inactivo" }}
+                </span>
+                <span
+                  class="text-xs px-2 py-0.5 rounded"
+                  [class.bg-green-100]="eq.active"
+                  [class.text-green-700]="eq.active"
+                  [class.bg-red-100]="!eq.active"
+                  [class.text-red-600]="!eq.active"
+                >
+                  {{ eq.stateName }}
+                </span>
+              </div>
             </div>
 
             <!-- Botones -->
-            <div class="flex items-center gap-2 shrink-0">
-              <span
-                class="text-xs px-2 py-0.5 rounded mr-2"
-                [class.bg-green-100]="eq.active"
-                [class.text-green-700]="eq.active"
-                [class.bg-red-100]="!eq.active"
-                [class.text-red-600]="!eq.active"
-              >
-                {{ eq.stateName }}
-              </span>
+            <div class="flex flex-wrap gap-2 sm:flex-nowrap sm:shrink-0">
               <button
                 (click)="verHV(eq)"
-                class="bg-primary text-white text-xs px-3 py-1.5 rounded-md hover:opacity-90 transition-all"
+                class="bg-primary text-white text-xs px-3 py-1.5 rounded-md hover:opacity-90 transition-all flex-1 sm:flex-none"
               >
                 Ver HV →
               </button>
               <button
                 (click)="edit(eq)"
-                class="bg-primary text-white text-xs px-3 py-1.5 rounded-md hover:opacity-90 transition-all"
+                class="bg-primary text-white text-xs px-3 py-1.5 rounded-md hover:opacity-90 transition-all flex-1 sm:flex-none"
               >
                 Editar
               </button>
               <button
                 (click)="toggleActive(eq)"
-                class="text-xs px-3 py-1.5 rounded-md text-white transition-all font-medium"
-                [ngClass]="
-                  eq.active
-                    ? 'bg-[#4d6e75] hover:bg-[#4d6e75]'
-                    : 'bg-[#263d42] hover:bg-[#121f23]'
-                "
+                class="text-xs px-3 py-1.5 rounded-md text-white transition-all font-medium flex-1 sm:flex-none"
+                [ngClass]="eq.active ? 'bg-[#4d6e75]' : 'bg-[#263d42]'"
               >
                 {{ eq.active ? "Inactivar" : "Activar" }}
               </button>

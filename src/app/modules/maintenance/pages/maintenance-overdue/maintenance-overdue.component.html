@@ -1,18 +1,21 @@
 <div class="p-6">
   <!-- Header banner -->
-  <div class="bg-primary rounded-lg px-6 py-4 mb-6 flex items-center gap-4">
+  <div class="bg-primary rounded-lg px-6 py-4 mb-6">
+    <!-- Título -->
+    <div class="mb-3">
+      <h1 class="text-sm font-semibold text-white">Mantenimientos Vencidos</h1>
+      <p class="text-xs text-white/60 mt-0.5">
+        Equipos con mantenimiento programado no ejecutado a tiempo
+      </p>
+    </div>
+
+    <!-- Badge -->
     <div
       *ngIf="!loading && totalElements > 0"
-      class="flex items-center gap-2 bg-red-50 border border-red-200 text-red-700 rounded-lg px-3 py-1.5 text-sm font-bold shrink-0"
+      class="inline-flex items-center gap-2 bg-red-50 border border-red-200 text-red-700 rounded-lg px-3 py-1.5 text-sm font-bold"
     >
       <span>&#9888;</span>
       {{ totalElements }} vencido{{ totalElements !== 1 ? "s" : "" }}
-    </div>
-    <div class="ml-auto text-right">
-      <h1 class="text-sm font-semibold text-white">Mantenimientos Vencidos</h1>
-      <p class="text-sm text-white/60 mt-0.5">
-        Equipos con mantenimiento programado no ejecutado a tiempo
-      </p>
     </div>
   </div>
 
