@@ -6,6 +6,8 @@ import { MaintenanceScheduleComponent } from './pages/maintenance-schedule/maint
 import { MaintenanceListComponent } from './pages/maintenance-list/maintenance-list.component';
 import { MaintenanceOverdueComponent } from './pages/maintenance-overdue/maintenance-overdue.component';
 
+import { ReportsModule } from '../reports/reports.module';
+
 @NgModule({
   declarations: [
     MaintenanceCreateComponent,
@@ -13,6 +15,6 @@ import { MaintenanceOverdueComponent } from './pages/maintenance-overdue/mainten
     MaintenanceListComponent,
     MaintenanceOverdueComponent,
   ],
-  imports: [SharedModule, MaintenanceRoutingModule],
+  imports: [SharedModule, MaintenanceRoutingModule, ReportsModule],
 })
 export class MaintenanceModule {}

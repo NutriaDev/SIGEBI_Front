@@ -12,6 +12,8 @@ import { InventoryListComponent } from './pages/inventory-list/inventory-list.co
 import { MovementCreateComponent } from './components/movement-create/movement-create.component';
 import { InventoryCreateComponent } from './components/inventory-create/inventory-create.component';
 
+import { ReportsModule } from '../reports/reports.module';
+
 @NgModule({
   declarations: [
     MovementsListComponent,
@@ -24,6 +26,7 @@ import { InventoryCreateComponent } from './components/inventory-create/inventor
     FormsModule,
     ReactiveFormsModule,
     InventoryRoutingModule,
+    ReportsModule,
 
     // Angular Material
     MatSelectModule,
