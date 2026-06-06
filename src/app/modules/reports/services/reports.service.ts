@@ -92,28 +92,7 @@ export class ReportsService {
 
     return this.http.get(`${this.base}/consolidated/filters`, { params });
   }
-
-  getConsolidatedByEquipment(equipmentId: number, page = 0, size = 10): Observable<any> {
-    return this.http.get(`${this.base}/consolidated/equipment/${equipmentId}`, {
-      params: new HttpParams().set('page', page).set('size', size)
-    });
-  }
-
-  getConsolidatedByLocation(location: string, page = 0, size = 10): Observable<any> {
-    return this.http.get(`${this.base}/consolidated/location/${location}`, {
-      params: new HttpParams().set('page', page).set('size', size)
-    });
-  }
-
-  getConsolidatedByDateRange(from: string, to: string, page = 0, size = 10): Observable<any> {
-    const params = new HttpParams()
-      .set('from', from)
-      .set('to', to)
-      .set('page', page)
-      .set('size', size);
-    return this.http.get(`${this.base}/consolidated/date-range`, { params });
-  }
-
+  
   // ── Snapshot ────────────────────────────────────────────────────
   getEquipmentSnapshot(equipmentId: number): Observable<any> {
     return this.http.get(`${this.base}/equipment-snapshot/${equipmentId}`);
@@ -141,7 +120,7 @@ export class ReportsService {
     if (params.equipmentId) httpParams = httpParams.set('equipmentId', params.equipmentId);
     if (params.location)    httpParams = httpParams.set('location', params.location);
 
-    return this.http.get(`${this.base}/export/direct`, {
+    return this.http.get(`${this.base}/export-direct`, {
       params: httpParams,
       responseType: 'blob'
     });
