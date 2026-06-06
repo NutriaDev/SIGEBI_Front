@@ -63,10 +63,10 @@
       <ng-container *ngIf="has('reports.read')">
         <a (click)="toggleReportMenu()" class="cursor-pointer">Reportes</a>
         <div *ngIf="reportMenuOpen" class="flex flex-col ml-4 gap-2 mt-2">
-          <a (click)="openServiceReportCreate()">Reporte de Servicio</a>
+         <a (click)="consolidatedReport()">Reportes Consolidado</a>
         </div>
       </ng-container>
-
+      
       <ng-container
         *ngIf="
           hasAny([

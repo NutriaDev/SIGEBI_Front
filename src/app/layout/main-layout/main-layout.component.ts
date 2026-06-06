@@ -20,6 +20,7 @@ import { MaintenanceCreateComponent } from 'app/modules/maintenance/pages/mainte
 import { MaintenanceListComponent } from 'app/modules/maintenance/pages/maintenance-list/maintenance-list.component';
 import { MaintenanceScheduleComponent } from 'app/modules/maintenance/pages/maintenance-schedule/maintenance-schedule.component';
 import { MaintenanceOverdueComponent } from 'app/modules/maintenance/pages/maintenance-overdue/maintenance-overdue.component';
+import { ConsolidatedReportComponent } from 'app/modules/reports/pages/consolidated-report/consolidated-report.component';
 
 @Component({
   selector: 'app-main-layout',
@@ -152,13 +153,12 @@ export class MainLayoutComponent {
     this.reportMenuOpen = !this.reportMenuOpen;
   }
 
-  openServiceReportCreate() {
+  consolidatedReport() {
     this.tabService.openTab(
-      'Reporte de Servicio',
-      ServiceReportCreateComponent,
-    );
-    this.isSidebarOpen = false;
-  }
+      'Reporte Consolidado', ConsolidatedReportComponent);
+    this.isSidebarOpen = false;}
+
+  
 
   //users
 
