@@ -2,7 +2,7 @@
   <div class="max-w-6xl mx-auto bg-white rounded-xl shadow-lg p-6">
     <!-- HEADER -->
     <div
-      class="flex justify-between items-center bg-primary text-white px-6 py-3 rounded-lg mb-6"
+      class="flex justify-between items-center bg-primary text-white px-6 py-3 rounded-lg mb-6 flex-wrap gap-3"
     >
       <h2 class="text-lg font-semibold">Movimientos de Equipos</h2>
       <button
@@ -43,7 +43,7 @@
         <input type="date" [(ngModel)]="filterDate" class="input w-full" />
       </div>
 
-      <div class="flex items-end gap-2">
+      <div class="flex items-end gap-2 flex-wrap">
         <button
           (click)="applyFilters()"
           class="bg-primary text-white text-sm px-4 py-2 rounded-lg hover:opacity-90 transition flex-1"
