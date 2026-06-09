@@ -34,7 +34,7 @@ export class ConsolidatedReportComponent implements OnInit {
   ngOnInit(): void {
     this.filterForm = this.fb.group({
       equipmentId: [null],
-      location: [''],
+      physicalLocation: [''],
       maintenanceType: [''],
       fromDate: [''],
       toDate: [''],
@@ -51,11 +51,11 @@ export class ConsolidatedReportComponent implements OnInit {
     this.errorMsg = '';
     this.currentPage = page;
 
-    const { equipmentId, location, maintenanceType, fromDate, toDate } = this.filterForm.value;
+    const { equipmentId, physicalLocation, maintenanceType, fromDate, toDate } = this.filterForm.value;
 
     this.reportsService.getConsolidatedWithFilters({
       equipmentId: equipmentId || undefined,
-      location: location || undefined,
+      physicalLocation: physicalLocation || undefined,
       maintenanceType: maintenanceType || undefined,
       fromDate: fromDate || undefined,
       toDate: toDate || undefined,
@@ -80,7 +80,7 @@ export class ConsolidatedReportComponent implements OnInit {
   onClear(): void {
     this.filterForm.reset({
       equipmentId: null,
-      location: '',
+      physicalLocation: '',
       maintenanceType: '',
       fromDate: '',
       toDate: '',

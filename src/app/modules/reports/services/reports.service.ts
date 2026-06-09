@@ -73,7 +73,7 @@ export class ReportsService {
   // ── Consolidado ─────────────────────────────────────────────────
   getConsolidatedWithFilters(filters: {
     equipmentId?: number;
-    location?: string;
+    physicalLocation?: string;
     maintenanceType?: string;
     fromDate?: string;
     toDate?: string;
@@ -85,7 +85,7 @@ export class ReportsService {
       .set('size', filters.size ?? 10);
 
     if (filters.equipmentId) params = params.set('equipmentId', filters.equipmentId);
-    if (filters.location)    params = params.set('location', filters.location);
+    if (filters.physicalLocation) params = params.set('physicalLocation', filters.physicalLocation);
     if (filters.maintenanceType) params = params.set('maintenanceType', filters.maintenanceType);
     if (filters.fromDate)    params = params.set('fromDate', filters.fromDate);
     if (filters.toDate)      params = params.set('toDate', filters.toDate);
