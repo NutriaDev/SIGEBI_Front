@@ -35,6 +35,7 @@ export class ConsolidatedReportComponent implements OnInit {
     this.filterForm = this.fb.group({
       equipmentId: [null],
       physicalLocation: [''],
+      maintenanceStatus: [''],
       maintenanceType: [''],
       fromDate: [''],
       toDate: [''],
@@ -51,18 +52,21 @@ export class ConsolidatedReportComponent implements OnInit {
     this.errorMsg = '';
     this.currentPage = page;
 
-    const { equipmentId, physicalLocation, maintenanceType, fromDate, toDate } = this.filterForm.value;
+    const { equipmentId, physicalLocation, maintenanceType, maintenanceStatus, fromDate, toDate } = this.filterForm.value;
 
     this.reportsService.getConsolidatedWithFilters({
       equipmentId: equipmentId || undefined,
       physicalLocation: physicalLocation || undefined,
       maintenanceType: maintenanceType || undefined,
+      maintenanceStatus: maintenanceStatus || undefined, // No se filtra por estado en este reporte
       fromDate: fromDate || undefined,
       toDate: toDate || undefined,
       page,
       size: this.pageSize,
     }).subscribe({
       next: (res) => {
+
+        
         this.loading = false;
         this.searched = true;
         this.records = res.body?.content ?? [];
@@ -82,6 +86,7 @@ export class ConsolidatedReportComponent implements OnInit {
       equipmentId: null,
       physicalLocation: '',
       maintenanceType: '',
+      maintenanceStatus: '',
       fromDate: '',
       toDate: '',
     });

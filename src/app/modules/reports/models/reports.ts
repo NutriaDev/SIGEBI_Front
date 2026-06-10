@@ -164,8 +164,12 @@ export interface ConsolidatedReportView {
   location: string;
   clinic?: string;
   serviceArea?: string;
-  maintenanceType: string;
+
+  maintenanceType?: string;
+  maintenanceStatus?: string;
+
   date: string;
+
   failureCause?: string;
   technicalDiagnosis?: string;
   servicePerformed?: string;

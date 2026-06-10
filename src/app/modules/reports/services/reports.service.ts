@@ -75,6 +75,7 @@ export class ReportsService {
     equipmentId?: number;
     physicalLocation?: string;
     maintenanceType?: string;
+    maintenanceStatus?: string;
     fromDate?: string;
     toDate?: string;
     page?: number;
@@ -87,6 +88,7 @@ export class ReportsService {
     if (filters.equipmentId) params = params.set('equipmentId', filters.equipmentId);
     if (filters.physicalLocation) params = params.set('physicalLocation', filters.physicalLocation);
     if (filters.maintenanceType) params = params.set('maintenanceType', filters.maintenanceType);
+    if (filters.maintenanceStatus) params = params.set('maintenanceStatus', filters.maintenanceStatus);
     if (filters.fromDate)    params = params.set('fromDate', filters.fromDate);
     if (filters.toDate)      params = params.set('toDate', filters.toDate);
 

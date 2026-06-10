@@ -136,16 +136,20 @@
             <td class="py-3 px-3">
               <span
                 class="px-2 py-0.5 rounded text-xs font-semibold"
-                [class.bg-green-100]="row.status === 'COMPLETED'"
-                [class.text-green-800]="row.status === 'COMPLETED'"
-                [class.bg-yellow-100]="row.status === 'PENDING'"
-                [class.text-yellow-800]="row.status === 'PENDING'"
-                [class.bg-red-100]="row.status === 'FAILED'"
-                [class.text-red-800]="row.status === 'FAILED'"
+                [class.bg-blue-100]="row.maintenanceStatus === 'REGISTRADO'"
+                [class.text-blue-800]="row.maintenanceStatus === 'REGISTRADO'"
+                [class.bg-green-100]="row.maintenanceStatus === 'FINALIZADO'"
+                [class.text-green-800]="row.maintenanceStatus === 'FINALIZADO'"
+                [class.bg-red-100]="row.maintenanceStatus === 'CANCELADO'"
+                [class.text-red-800]="row.maintenanceStatus === 'CANCELADO'"
+                [class.bg-yellow-100]="row.maintenanceStatus === 'PENDIENTE'"
+                [class.text-yellow-800]="row.maintenanceStatus === 'PENDIENTE'"
+                [class.bg-orange-100]="row.maintenanceStatus === 'ATRASADO'"
+                [class.text-orange-800]="row.maintenanceStatus === 'ATRASADO'"
               >
-                {{ row.status || "-" }}
+                {{ row.maintenanceStatus || "-" }}
               </span>
-            </td>
+            </td>           
             <td class="py-3 px-3 text-center">
               <button
                 *ngIf="row.serviceReportId"
