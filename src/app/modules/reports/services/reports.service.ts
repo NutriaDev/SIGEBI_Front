@@ -92,6 +92,18 @@ export class ReportsService {
 
     return this.http.get(`${this.base}/consolidated/filters`, { params });
   }
+
+  downloadServiceReportByMaintenance(
+  serviceReportId: number
+): Observable<Blob> {
+
+  return this.http.get(
+    `${environment.apiUrl}/api/service-reports/${serviceReportId}/pdf`,
+    {
+      responseType: 'blob'
+    }
+  );
+}
   
   // ── Snapshot ────────────────────────────────────────────────────
   getEquipmentSnapshot(equipmentId: number): Observable<any> {

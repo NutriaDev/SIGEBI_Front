@@ -97,6 +97,26 @@ export class ConsolidatedReportComponent implements OnInit {
     if (this.currentPage > 0) this.onSearch(this.currentPage - 1);
   }
 
+  downloadServiceReport(serviceReportId: number): void {
+  this.reportsService
+    .downloadServiceReportByMaintenance(serviceReportId)
+    .subscribe({
+      next: (blob) => {
+        const url = window.URL.createObjectURL(blob);
+
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `reporte_tecnico_${serviceReportId}.pdf`;
+        a.click();
+
+        window.URL.revokeObjectURL(url);
+      },
+      error: () => {
+        this.errorMsg = 'No fue posible descargar el reporte técnico.';
+      }
+    });
+}
+
   nextPage(): void {
     if (this.currentPage < this.totalPages - 1) this.onSearch(this.currentPage + 1);
   }
