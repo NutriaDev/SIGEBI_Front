@@ -10,6 +10,7 @@ import { EquipmentCreateComponent } from '../equipment-create/equipment-create.c
 import Swal from 'sweetalert2';
 import { EquipmentEditComponent } from '../equipment-edit/equipment-edit.component';
 import { MediaService } from 'app/core/services/media.service';
+import { MaintenanceCreateComponent } from 'app/modules/maintenance/pages/maintenance-create/maintenance-create.component';
 
 interface SearchTab {
   key: string;
@@ -420,6 +421,13 @@ export class EquipmentLifecycleComponent {
 
   edit(eq: Equipment): void {
     this.tabService.openTab('Editar Equipo', EquipmentEditComponent, {
+      equipmentId: eq.equipmentId,
+    });
+  }
+
+  generateReport(eq: Equipment): void {
+    this.tabService.openTab('Reporte de Equipo', MaintenanceCreateComponent , {
+      reportType: 'equipment',
       equipmentId: eq.equipmentId,
     });
   }
