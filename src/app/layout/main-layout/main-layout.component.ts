@@ -21,6 +21,7 @@ import { MaintenanceListComponent } from 'app/modules/maintenance/pages/maintena
 import { MaintenanceScheduleComponent } from 'app/modules/maintenance/pages/maintenance-schedule/maintenance-schedule.component';
 import { MaintenanceOverdueComponent } from 'app/modules/maintenance/pages/maintenance-overdue/maintenance-overdue.component';
 import { ConsolidatedReportComponent } from 'app/modules/reports/pages/consolidated-report/consolidated-report.component';
+import { EquipmentLocationComponent } from 'app/modules/reports/pages/equipment-location/equipment-location.component';
 
 @Component({
   selector: 'app-main-layout',
@@ -71,6 +72,10 @@ export class MainLayoutComponent {
     this.tabService.openTab('Equipos Médicos', EquipmentAllComponent);
   }
 
+  openEquipmentLocation() {
+    this.tabService.openTab('Buscar Ubicacion', EquipmentLocationComponent);
+  }
+
   openEquipmentArea() {
     this.tabService.openTab('Area de equipos', AreaFormComponent);
   }
@@ -86,7 +91,7 @@ export class MainLayoutComponent {
     this.tabService.openTab('Estado de un equipo', StateFormComponent);
   }
 
-  openEquipmentLocation() {
+  openEquipmentLocations() {
     this.tabService.openTab('Ubicacion de un equipo', LocationFormComponent);
   }
 

@@ -184,6 +184,8 @@ export interface EquipmentSnapshot {
   serial?: string;
   locationId?: number;
   locationName?: string;
-  status?: string;
-  lastUpdated?: string;
+  state?: string;
+  classification?: string;
+  riskLevel?: string;
+  lastMaintenanceDate?: string | null;
 }
