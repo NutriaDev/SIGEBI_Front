@@ -210,12 +210,12 @@
     <!-- SECCIÓN 4: HOJA DE VIDA -->
     @if (view === "hv" && equipment) {
       <div
-        class="flex justify-between items-center bg-primary text-white px-6 py-3 rounded-lg mb-6"
+        class="bg-primary text-white px-6 py-3 rounded-lg mb-6"
       >
         <h2 class="text-lg font-semibold">
           Equipment Lifecycle - HV {{ equipment.equipmentId }}
         </h2>
-        <div class="flex items-center gap-4">
+        <div class="flex items-center gap-4 flex-row">
           <span class="text-sm opacity-90">Version 1.0.0</span>
           <button
             (click)="goBack()"
@@ -420,19 +420,21 @@
         </button>
         <button
           class="bg-primary text-white px-6 py-2 rounded-md shadow hover:opacity-90"
+          (click)="openMaintenanceCalendar()"
         >
-          Calendario de Mantenimiento
+          Historial de Mantenimiento
         </button>
         <button
           class="bg-primary text-white px-6 py-2 rounded-md shadow hover:opacity-90"
+          
         >
-          Historial
+          Historial de Equipo
         </button>
-        <button
+        <!-- <button
           class="bg-primary text-white px-6 py-2 rounded-md shadow hover:opacity-90"
         >
           Ver Agenda
-        </button>
+        </button> -->
       </div>
     }
   </div>
