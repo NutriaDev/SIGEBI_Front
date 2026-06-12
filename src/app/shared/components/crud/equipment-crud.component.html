@@ -75,7 +75,16 @@
             *ngFor="let item of items"
             class="flex justify-between items-center border-b py-2"
           >
-            <span>{{ item.name }}</span>
+            <span>
+              #{{
+                item.id ||
+                  item.locationId ||
+                  item.areaId ||
+                  item.classificationId ||
+                  item.stateId
+              }}
+              - {{ item.name }}
+            </span>
             <div class="flex items-center gap-3">
               <span
                 class="text-xs px-2 py-1 rounded"
