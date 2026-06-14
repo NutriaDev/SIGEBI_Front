@@ -142,22 +142,17 @@
           </span>
 
           <!-- 👇 BOTÓN ASIGNAR TÉCNICO — solo en programados -->
-          <button
+          <!-- <button
             *ngIf="row.source === 'SCHEDULE'"
             type="button"
             class="px-3 py-1.5 text-xs font-semibold rounded bg-primary text-white hover:opacity-90 transition-opacity"
             (click)="onAssignTechnician(row)"
           >
             Asignar técnico
-          </button>
+          </button> -->
         </div>
       </div>
     </div>
-  </div>
-
-  <!-- 🔴 ERROR -->
-  <div *ngIf="errorMsg" class="card mb-4 text-sm text-red-600">
-    {{ errorMsg }}
   </div>
 
   <!-- HISTORIAL -->
