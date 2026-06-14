@@ -31,14 +31,12 @@ export interface MaintenanceResponse {
 }
 
 export interface MaintenanceScheduleResponse {
-  id: number;
-  serialNumber: string;
-  equipmentName: string;
-  service: string;
-  type: string;
-  scheduledDate: string;
-  notes: string;
-  status: string; // 'PENDIENTE' | 'VENCIDO' | 'COMPLETADO'
+  idSchedule: number;
+  equipmentId: number;
+  maintenanceType: string;
+  scheduledDate: string; 
+  status: string;
+  technicianName: string;
   daysOverdue?: number;
 }
 
