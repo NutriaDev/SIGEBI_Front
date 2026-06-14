@@ -49,6 +49,11 @@ export interface MaintenanceUnifiedResponse {
   source: 'SCHEDULE' | 'MAINTENANCE';
 }
 
+export interface FinalizeScheduleRequest {
+  scheduleId: number;
+  maintenanceId: number;
+}
+
 // ─── Pagination ─────────────────────────────────────────────────────────────
 
 export interface PageResponse<T> {

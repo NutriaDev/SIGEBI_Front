@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import {
   ApiResponse,
+  FinalizeScheduleRequest,
   MaintenanceRequest,
   MaintenanceResponse,
   MaintenanceScheduleRequest,
@@ -77,6 +78,13 @@ export class MaintenanceService {
       ApiResponse<PageResponse<MaintenanceScheduleResponse>>
     >(`${this.apiUrl}/overdue`, { params });
   }
+
+  finalizeSchedule(payload: FinalizeScheduleRequest) {
+  return this.http.post<ApiResponse>(
+    `${this.apiUrl}/schedule/finalize`,
+    payload
+  );
+}
 
   // maintenance.service.ts
   // ── GET /maintenance/timeline ─────────────────────────────────────────────
