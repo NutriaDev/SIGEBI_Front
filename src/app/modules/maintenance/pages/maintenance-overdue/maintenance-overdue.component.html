@@ -113,17 +113,18 @@
               <td class="px-4 py-3 whitespace-nowrap text-text-main">
                 {{ row.scheduledDate | date: "dd/MM/yyyy HH:mm" }}
               </td>
-              <td class="px-4 py-3">
+              <td class="px-4 py-3 whitespace-nowrap">
                 <span
                   [class]="
                     (row.daysOverdue ?? 0) > 30
-                      ? 'inline-block px-2 py-0.5 rounded-full text-xs font-bold bg-red-800 text-white'
+                      ? 'inline-block px-2 py-0.5 rounded-full text-xs font-bold bg-red-100 text-red-800'
                       : 'inline-block px-2 py-0.5 rounded-full text-xs font-bold bg-red-100 text-red-700'
                   "
                 >
                   {{ row.daysOverdue ?? "—" }} días
                 </span>
-              </td>              
+              </td>
+              
               <td class="px-4 py-3 text-center">
                 <button
                   class="bg-primary text-white text-xs px-3 py-1.5 rounded-md hover:opacity-90 transition-all"
