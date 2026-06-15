@@ -22,6 +22,7 @@ import { MaintenanceScheduleComponent } from 'app/modules/maintenance/pages/main
 import { MaintenanceOverdueComponent } from 'app/modules/maintenance/pages/maintenance-overdue/maintenance-overdue.component';
 import { ConsolidatedReportComponent } from 'app/modules/reports/pages/consolidated-report/consolidated-report.component';
 import { EquipmentLocationComponent } from 'app/modules/reports/pages/equipment-location/equipment-location.component';
+import { AuditLogsComponent } from '../../modules/audit/pages/audit-logs/audit-logs.component';
 
 @Component({
   selector: 'app-main-layout',
@@ -162,6 +163,15 @@ export class MainLayoutComponent {
     this.tabService.openTab(
       'Reporte Consolidado', ConsolidatedReportComponent);
     this.isSidebarOpen = false;}
+
+  openAuditLogs() {
+    this.tabService.openTab('Auditoría', AuditLogsComponent);
+    this.isSidebarOpen = false;
+  }
+
+  get isSuperadmin(): boolean {
+    return this.authService.getRoles().includes('SUPERADMIN');
+  }
 
   
 

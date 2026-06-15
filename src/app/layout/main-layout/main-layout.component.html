@@ -70,6 +70,10 @@
         </div>
       </ng-container>
       
+      <ng-container *ngIf="isSuperadmin">
+        <a class="btn-white" (click)="openAuditLogs()">Auditoría</a>
+      </ng-container>
+
       <ng-container
         *ngIf="
           hasAny([
