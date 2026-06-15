@@ -5,6 +5,7 @@ import {
   MaintenanceResponse,
   MaintenanceUnifiedResponse,
 } from '../../models/model';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-maintenance-list',
@@ -22,7 +23,6 @@ export class MaintenanceListComponent implements OnInit {
   pageSize = 10;
 
   loading = false;
-  errorMsg = '';
   searched = false;
 
   readonly maintenanceTypes = [
@@ -69,7 +69,6 @@ export class MaintenanceListComponent implements OnInit {
     }
 
     this.loading = true;
-    this.errorMsg = '';
     this.currentPage = page;
 
     const { equipmentId, type, fromDate, toDate } = this.filterForm.value;
@@ -94,8 +93,17 @@ export class MaintenanceListComponent implements OnInit {
         error: (err) => {
           this.loading = false;
           this.searched = true;
-          this.errorMsg =
-            err?.error?.message || 'Error al consultar el historial.';
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: err?.error?.message || 'Error al consultar el historial.',
+            confirmButtonText: 'Aceptar',
+            buttonsStyling: false,
+            customClass: {
+              popup: 'sigebi-popup',
+              confirmButton: 'sigebi-confirm-btn',
+            },
+          });
         },
       });
   }
@@ -112,7 +120,6 @@ export class MaintenanceListComponent implements OnInit {
     this.totalPages = 0;
     this.currentPage = 0;
     this.searched = false;
-    this.errorMsg = '';
   }
 
   prevPage(): void {
@@ -133,32 +140,51 @@ export class MaintenanceListComponent implements OnInit {
   }
 
   onLoadTimeline(): void {
-    this.errorMsg = '';
     const equipmentId = this.filterForm.value.equipmentId;
 
     if (!equipmentId) {
-      this.errorMsg = 'Debes ingresar un ID de equipo para ver el timeline.';
+      Swal.fire({
+        icon: 'warning',
+        title: 'Equipo requerido',
+        text: 'Debes ingresar un ID de equipo para ver la línea de tiempo.',
+        confirmButtonText: 'Aceptar',
+        buttonsStyling: false,
+        customClass: {
+          popup: 'sigebi-popup',
+          confirmButton: 'sigebi-confirm-btn',
+        },
+      });
       return;
     }
 
-    this.errorMsg = ''; // 🔥 limpia errores previos
     this.timelineLoading = true;
 
     this.maintenanceService.getTimeline(equipmentId, 0, 20).subscribe({
       next: (res) => {
         this.timelineLoading = false;
 
-        console.log('TIMELINE RESPONSE 👉', res); // 👈 debug
+        console.log('TIMELINE RESPONSE 👉', res);
 
         this.timelineRecords = res.body?.content || [];
       },
       error: (err) => {
         this.timelineLoading = false;
-        console.error('STATUS:', err.status);
-        console.error('ERROR BODY:', err.error);
-        console.error('MESSAGE:', err.message);
-        this.errorMsg =
-          err?.error?.message || 'Error al consultar el timeline.';
+
+        console.log('STATUS:', err.status);
+        console.log('ERROR COMPLETO:', err);
+        console.log('ERROR BODY STRING:', JSON.stringify(err.error, null, 2));
+
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: err?.error?.message || 'Error al consultar el timeline.',
+          confirmButtonText: 'Aceptar',
+          buttonsStyling: false,
+          customClass: {
+            popup: 'sigebi-popup',
+            confirmButton: 'sigebi-confirm-btn',
+          },
+        });
       },
     });
   }

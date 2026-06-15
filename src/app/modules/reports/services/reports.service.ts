@@ -73,8 +73,9 @@ export class ReportsService {
   // ── Consolidado ─────────────────────────────────────────────────
   getConsolidatedWithFilters(filters: {
     equipmentId?: number;
-    location?: string;
+    physicalLocation?: string;
     maintenanceType?: string;
+    maintenanceStatus?: string;
     fromDate?: string;
     toDate?: string;
     page?: number;
@@ -85,35 +86,27 @@ export class ReportsService {
       .set('size', filters.size ?? 10);
 
     if (filters.equipmentId) params = params.set('equipmentId', filters.equipmentId);
-    if (filters.location)    params = params.set('location', filters.location);
+    if (filters.physicalLocation) params = params.set('physicalLocation', filters.physicalLocation);
     if (filters.maintenanceType) params = params.set('maintenanceType', filters.maintenanceType);
+    if (filters.maintenanceStatus) params = params.set('maintenanceStatus', filters.maintenanceStatus);
     if (filters.fromDate)    params = params.set('fromDate', filters.fromDate);
     if (filters.toDate)      params = params.set('toDate', filters.toDate);
 
     return this.http.get(`${this.base}/consolidated/filters`, { params });
   }
 
-  getConsolidatedByEquipment(equipmentId: number, page = 0, size = 10): Observable<any> {
-    return this.http.get(`${this.base}/consolidated/equipment/${equipmentId}`, {
-      params: new HttpParams().set('page', page).set('size', size)
-    });
-  }
+  downloadServiceReportByMaintenance(
+  serviceReportId: number
+): Observable<Blob> {
 
-  getConsolidatedByLocation(location: string, page = 0, size = 10): Observable<any> {
-    return this.http.get(`${this.base}/consolidated/location/${location}`, {
-      params: new HttpParams().set('page', page).set('size', size)
-    });
-  }
-
-  getConsolidatedByDateRange(from: string, to: string, page = 0, size = 10): Observable<any> {
-    const params = new HttpParams()
-      .set('from', from)
-      .set('to', to)
-      .set('page', page)
-      .set('size', size);
-    return this.http.get(`${this.base}/consolidated/date-range`, { params });
-  }
-
+  return this.http.get(
+    `${environment.apiUrl}/api/service-reports/${serviceReportId}/pdf`,
+    {
+      responseType: 'blob'
+    }
+  );
+}
+  
   // ── Snapshot ────────────────────────────────────────────────────
   getEquipmentSnapshot(equipmentId: number): Observable<any> {
     return this.http.get(`${this.base}/equipment-snapshot/${equipmentId}`);
@@ -141,7 +134,7 @@ export class ReportsService {
     if (params.equipmentId) httpParams = httpParams.set('equipmentId', params.equipmentId);
     if (params.location)    httpParams = httpParams.set('location', params.location);
 
-    return this.http.get(`${this.base}/export/direct`, {
+    return this.http.get(`${this.base}/export-direct`, {
       params: httpParams,
       responseType: 'blob'
     });

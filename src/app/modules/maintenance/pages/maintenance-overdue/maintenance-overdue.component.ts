@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MaintenanceService } from '../../services/maintenance.service';
 import { MaintenanceScheduleResponse } from '../../models/model';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-maintenance-overdue',
@@ -14,7 +15,7 @@ export class MaintenanceOverdueComponent implements OnInit {
   pageSize = 10;
 
   loading = true;
-  errorMsg = '';
+  hasError = false;
 
   constructor(private maintenanceService: MaintenanceService) {}
 
@@ -24,7 +25,7 @@ export class MaintenanceOverdueComponent implements OnInit {
 
   load(page: number): void {
     this.loading = true;
-    this.errorMsg = '';
+    this.hasError = false;
     this.currentPage = page;
 
     this.maintenanceService.getOverdueSchedules(page, this.pageSize).subscribe({
@@ -36,8 +37,18 @@ export class MaintenanceOverdueComponent implements OnInit {
       },
       error: (err) => {
         this.loading = false;
-        this.errorMsg =
-          err?.error?.message || 'Error al cargar los mantenimientos vencidos.';
+        this.hasError = true;
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: err?.error?.message || 'Error al cargar los mantenimientos vencidos.',
+          confirmButtonText: 'Aceptar',
+          buttonsStyling: false,
+          customClass: {
+            popup: 'sigebi-popup',
+            confirmButton: 'sigebi-confirm-btn',
+          },
+        });
       },
     });
   }
@@ -49,6 +60,83 @@ export class MaintenanceOverdueComponent implements OnInit {
   nextPage(): void {
     if (this.currentPage < this.totalPages - 1) this.load(this.currentPage + 1);
   }
+
+  onEdit(row: MaintenanceScheduleResponse): void {
+
+  Swal.fire({
+    title: 'Gestionar mantenimiento vencido',
+    text: `Programación #${row.idSchedule}`,
+    input: 'number',
+    inputLabel: 'ID del mantenimiento realizado',
+    inputPlaceholder: 'Ej: 25',
+    showCancelButton: true,
+    confirmButtonText: 'Guardar',
+    cancelButtonText: 'Cancelar',
+    buttonsStyling: false,
+    customClass: {
+      popup: 'sigebi-popup',
+      confirmButton: 'sigebi-confirm-btn',
+      cancelButton: 'sigebi-cancel-btn',
+    },
+    inputValidator: (value) => {
+      if (!value) {
+        return 'Debes ingresar el ID del mantenimiento';
+      }
+      return null;
+    },
+  }).then((result) => {
+
+    if (!result.isConfirmed) {
+      return;
+    }
+
+    const payload = {
+      scheduleId: row.idSchedule,
+      maintenanceId: Number(result.value),
+    };
+
+    this.maintenanceService
+      .finalizeSchedule(payload)
+      .subscribe({
+
+        next: () => {
+
+          Swal.fire({
+            icon: 'success',
+            title: 'Programación actualizada',
+            text: 'El mantenimiento fue asociado correctamente.',
+            confirmButtonText: 'Aceptar',
+            buttonsStyling: false,
+            customClass: {
+              popup: 'sigebi-popup',
+              confirmButton: 'sigebi-confirm-btn',
+            },
+          });
+
+          this.load(this.currentPage);
+        },
+
+        error: (err) => {
+
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text:
+              err?.error?.message ||
+              'No fue posible actualizar la programación.',
+            confirmButtonText: 'Aceptar',
+            buttonsStyling: false,
+            customClass: {
+              popup: 'sigebi-popup',
+              confirmButton: 'sigebi-confirm-btn',
+            },
+          });
+
+        },
+      });
+
+  });
+}
 
   get startRecord(): number {
     return this.totalElements === 0 ? 0 : this.currentPage * this.pageSize + 1;

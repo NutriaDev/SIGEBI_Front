@@ -28,6 +28,7 @@
       <div *ngIf="equipmentMenuOpen" class="flex flex-col ml-4 gap-2 mt-2">
         <a (click)="openEquipment()">Busqueda Avanzada</a>
         <a (click)="createEquipment()">Crear equipos medicos</a>
+        <a (click)="openEquipmentLocation()">Ubicacion Actual de un Equipo</a>
         <a (click)="getAllEquipment()">Todos los equipos</a>
 
         <a (click)="openEquipmentArea()">Área de Equipos</a>
@@ -36,9 +37,10 @@
 
         <a (click)="openEquipmentState()">Estados</a>
 
-        <a (click)="openEquipmentLocation()">Ubicaciones</a>
+        <a (click)="openEquipmentLocations()">Ubicaciones</a>
 
         <a (click)="openEquipmentProvider()">Proveedores</a>
+
       </div>
 
       <a (click)="toggleInventoryMenu()" class="cursor-pointer">
@@ -63,8 +65,13 @@
       <ng-container *ngIf="has('reports.read')">
         <a (click)="toggleReportMenu()" class="cursor-pointer">Reportes</a>
         <div *ngIf="reportMenuOpen" class="flex flex-col ml-4 gap-2 mt-2">
-          <a (click)="openServiceReportCreate()">Reporte de Servicio</a>
+         <a (click)="consolidatedReport()">Reportes Consolidado</a>
+         
         </div>
+      </ng-container>
+      
+      <ng-container *ngIf="isSuperadmin">
+        <a class="btn-white" (click)="openAuditLogs()">Auditoría</a>
       </ng-container>
 
       <ng-container

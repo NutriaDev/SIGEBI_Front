@@ -54,6 +54,19 @@ export class ExportReportButtonComponent {
       format,
     }).subscribe({
       next: (blob) => {
+        // Verificar que sea un blob válido con contenido
+      if (!blob || blob.size === 0) {
+        this.exporting = false;
+        Swal.fire({
+          icon: 'warning',
+          title: 'Sin datos',
+          text: 'No hay datos para exportar en el rango de fechas seleccionado.',
+          confirmButtonText: 'Aceptar',
+          buttonsStyling: false,
+          customClass: { popup: 'sigebi-popup', confirmButton: 'sigebi-confirm-btn' }
+        });
+        return;
+      }
         const extension = format === 'EXCEL' ? 'xlsx' : format.toLowerCase();
         const fileName = `${this.reportType.toLowerCase()}-${this.from}-${this.to}.${extension}`;
 
@@ -69,21 +82,46 @@ export class ExportReportButtonComponent {
         this.exporting = false;
         this.showPopup = false;
       },
-      error: () => {
-        this.exporting = false;
+      error: (err) => {
+      this.exporting = false;
 
+      // Leer el mensaje de error del blob de error
+      if (err.error instanceof Blob) {
+        const reader = new FileReader();
+        reader.onload = () => {
+          try {
+            const json = JSON.parse(reader.result as string);
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: json.message ?? 'No se pudo generar el reporte.',
+              confirmButtonText: 'Aceptar',
+              buttonsStyling: false,
+              customClass: { popup: 'sigebi-popup', confirmButton: 'sigebi-confirm-btn' }
+            });
+          } catch {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: 'No se pudo generar el reporte.',
+              confirmButtonText: 'Aceptar',
+              buttonsStyling: false,
+              customClass: { popup: 'sigebi-popup', confirmButton: 'sigebi-confirm-btn' }
+            });
+          }
+        };
+        reader.readAsText(err.error);
+      } else {
         Swal.fire({
           icon: 'error',
           title: 'Error',
           text: 'No se pudo generar el reporte.',
           confirmButtonText: 'Aceptar',
           buttonsStyling: false,
-          customClass: {
-            popup: 'sigebi-popup',
-            confirmButton: 'sigebi-confirm-btn',
-          },
+          customClass: { popup: 'sigebi-popup', confirmButton: 'sigebi-confirm-btn' }
         });
-      },
-    });
+      }
+    }
+      });
   }
 }

@@ -20,6 +20,9 @@ import { MaintenanceCreateComponent } from 'app/modules/maintenance/pages/mainte
 import { MaintenanceListComponent } from 'app/modules/maintenance/pages/maintenance-list/maintenance-list.component';
 import { MaintenanceScheduleComponent } from 'app/modules/maintenance/pages/maintenance-schedule/maintenance-schedule.component';
 import { MaintenanceOverdueComponent } from 'app/modules/maintenance/pages/maintenance-overdue/maintenance-overdue.component';
+import { ConsolidatedReportComponent } from 'app/modules/reports/pages/consolidated-report/consolidated-report.component';
+import { EquipmentLocationComponent } from 'app/modules/reports/pages/equipment-location/equipment-location.component';
+import { AuditLogsComponent } from '../../modules/audit/pages/audit-logs/audit-logs.component';
 
 @Component({
   selector: 'app-main-layout',
@@ -70,6 +73,10 @@ export class MainLayoutComponent {
     this.tabService.openTab('Equipos Médicos', EquipmentAllComponent);
   }
 
+  openEquipmentLocation() {
+    this.tabService.openTab('Buscar Ubicacion', EquipmentLocationComponent);
+  }
+
   openEquipmentArea() {
     this.tabService.openTab('Area de equipos', AreaFormComponent);
   }
@@ -85,7 +92,7 @@ export class MainLayoutComponent {
     this.tabService.openTab('Estado de un equipo', StateFormComponent);
   }
 
-  openEquipmentLocation() {
+  openEquipmentLocations() {
     this.tabService.openTab('Ubicacion de un equipo', LocationFormComponent);
   }
 
@@ -152,13 +159,21 @@ export class MainLayoutComponent {
     this.reportMenuOpen = !this.reportMenuOpen;
   }
 
-  openServiceReportCreate() {
+  consolidatedReport() {
     this.tabService.openTab(
-      'Reporte de Servicio',
-      ServiceReportCreateComponent,
-    );
+      'Reporte Consolidado', ConsolidatedReportComponent);
+    this.isSidebarOpen = false;}
+
+  openAuditLogs() {
+    this.tabService.openTab('Auditoría', AuditLogsComponent);
     this.isSidebarOpen = false;
   }
+
+  get isSuperadmin(): boolean {
+    return this.authService.getRoles().includes('SUPERADMIN');
+  }
+
+  
 
   //users
 
