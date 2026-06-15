@@ -2,7 +2,7 @@
 
 export interface InventoryResponse {
   inventoryId: number;
-  location: string;
+  locationName: string;
   date: string; // LocalDate  → "yyyy-MM-dd"
   observations: string;
   createdAt: string; // LocalDateTime → ISO string
@@ -17,7 +17,7 @@ export interface InventoryDetailResponse {
 
 export interface InventoryWithDetailResponse {
   inventoryId: number;
-  location: string;
+  locationName: string;
   date: string;
   observations: string;
   createdAt: string;
