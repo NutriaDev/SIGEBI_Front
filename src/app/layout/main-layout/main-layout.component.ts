@@ -4,10 +4,7 @@ import { TabService } from '../../modules/dashboard/services/tab.service';
 import { UserEditComponent } from '../../modules/users/pages/user-edit/user-edit.component';
 import { UserCreateComponent } from '../../modules/users/pages/user-create/user-create.component';
 import { UserListComponent } from '../../modules/users/pages/user-list/user-list.component';
-import { MaintenanceModule } from '../../modules/maintenance/maintenance.module';
-import { ReportsModule } from '../../modules/reports/reports.module';
-import { InventoryModule } from '../../modules/inventory/inventory.module';
-import { EquipmentModule } from '../../modules/equipment/equipment.module';
+import { ServiceReportCreateComponent } from '../../modules/reports/pages/service-report-create/service-report-create.component';
 import { EquipmentLifecycleComponent } from 'app/modules/equipment/pages/equipment-lifecycle/equipment-lifecycle.component';
 import { AreaFormComponent } from 'app/modules/equipment/components/area-form/area-form.component';
 import { ClasificationFormComponent } from 'app/modules/equipment/components/clasification-form/clasification-form.component';
@@ -19,6 +16,13 @@ import { EquipmentAllComponent } from 'app/modules/equipment/pages/equipment-all
 import { InventoryListComponent } from 'app/modules/inventory/pages/inventory-list/inventory-list.component';
 import { MovementsListComponent } from 'app/modules/inventory/pages/movement-list/movement-list.component';
 import { InventoryCreateComponent } from 'app/modules/inventory/components/inventory-create/inventory-create.component';
+import { MaintenanceCreateComponent } from 'app/modules/maintenance/pages/maintenance-create/maintenance-create.component';
+import { MaintenanceListComponent } from 'app/modules/maintenance/pages/maintenance-list/maintenance-list.component';
+import { MaintenanceScheduleComponent } from 'app/modules/maintenance/pages/maintenance-schedule/maintenance-schedule.component';
+import { MaintenanceOverdueComponent } from 'app/modules/maintenance/pages/maintenance-overdue/maintenance-overdue.component';
+import { ConsolidatedReportComponent } from 'app/modules/reports/pages/consolidated-report/consolidated-report.component';
+import { EquipmentLocationComponent } from 'app/modules/reports/pages/equipment-location/equipment-location.component';
+import { AuditLogsComponent } from '../../modules/audit/pages/audit-logs/audit-logs.component';
 
 @Component({
   selector: 'app-main-layout',
@@ -30,7 +34,10 @@ export class MainLayoutComponent {
     private tabService: TabService,
   ) {}
   isSidebarOpen = false;
+  equipmentMenuOpen = false;
   inventoryMenuOpen = false;
+  maintenanceMenuOpen = false;
+  reportMenuOpen = false;
 
   toggleSidebar() {
     this.isSidebarOpen = !this.isSidebarOpen;
@@ -45,7 +52,6 @@ export class MainLayoutComponent {
   }
 
   // Module equpiments
-  equipmentMenuOpen = false;
 
   toggleEquipmentMenu() {
     this.equipmentMenuOpen = !this.equipmentMenuOpen;
@@ -67,6 +73,10 @@ export class MainLayoutComponent {
     this.tabService.openTab('Equipos Médicos', EquipmentAllComponent);
   }
 
+  openEquipmentLocation() {
+    this.tabService.openTab('Buscar Ubicacion', EquipmentLocationComponent);
+  }
+
   openEquipmentArea() {
     this.tabService.openTab('Area de equipos', AreaFormComponent);
   }
@@ -82,7 +92,7 @@ export class MainLayoutComponent {
     this.tabService.openTab('Estado de un equipo', StateFormComponent);
   }
 
-  openEquipmentLocation() {
+  openEquipmentLocations() {
     this.tabService.openTab('Ubicacion de un equipo', LocationFormComponent);
   }
 
@@ -111,17 +121,61 @@ export class MainLayoutComponent {
     this.isSidebarOpen = false;
   }
 
-  //maintenance
+  //module maintenance
 
-  openMaintenance() {
-    this.tabService.openTab('Mantenimiento', MaintenanceModule);
+  toggleMaintenanceMenu() {
+    this.maintenanceMenuOpen = !this.maintenanceMenuOpen;
+  }
+
+  createMaintenance() {
+    this.tabService.openTab(
+      'Registrar mantenimiento',
+      MaintenanceCreateComponent,
+    );
     this.isSidebarOpen = false;
   }
 
-  openReports() {
-    this.tabService.openTab('Reportes', ReportsModule);
+  scheduleMaintenance() {
+    this.tabService.openTab(
+      'Programar Mantenimiento',
+      MaintenanceScheduleComponent,
+    );
     this.isSidebarOpen = false;
   }
+
+  listMaintenance() {
+    this.tabService.openTab('Mantenimientos', MaintenanceListComponent);
+    this.isSidebarOpen = false;
+  }
+
+  overdueMaintenance() {
+    this.tabService.openTab('Alertas', MaintenanceOverdueComponent);
+    this.isSidebarOpen = false;
+  }
+
+  //reports and audit
+
+  toggleReportMenu() {
+    this.reportMenuOpen = !this.reportMenuOpen;
+  }
+
+  consolidatedReport() {
+    this.tabService.openTab(
+      'Reporte Consolidado', ConsolidatedReportComponent);
+    this.isSidebarOpen = false;}
+
+  openAuditLogs() {
+    this.tabService.openTab('Auditoría', AuditLogsComponent);
+    this.isSidebarOpen = false;
+  }
+
+  get isSuperadmin(): boolean {
+    return this.authService.getRoles().includes('SUPERADMIN');
+  }
+
+  
+
+  //users
 
   openUsers() {
     this.tabService.openTab('Usuarios', UserListComponent);

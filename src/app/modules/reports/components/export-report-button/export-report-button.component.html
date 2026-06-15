@@ -1,0 +1,71 @@
+<button
+  type="button"
+  (click)="openPopup()"
+  class="bg-primary text-white text-sm px-4 py-2 rounded-lg hover:opacity-90 transition">
+  Exportar Reporte
+</button>
+
+@if (showPopup) {
+  <div class="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+    <div class="bg-white rounded-xl shadow-lg p-6 w-full max-w-md">
+      <h3 class="text-lg font-semibold mb-4 text-primary">
+        {{ title }}
+      </h3>
+
+      <div class="space-y-4">
+        <div>
+          <label class="block text-xs text-gray-500 mb-1">
+            Fecha de inicio
+          </label>
+          <input
+            type="date"
+            [(ngModel)]="from"
+             class="input w-full text-black" />
+        </div>
+
+        <div>
+          <label class="block text-xs text-gray-500 mb-1">
+            Fecha final
+          </label>
+          <input
+            type="date"
+            [(ngModel)]="to"
+             class="input w-full text-black" />
+        </div>
+
+        <div class="grid grid-cols-1 gap-2 pt-2">
+          <button
+            type="button"
+            [disabled]="exporting"
+            (click)="exportReport('PDF')"
+            class="btn-primary">
+            Exportar PDF
+          </button>
+
+          <button
+            type="button"
+            [disabled]="exporting"
+            (click)="exportReport('EXCEL')"
+            class="btn-primary">
+            Exportar Excel
+          </button>
+
+          <button
+            type="button"
+            [disabled]="exporting"
+            (click)="exportReport('CSV')"
+            class="btn-primary">
+            Exportar CSV
+          </button>
+        </div>
+
+        <button
+          type="button"
+          (click)="closePopup()"
+          class="text-sm text-gray-500 hover:underline">
+          Cancelar
+        </button>
+      </div>
+    </div>
+  </div>
+}

@@ -10,6 +10,8 @@ import { EquipmentCreateComponent } from '../equipment-create/equipment-create.c
 import Swal from 'sweetalert2';
 import { EquipmentEditComponent } from '../equipment-edit/equipment-edit.component';
 import { MediaService } from 'app/core/services/media.service';
+import { MaintenanceCreateComponent } from 'app/modules/maintenance/pages/maintenance-create/maintenance-create.component';
+import { MaintenanceListComponent } from 'app/modules/maintenance/pages/maintenance-list/maintenance-list.component';
 
 interface SearchTab {
   key: string;
@@ -414,6 +416,7 @@ export class EquipmentLifecycleComponent {
     });
   }
 
+
   createEquipment() {
     this.tabService.openTab('Crear Equipos', EquipmentCreateComponent);
   }
@@ -423,6 +426,18 @@ export class EquipmentLifecycleComponent {
       equipmentId: eq.equipmentId,
     });
   }
+
+  generateReport(eq: Equipment): void {
+    this.tabService.openTab('Reporte de Equipo', MaintenanceCreateComponent , {
+      reportType: 'equipment',
+      equipmentId: eq.equipmentId,
+    });
+  }
+
+  openMaintenanceCalendar(): void {
+    this.tabService.openTab('Historial deMantenimiento', MaintenanceListComponent , {});
+  }
+
 
   goBack() {
     this.equipment = null;

@@ -1,0 +1,177 @@
+<div class="p-1">
+  <!-- Header banner -->
+  <div class="bg-primary rounded-lg px-6 py-4 mb-6 flex items-center gap-4">
+    <div class="ml-auto text-right">
+      <h1 class="text-sm font-semibold text-white">
+        Ubicación Actual del Equipo
+      </h1>
+      <p class="text-sm text-white/60 mt-0.5">
+        Consulte la ubicación actual de un equipo médico
+      </p>
+    </div>
+  </div>
+
+  <!-- Filter Card -->
+  <div class="card mb-5">
+    <form [formGroup]="filterForm" (ngSubmit)="search()" novalidate>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
+        <!-- Equipment ID -->
+        <div class="flex flex-col gap-1">
+          <label class="text-xs font-semibold text-text-main">
+            ID del Equipo <span class="text-danger">*</span>
+          </label>
+          <input
+            type="number"
+            formControlName="equipmentId"
+            placeholder="Ej: 101"
+            [class]="
+              isInvalid('equipmentId')
+                ? 'input-field border-red-500'
+                : 'input-field'
+            "
+          />
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="flex justify-end gap-3 pt-4 border-t border-secondary">
+        <button type="button" class="btn-white px-4 py-2" (click)="clear()">
+          Limpiar
+        </button>
+        <button
+          type="submit"
+          [disabled]="loading"
+          class="btn-primary px-5 py-2 flex items-center gap-2"
+        >
+          {{ loading ? "Buscando..." : "Buscar" }}
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Loading -->
+  @if (loading) {
+    <div class="card mb-4 text-sm text-gray-600">
+      Consultando ubicación del equipo...
+    </div>
+  }
+
+  <!-- Error -->
+  @if (errorMsg) {
+    <div class="card mb-4 text-sm text-red-600">
+      {{ errorMsg }}
+    </div>
+  }
+
+  <!-- Result -->
+  @if (searched && snapshot) {
+    <div class="card">
+      <h2 class="text-lg font-semibold text-text-main mb-6">
+        {{ snapshot.name }}
+      </h2>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        <!-- Serie -->
+        <div>
+          <p class="text-xs font-semibold text-text-muted uppercase tracking-wide">
+            Serie
+          </p>
+          <p class="text-sm text-text-main mt-1">{{ snapshot.serial || '-' }}</p>
+        </div>
+
+        <!-- Marca -->
+        <div>
+          <p class="text-xs font-semibold text-text-muted uppercase tracking-wide">
+            Marca
+          </p>
+          <p class="text-sm text-text-main mt-1">{{ snapshot.brand || '-' }}</p>
+        </div>
+
+        <!-- Modelo -->
+        <div>
+          <p class="text-xs font-semibold text-text-muted uppercase tracking-wide">
+            Modelo
+          </p>
+          <p class="text-sm text-text-main mt-1">{{ snapshot.model || '-' }}</p>
+        </div>
+
+        <!-- Ubicación Actual -->
+        <div>
+          <p class="text-xs font-semibold text-text-muted uppercase tracking-wide">
+            Ubicación Actual
+          </p>
+          <p class="text-sm text-text-main mt-1">
+            📍 {{ snapshot.locationName || '-' }}
+          </p>
+        </div>
+
+        <!-- Estado -->
+        <div>
+          <p class="text-xs font-semibold text-text-muted uppercase tracking-wide">
+            Estado
+          </p>
+          <p class="mt-1">
+            <span
+              class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-semibold"
+              [class.bg-green-100]="snapshot.state === 'Operativo'"
+              [class.text-green-800]="snapshot.state === 'Operativo'"
+              [class.bg-yellow-100]="snapshot.state === 'Back-up'"
+              [class.text-yellow-800]="snapshot.state === 'Back-up'"
+              [class.bg-red-100]="snapshot.state === 'Dañado' || snapshot.state === 'Inactivo'"
+              [class.text-red-800]="snapshot.state === 'Dañado' || snapshot.state === 'Inactivo'"
+              [class.bg-blue-100]="snapshot.state && !['Operativo', 'Back-up', 'Dañado', 'Inactivo'].includes(snapshot.state)"
+              [class.text-blue-800]="snapshot.state && !['Operativo', 'Back-up', 'Dañado', 'Inactivo'].includes(snapshot.state)"
+            >
+              🟢 {{ snapshot.state }}
+            </span>
+          </p>
+        </div>
+
+        <!-- Clasificación -->
+        <div>
+          <p class="text-xs font-semibold text-text-muted uppercase tracking-wide">
+            Clasificación
+          </p>
+          <p class="text-sm text-text-main mt-1">{{ snapshot.classification || '-' }}</p>
+        </div>
+
+        <!-- Nivel de Riesgo -->
+        <div>
+          <p class="text-xs font-semibold text-text-muted uppercase tracking-wide">
+            Nivel de Riesgo
+          </p>
+          <p class="mt-1">
+            <span
+              class="px-2 py-0.5 rounded text-xs font-semibold"
+              [class.bg-red-100]="snapshot.riskLevel === 'ALTO'"
+              [class.text-red-800]="snapshot.riskLevel === 'ALTO'"
+              [class.bg-yellow-100]="snapshot.riskLevel === 'MEDIO'"
+              [class.text-yellow-800]="snapshot.riskLevel === 'MEDIO'"
+              [class.bg-green-100]="snapshot.riskLevel === 'BAJO'"
+              [class.text-green-800]="snapshot.riskLevel === 'BAJO'"
+            >
+              {{ snapshot.riskLevel || '-' }}
+            </span>
+          </p>
+        </div>
+
+        <!-- Último Mantenimiento -->
+        <div>
+          <p class="text-xs font-semibold text-text-muted uppercase tracking-wide">
+            Último Mantenimiento
+          </p>
+          <p class="text-sm text-text-main mt-1">
+            {{ snapshot.lastMaintenanceDate ? (snapshot.lastMaintenanceDate | date: 'dd/MM/yyyy') : 'Sin registros' }}
+          </p>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- No results -->
+  @if (searched && !snapshot && !errorMsg) {
+    <div class="card text-center py-12 text-gray-400 text-sm">
+      No se encontró información para el ID de equipo ingresado.
+    </div>
+  }
+</div>

@@ -2,7 +2,7 @@
   <div class="max-w-6xl mx-auto bg-white rounded-xl shadow-lg p-6">
     <!-- HEADER -->
     <div
-      class="flex justify-between items-center bg-primary text-white px-6 py-3 rounded-lg mb-6"
+      class="flex justify-between items-center bg-primary text-white px-6 py-3 rounded-lg mb-6 flex-wrap gap-3"
     >
       <h2 class="text-lg font-semibold">Movimientos de Equipos</h2>
       <button
@@ -11,6 +11,9 @@
       >
         + Registrar Movimiento
       </button>
+      <app-export-report-button
+        reportType="MOVEMENTS">
+      </app-export-report-button>
     </div>
 
     <!-- FILTROS -->
@@ -40,7 +43,7 @@
         <input type="date" [(ngModel)]="filterDate" class="input w-full" />
       </div>
 
-      <div class="flex items-end gap-2">
+      <div class="flex items-end gap-2 flex-wrap">
         <button
           (click)="applyFilters()"
           class="bg-primary text-white text-sm px-4 py-2 rounded-lg hover:opacity-90 transition flex-1"
@@ -76,50 +79,43 @@
         <div class="space-y-2">
           <div
             *ngFor="let mv of movements"
-            class="bg-white border border-gray-200 rounded-md px-4 py-3 hover:shadow-sm transition-all"
+            class="bg-white border border-gray-200 rounded-lg px-4 py-3 hover:shadow-sm transition-all"
           >
-            <div class="flex justify-between items-start">
-              <!-- Info principal -->
-              <div class="flex-1">
-                <div class="flex items-center gap-2 flex-wrap">
-                  <span class="font-medium text-sm"
-                    >Equipo #{{ mv.equipmentId }}</span
-                  >
-                  <span
-                    class="text-xs px-2 py-0.5 rounded font-medium bg-gray-100 text-gray-600"
-                  >
-                    {{ mv.reason }}
-                  </span>
-                </div>
-
-                <!-- Origen → Destino (IDs) -->
-                <div class="flex items-center gap-2 mt-1 text-xs text-gray-500">
-                  <span class="bg-gray-100 px-2 py-0.5 rounded"
-                    >Loc. {{ mv.originLocationId }}</span
-                  >
-                  <span class="text-gray-400">→</span>
-                  <span
-                    class="bg-primary/10 text-primary px-2 py-0.5 rounded font-medium"
-                  >
-                    Loc Destino. {{ mv.destinationLocationId }}
-                  </span>
-                  <span
-                    class="bg-primary/10 text-primary px-2 py-0.5 rounded font-medium"
-                  >
-                    Usuario Responsable. {{ mv.responsibleUserId }}
-                  </span>
-                </div>
-
-                <div class="text-xs text-gray-400 mt-1">
-                  Responsable ID: {{ mv.responsibleUserId }} · Fecha:
-                  {{ mv.date | date: "dd/MM/yyyy" }} · Creado:
-                  {{ mv.createdAt | date: "dd/MM/yyyy HH:mm" }}
-                </div>
+            <!-- Fila 1: Equipo + Razón + #MV -->
+            <div class="flex justify-between items-center gap-2 mb-2">
+              <div class="flex items-center gap-2 min-w-0">
+                <span class="font-semibold text-sm shrink-0"
+                  >Equipo #{{ mv.equipmentId }}</span
+                >
+                <span
+                  class="text-xs px-2 py-0.5 rounded font-medium bg-gray-100 text-gray-600 shrink-0"
+                >
+                  {{ mv.reason }}
+                </span>
               </div>
-
-              <span class="text-xs text-gray-300 ml-4"
+              <span class="text-xs text-gray-400 shrink-0"
                 >#MV{{ mv.movementId }}</span
               >
+            </div>
+
+            <!-- Fila 2: Origen → Destino -->
+            <div class="flex items-center gap-2 flex-wrap text-xs mb-2">
+              <span class="bg-gray-100 text-gray-600 px-2 py-0.5 rounded">
+                Loc. {{ mv.originLocationId }}
+              </span>
+              <span class="text-gray-400">→</span>
+              <span
+                class="bg-primary/10 text-primary px-2 py-0.5 rounded font-medium"
+              >
+                Loc. Destino {{ mv.destinationLocationId }}
+              </span>
+            </div>
+
+            <!-- Fila 3: Responsable + Fecha -->
+            <div class="text-xs text-gray-400 flex flex-wrap gap-x-3 gap-y-1">
+              <span>Responsable ID: {{ mv.responsibleUserId }}</span>
+              <span>Fecha: {{ mv.date | date: "dd/MM/yyyy" }}</span>
+              <span>Creado: {{ mv.createdAt | date: "dd/MM/yyyy HH:mm" }}</span>
             </div>
           </div>
         </div>

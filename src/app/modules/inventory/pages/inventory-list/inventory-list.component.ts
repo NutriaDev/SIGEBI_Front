@@ -79,4 +79,35 @@ export class InventoryListComponent implements OnInit {
     if (page < 0 || page >= this.totalPages) return;
     this.load(page);
   }
+
+  hasMissing(observations: string | null | undefined): boolean {
+  if (!observations) return false;
+
+    return (
+      observations.includes('Faltantes físicamente') &&
+      !observations.includes('Faltantes físicamente: []')
+    );
+  }
+
+  hasSurplus(observations: string | null | undefined): boolean {
+    if (!observations) return false;
+
+    return (
+      observations.includes('Sobrantes físicamente') &&
+      !observations.includes('Sobrantes físicamente: []')
+    );
+  }
+
+  get missingCount(): number {
+    return this.inventories.filter(item =>
+      this.hasMissing(item.observations)
+    ).length;
+  }
+
+  get surplusCount(): number {
+    return this.inventories.filter(item =>
+      this.hasSurplus(item.observations)
+    ).length;
+  }
+
 }

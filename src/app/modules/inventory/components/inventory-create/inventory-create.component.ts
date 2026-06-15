@@ -1,32 +1,48 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
 import { InventoryService } from '../../services/inventory.service';
 import Swal from 'sweetalert2';
+import { LocationService } from 'app/modules/equipment/services/location.service';
 
 @Component({
   selector: 'app-inventory-create',
   templateUrl: './inventory-create.component.html',
 })
-export class InventoryCreateComponent {
+export class InventoryCreateComponent implements OnInit {
   inventoryForm: FormGroup;
-  loading = false;
+  loadingLocations = false;
+  submitting = false;
+  locations: any[] = [];
 
   readonly states = ['BUENO', 'REGULAR', 'MALO', 'DADO_DE_BAJA'];
-
-  readonly roles = ['SUPERADMIN', 'ADMIN', 'SUPERVISOR', 'TECNICO'];
 
   constructor(
     private fb: FormBuilder,
     private inventoryService: InventoryService,
+    private locationService: LocationService,
   ) {
     this.inventoryForm = this.fb.group({
-      location: ['', Validators.required],
       locationId: ['', [Validators.required, Validators.min(1)]],
       date: [''],
       observations: [''],
-      createdBy: ['', [Validators.required, Validators.min(1)]],
-      userRole: ['', Validators.required],
       details: this.fb.array([this.newDetail()]),
+    });
+  }
+
+  ngOnInit(): void {
+    this.loadLocations();
+  }
+
+  loadLocations(): void {
+    this.loadingLocations = true;
+    this.locationService.getAllActive().subscribe({
+      next: (res: any) => {
+        this.locations = res.body?.content ?? res.body ?? [];
+        this.loadingLocations = false;
+      },
+      error: () => {
+        this.loadingLocations = false;
+      },
     });
   }
 
@@ -77,12 +93,9 @@ export class InventoryCreateComponent {
     const v = this.inventoryForm.value;
 
     const payload = {
-      location: v.location,
       locationId: Number(v.locationId),
       date: v.date || null,
       observations: v.observations || null,
-      createdBy: Number(v.createdBy),
-      userRole: v.userRole,
       details: v.details.map((d: any) => ({
         equipmentId: Number(d.equipmentId),
         state: d.state,
@@ -90,7 +103,7 @@ export class InventoryCreateComponent {
       })),
     };
 
-    this.loading = true;
+    this.submitting = true;
 
     this.inventoryService.createInventory(payload).subscribe({
       next: (res) => {
@@ -106,10 +119,10 @@ export class InventoryCreateComponent {
           },
         });
 
-        this.inventoryForm.reset();
+        this.inventoryForm.reset({ date: '', observations: '' });
         this.details.clear();
         this.details.push(this.newDetail());
-        this.loading = false;
+        this.submitting = false;
       },
       error: (err: { status: number; error: { message: string } }) => {
         let message = 'Error al crear el inventario.';
@@ -133,7 +146,7 @@ export class InventoryCreateComponent {
           },
         });
 
-        this.loading = false;
+        this.submitting = false;
       },
     });
   }
