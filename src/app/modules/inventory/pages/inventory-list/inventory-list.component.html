@@ -6,26 +6,22 @@
     >
       <h2 class="text-lg font-semibold">Inventario de Equipos</h2>
       <span class="text-sm opacity-90">{{ totalElements }} registros</span>
+      <app-export-report-button
+        reportType="INVENTORY"
+        title="Exportar reporte de inventarios">
+      </app-export-report-button>
     </div>
 
     <!-- FILTROS -->
-    <div class="grid md:grid-cols-3 gap-4 mb-6">
+    <div class="grid grid-cols-1 gap-3 mb-6">
       <div>
         <label class="block text-xs text-gray-500 mb-1"
-          >Filtrar por fecha</label
+          >Fecha del inventario</label
         >
-        <input
-          type="date"
-          [(ngModel)]="filterDate"
-          class="input w-full"
-          placeholder="yyyy-MM-dd"
-        />
+        <input type="date" [(ngModel)]="filterDate" class="input w-full" />
       </div>
-
       <div>
-        <label class="block text-xs text-gray-500 mb-1"
-          >Filtrar por ubicación (ID)</label
-        >
+        <label class="block text-xs text-gray-500 mb-1">ID de ubicación</label>
         <input
           type="number"
           [(ngModel)]="filterLocationId"
@@ -33,8 +29,7 @@
           placeholder="Ej: 1"
         />
       </div>
-
-      <div class="flex items-end gap-2">
+      <div class="flex gap-2">
         <button
           (click)="applyFilters()"
           class="bg-primary text-white text-sm px-4 py-2 rounded-lg hover:opacity-90 transition flex-1"
@@ -59,7 +54,7 @@
       </div>
     }
 
-    <!-- TABLA -->
+    <!-- LISTA -->
     @if (!loading && inventories.length > 0) {
       <div class="bg-gray-50 rounded-lg shadow p-4">
         <p class="text-xs text-gray-400 mb-3">
@@ -67,40 +62,132 @@
           {{ totalPages }}
         </p>
 
-        <!-- Cabecera tabla -->
-        <div
-          class="grid grid-cols-5 gap-2 px-4 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wide border-b border-gray-200"
-        >
-          <span>ID</span>
-          <span>Ubicación</span>
-          <span>Fecha</span>
-          <span>Observaciones</span>
-          <span>Creado</span>
+        <!-- RESUMEN -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-5">
+
+          <!-- Total -->
+          <div class="bg-white rounded-lg border p-4 shadow-sm">
+            <p class="text-sm text-gray-500">
+              Total inventarios
+            </p>
+            <p class="text-2xl font-bold text-primary">
+              {{ totalElements }}
+            </p>
+          </div>
+
+          <!-- Faltantes -->
+          <div class="bg-red-50 rounded-lg border border-red-200 p-4 shadow-sm">
+            <p class="text-sm text-red-600">
+              Faltantes
+            </p>
+            <p class="text-2xl font-bold text-red-700">
+              {{ missingCount }}
+            </p>
+          </div>
+
+          <!-- Sobrantes -->
+          <div class="bg-yellow-50 rounded-lg border border-yellow-200 p-4 shadow-sm">
+            <p class="text-sm text-yellow-600">
+              Sobrantes
+            </p>
+            <p class="text-2xl font-bold text-yellow-700">
+              {{ surplusCount }}
+            </p>
+          </div>
+
         </div>
 
-        <!-- Filas -->
-        <div class="space-y-1 mt-1">
-          <div
-            *ngFor="let item of inventories"
-            class="grid grid-cols-5 gap-2 items-center bg-white border border-gray-100 rounded-md px-4 py-3 hover:shadow-sm transition-all text-sm"
-          >
-            <span class="text-gray-400 text-xs font-medium"
-              >#{{ item.inventoryId }}</span
-            >
-            <span class="font-medium text-sm">{{ item.location }}</span>
-            <span class="text-gray-600 text-xs">{{
-              item.date | date: "dd/MM/yyyy"
-            }}</span>
-            <span
-              class="text-gray-500 text-xs truncate"
-              [title]="item.observations"
-            >
-              {{ item.observations || "—" }}
-            </span>
-            <span class="text-gray-400 text-xs">{{
-              item.createdAt | date: "dd/MM/yyyy HH:mm"
-            }}</span>
-          </div>
+        <!-- TABLA DE INVENTARIOS -->
+        <div class="overflow-x-auto bg-white rounded-lg shadow-sm border">
+          <table class="min-w-full divide-y divide-gray-200">
+
+            <!-- Encabezado -->
+            <thead class="bg-gray-100">
+              <tr class="text-left text-xs font-semibold text-gray-600 uppercase">
+                <th class="px-4 py-3">ID</th>
+                <th class="px-4 py-3">Ubicación</th>
+                <th class="px-4 py-3">Fecha inventario</th>
+                <th class="px-4 py-3">Registrado</th>
+                <th class="px-4 py-3">Observaciones</th>
+              </tr>
+            </thead>
+
+            <!-- Datos -->
+            <tbody class="divide-y divide-gray-100">
+
+              <tr
+                *ngFor="let item of inventories"
+                class="hover:bg-gray-50 transition"
+              >
+
+                <!-- ID -->
+                <td class="px-4 py-3 text-sm font-semibold text-primary">
+                  #{{ item.inventoryId }}
+                </td>
+
+                <!-- Ubicación -->
+                <td class="px-4 py-3 text-sm text-gray-700">
+                  {{ item.locationName }}
+                </td>
+
+                <!-- Fecha -->
+                <td class="px-4 py-3 text-sm text-gray-600">
+                  {{ item.date | date: "dd/MM/yyyy" }}
+                </td>
+
+                <!-- Creación -->
+                <td class="px-4 py-3 text-sm text-gray-500">
+                  {{ item.createdAt | date: "dd/MM/yyyy HH:mm" }}
+                </td>
+
+                <!-- Inconsistencias -->
+                <td class="px-4 py-3 text-sm">
+
+                  <div class="flex flex-col gap-2">
+
+                    <!-- Faltantes -->
+                    @if (hasMissing(item.observations)) {
+                      <span
+                        class="inline-flex w-fit bg-red-100 text-red-700 px-2 py-1 rounded-full text-xs font-medium"
+                      >
+                        🔴 Faltantes físicos
+                      </span>
+                    }
+
+                    <!-- Sobrantes -->
+                    @if (hasSurplus(item.observations)) {
+                      <span
+                        class="inline-flex w-fit bg-yellow-100 text-yellow-700 px-2 py-1 rounded-full text-xs font-medium"
+                      >
+                        🟡 Sobrantes físicos
+                      </span>
+                    }
+
+                    <!-- Sin inconsistencias -->
+                    @if (!hasMissing(item.observations) && !hasSurplus(item.observations)) {
+                      <span
+                        class="inline-flex w-fit bg-green-100 text-green-700 px-2 py-1 rounded-full text-xs font-medium"
+                      >
+                        🟢 Sin inconsistencias
+                      </span>
+                    }
+
+                    <!-- Detalle original -->
+                    @if (item.observations) {
+                      <p class="text-xs text-gray-600 whitespace-pre-line">
+                        {{ item.observations }}
+                      </p>
+                    }
+
+                  </div>
+
+                </td>
+
+              </tr>
+
+            </tbody>
+
+          </table>
         </div>
 
         <!-- Paginación -->
@@ -134,7 +221,7 @@
     <!-- VACÍO -->
     @if (!loading && inventories.length === 0) {
       <div class="text-center text-gray-400 text-sm py-10">
-        No hay inventarios registrados para los filtros seleccionados.
+        No hay inventarios para los filtros seleccionados.
       </div>
     }
   </div>

@@ -20,7 +20,7 @@
   >
     <h1 class="text-3xl text-white font-semibold text-center mb-12">SIGEBI</h1>
 
-    <nav class="flex flex-col gap-4 text-sm">
+    <nav class="flex flex-col gap-4 text-sm overflow-y-auto flex-1 pr-1">
       <a (click)="toggleEquipmentMenu()" class="cursor-pointer">
         Equipos Médicos
       </a>
@@ -61,7 +61,10 @@
       </div>
 
       <ng-container *ngIf="has('reports.read')">
-        <a (click)="openReports()">Reportes</a>
+        <a (click)="toggleReportMenu()" class="cursor-pointer">Reportes</a>
+        <div *ngIf="reportMenuOpen" class="flex flex-col ml-4 gap-2 mt-2">
+          <a (click)="openServiceReportCreate()">Reporte de Servicio</a>
+        </div>
       </ng-container>
 
       <ng-container

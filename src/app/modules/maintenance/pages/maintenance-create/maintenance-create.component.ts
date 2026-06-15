@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MaintenanceService } from '../../services/maintenance.service';
+import { TabService } from '../../../dashboard/services/tab.service';
+import { ServiceReportCreateComponent } from '../../../reports/pages/service-report-create/service-report-create.component';
 
 @Component({
   selector: 'app-maintenance-create',
@@ -24,6 +26,7 @@ export class MaintenanceCreateComponent implements OnInit {
     private fb: FormBuilder,
     private maintenanceService: MaintenanceService,
     private router: Router,
+    private tabService: TabService,
   ) {}
 
   ngOnInit(): void {
@@ -92,8 +95,15 @@ export class MaintenanceCreateComponent implements OnInit {
     this.maintenanceService.registerMaintenance(payload).subscribe({
       next: (res) => {
         this.loading = false;
-        this.successMsg = res.message;
-        this.form.reset();
+        console.log('Respuesta completa del API:', res); // ← agregar
+        console.log('res.body:', res.body); // ← agregar
+        console.log('res.body?.id:', res.body?.idMaintenance); // ← agregar
+
+        this.tabService.openTab(
+          'Reporte de Servicio',
+          ServiceReportCreateComponent,
+          { maintenanceId: res.body?.idMaintenance },
+        );
       },
       error: (err) => {
         this.loading = false;

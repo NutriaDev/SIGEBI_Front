@@ -7,34 +7,29 @@
   <!-- FORM -->
   <div class="bg-transparent rounded-xl shadow-lg p-8">
     <form [formGroup]="inventoryForm" (ngSubmit)="submit()" class="space-y-6">
-      <!-- UBICACIÓN / ID UBICACIÓN -->
-      <div class="grid md:grid-cols-2 gap-6">
-        <div>
-          <label class="block text-sm mb-1">Nombre de Ubicación *</label>
-          <input
-            formControlName="location"
-            class="input w-full"
-            placeholder="Ej: SALAS DE CIRUGÍA"
-          />
+      <!-- UBICACIÓN -->
+      <div>
+        @if (loadingLocations && locations.length === 0) {
           <div
-            *ngIf="
-              inventoryForm.get('location')?.invalid &&
-              inventoryForm.get('location')?.touched
-            "
-            class="text-sm text-red-500 mt-1"
+            class="bg-blue-50 border border-blue-200 text-blue-600 text-sm rounded-lg px-4 py-3 mb-4"
           >
-            Requerido
+            Cargando ubicaciones...
           </div>
-        </div>
-
+        }
         <div>
-          <label class="block text-sm mb-1">ID Ubicación *</label>
-          <input
-            type="number"
-            formControlName="locationId"
-            class="input w-full"
-            placeholder="Ej: 1"
-          />
+          <label class="block text-sm mb-1">Ubicación *</label>
+          <mat-form-field class="w-full">
+            <mat-label>Seleccionar ubicación</mat-label>
+            <mat-select formControlName="locationId">
+              <mat-option [value]="null" disabled>Seleccionar</mat-option>
+              <mat-option
+                *ngFor="let loc of locations"
+                [value]="loc.locationId"
+              >
+                {{ loc.name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
           <div
             *ngIf="
               inventoryForm.get('locationId')?.invalid &&
@@ -61,45 +56,6 @@
             class="input w-full"
             placeholder="Opcional"
           />
-        </div>
-      </div>
-
-      <!-- CREADO POR / ROL -->
-      <div class="grid md:grid-cols-2 gap-6">
-        <div>
-          <label class="block text-sm mb-1">ID Responsable *</label>
-          <input
-            type="number"
-            formControlName="createdBy"
-            class="input w-full"
-            placeholder="Ej: 1"
-          />
-          <div
-            *ngIf="
-              inventoryForm.get('createdBy')?.invalid &&
-              inventoryForm.get('createdBy')?.touched
-            "
-            class="text-sm text-red-500 mt-1"
-          >
-            Requerido
-          </div>
-        </div>
-
-        <div>
-          <label class="block text-sm mb-1">Rol del responsable *</label>
-          <select formControlName="userRole" class="input w-full">
-            <option value="">Seleccionar rol...</option>
-            <option *ngFor="let r of roles" [value]="r">{{ r }}</option>
-          </select>
-          <div
-            *ngIf="
-              inventoryForm.get('userRole')?.invalid &&
-              inventoryForm.get('userRole')?.touched
-            "
-            class="text-sm text-red-500 mt-1"
-          >
-            Requerido
-          </div>
         </div>
       </div>
 
@@ -199,10 +155,10 @@
       <div class="pt-4 text-center">
         <button
           type="submit"
-          [disabled]="loading"
+          [disabled]="submitting"
           class="bg-primary text-white px-8 py-3 rounded-lg shadow hover:opacity-90 transition disabled:opacity-50"
         >
-          {{ loading ? "Registrando..." : "Crear Inventario" }}
+          {{ submitting ? "Registrando..." : "Crear Inventario" }}
         </button>
       </div>
     </form>
