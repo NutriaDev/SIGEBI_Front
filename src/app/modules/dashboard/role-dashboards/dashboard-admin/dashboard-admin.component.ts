@@ -7,6 +7,7 @@ import { UserCreateComponent } from '../../../users/pages/user-create/user-creat
 import { UserEditComponent } from '../../../users/pages/user-edit/user-edit.component';
 import { ReportsModule } from '../../../reports/reports.module';
 import { EquipmentLifecycleComponent } from 'app/modules/equipment/pages/equipment-lifecycle/equipment-lifecycle.component';
+import { ConsolidatedReportComponent } from 'app/modules/reports/pages/consolidated-report/consolidated-report.component';
 
 @Component({
   selector: 'app-dashboard-admin',
@@ -14,6 +15,7 @@ import { EquipmentLifecycleComponent } from 'app/modules/equipment/pages/equipme
 })
 export class DashboardAdminComponent {
   constructor(private tabService: TabService) {}
+  isSidebarOpen = false;
 
   openUsers() {
     this.tabService.openTab('Usuarios', UserListComponent);
@@ -27,9 +29,10 @@ export class DashboardAdminComponent {
     this.tabService.openTab('Editar Usuario', UserEditComponent);
   }
 
-  openReports() {
-    this.tabService.openTab('Reportes', ReportsModule);
-  }
+  consolidatedReport() {
+      this.tabService.openTab(
+        'Reporte Consolidado', ConsolidatedReportComponent);
+      this.isSidebarOpen = false;}
 
   openEquipmentLifecycle() {
     this.tabService.openTab(
